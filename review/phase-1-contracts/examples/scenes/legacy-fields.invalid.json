@@ -1,0 +1,9 @@
+{
+  "sceneId": "scene_legacy",
+  "visualTemplate": "TITLE",
+  "narrationText": "Not the canonical field names",
+  "visualProps": {
+    "title": "Legacy"
+  },
+  "estimatedDurationMs": 6000
+}

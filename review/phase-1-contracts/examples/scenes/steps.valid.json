@@ -1,0 +1,14 @@
+{
+  "sceneId": "scene_steps",
+  "template": "STEPS",
+  "narration": "First review the script. Then approve it and start the render.",
+  "visualProps": {
+    "title": "Review before rendering",
+    "steps": [
+      "Review narration",
+      "Approve the saved revision",
+      "Start rendering"
+    ]
+  },
+  "estimatedDurationSec": 6
+}

@@ -1,0 +1,97 @@
+{
+  "id": "sb_event_loop_30",
+  "projectId": "prj_event_loop_30",
+  "revision": 2,
+  "status": "APPROVED",
+  "schemaVersion": 1,
+  "targetDurationSec": 30,
+  "settingsSnapshot": {
+    "mode": "FACELESS",
+    "durationSec": 30,
+    "language": "en",
+    "aspectRatio": "16:9",
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS",
+    "characterAssetId": null
+  },
+  "scenes": [
+    {
+      "sceneId": "intro_30",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time. The event loop coordinates when waiting callbacks can run.",
+      "estimatedDurationSec": 7,
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One call stack, tasks and microtasks"
+      }
+    },
+    {
+      "sceneId": "stack_30",
+      "template": "STACK_QUEUE",
+      "narration": "Function calls enter the stack, and the newest finishes first. Long tasks keep other callbacks waiting.",
+      "estimatedDurationSec": 8,
+      "visualProps": {
+        "title": "One call stack",
+        "items": [
+          "main()",
+          "calculate()",
+          "format()"
+        ],
+        "layout": "STACK"
+      }
+    },
+    {
+      "sceneId": "flow_30",
+      "template": "FLOWCHART",
+      "narration": "After the current task, the browser drains microtasks before running a later task, such as a timer.",
+      "estimatedDurationSec": 8,
+      "visualProps": {
+        "title": "After the current task",
+        "nodes": [
+          {
+            "id": "task",
+            "label": "Current task finishes"
+          },
+          {
+            "id": "microtasks",
+            "label": "Drain microtasks"
+          },
+          {
+            "id": "next",
+            "label": "Run a later ready task"
+          }
+        ],
+        "edges": [
+          {
+            "from": "task",
+            "to": "microtasks",
+            "label": "Checkpoint"
+          },
+          {
+            "from": "microtasks",
+            "to": "next",
+            "label": "When eligible"
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "summary_30",
+      "template": "KEY_POINTS",
+      "narration": "Promises schedule microtasks, while timers schedule tasks. A zero delay timer waits for current work to finish.",
+      "estimatedDurationSec": 7,
+      "visualProps": {
+        "title": "Remember the order",
+        "points": [
+          "Current task runs to completion",
+          "Promise callbacks use microtasks",
+          "Timers schedule later tasks",
+          "Keep synchronous work short"
+        ]
+      }
+    }
+  ],
+  "approvedAt": "2026-11-21T12:30:00.000Z",
+  "createdAt": "2026-11-21T11:59:00.000Z",
+  "updatedAt": "2026-11-21T12:30:00.000Z"
+}

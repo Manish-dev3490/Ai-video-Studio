@@ -1,0 +1,10 @@
+node_modules/
+**/node_modules/
+.cache/
+**/.cache/
+artifacts/
+var/
+.env
+.env.*
+!.env.example
+apps/*/dist/

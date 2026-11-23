@@ -1,0 +1,12 @@
+{
+  "title": "Event Loop Explained",
+  "prompt": "Explain the JavaScript event loop clearly.",
+  "settings": {
+    "mode": "FACELESS",
+    "durationSec": 30,
+    "language": "en",
+    "aspectRatio": "16:9",
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS"
+  }
+}

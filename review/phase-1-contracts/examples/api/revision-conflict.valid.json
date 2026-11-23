@@ -1,0 +1,11 @@
+{
+  "error": {
+    "code": "REVISION_CONFLICT",
+    "message": "Reload the latest saved revision.",
+    "details": {
+      "currentRevision": 3
+    },
+    "retryable": false
+  },
+  "requestId": "req_review"
+}

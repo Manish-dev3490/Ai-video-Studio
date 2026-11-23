@@ -1,0 +1,14 @@
+{
+  "sceneId": "scene_summary",
+  "template": "KEY_POINTS",
+  "narration": "Remember the order: finish the task, drain microtasks, then take the next task.",
+  "visualProps": {
+    "title": "Three things to remember",
+    "points": [
+      "Finish the current task",
+      "Drain microtasks",
+      "Take the next task"
+    ]
+  },
+  "estimatedDurationSec": 6
+}

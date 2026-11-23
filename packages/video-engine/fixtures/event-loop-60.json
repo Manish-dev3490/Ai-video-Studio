@@ -1,0 +1,112 @@
+{
+  "id": "sb_event_loop_60",
+  "projectId": "prj_event_loop_60",
+  "revision": 2,
+  "status": "APPROVED",
+  "schemaVersion": 1,
+  "targetDurationSec": 60,
+  "settingsSnapshot": {
+    "mode": "FACELESS",
+    "durationSec": 60,
+    "language": "en",
+    "aspectRatio": "16:9",
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS",
+    "characterAssetId": null
+  },
+  "scenes": [
+    {
+      "sceneId": "intro_60",
+      "template": "TITLE",
+      "narration": "The browser event loop explains callback order. One call stack executes the current task, while browser features track activities such as timers and network requests outside the JavaScript stack.",
+      "estimatedDurationSec": 12,
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One call stack, tasks and microtasks"
+      }
+    },
+    {
+      "sceneId": "stack_60",
+      "template": "STACK_QUEUE",
+      "narration": "Calling a function pushes a stack frame, and returning removes it. Each task runs to completion, so long synchronous work can delay callbacks and page updates.",
+      "estimatedDurationSec": 12,
+      "visualProps": {
+        "title": "One call stack",
+        "items": [
+          "main()",
+          "calculate()",
+          "format()"
+        ],
+        "layout": "STACK"
+      }
+    },
+    {
+      "sceneId": "example_60",
+      "template": "STEPS",
+      "narration": "Suppose a script logs A, schedules a timer to log D, schedules a resolved promise callback to log C, then logs B. It prints A and B first.",
+      "estimatedDurationSec": 12,
+      "visualProps": {
+        "title": "Follow the example",
+        "steps": [
+          "Log A synchronously",
+          "Schedule timer callback D",
+          "Schedule promise microtask C",
+          "Log B synchronously"
+        ]
+      }
+    },
+    {
+      "sceneId": "flow_60",
+      "template": "FLOWCHART",
+      "narration": "After the task finishes, the browser drains microtasks. The promise callback prints C before a ready timer task can print D in a later turn.",
+      "estimatedDurationSec": 12,
+      "visualProps": {
+        "title": "After the current task",
+        "nodes": [
+          {
+            "id": "task",
+            "label": "Current task finishes"
+          },
+          {
+            "id": "microtasks",
+            "label": "Drain microtasks"
+          },
+          {
+            "id": "next",
+            "label": "Run a later ready task"
+          }
+        ],
+        "edges": [
+          {
+            "from": "task",
+            "to": "microtasks",
+            "label": "Checkpoint"
+          },
+          {
+            "from": "microtasks",
+            "to": "next",
+            "label": "When eligible"
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "summary_60",
+      "template": "KEY_POINTS",
+      "narration": "A zero delay timer does not mean immediate execution. Promise callbacks use microtasks, while timer callbacks use tasks. Keep synchronous work short to preserve browser responsiveness.",
+      "estimatedDurationSec": 12,
+      "visualProps": {
+        "title": "Remember the order",
+        "points": [
+          "Current task runs to completion",
+          "Promise callbacks use microtasks",
+          "Timers schedule later tasks",
+          "Keep synchronous work short"
+        ]
+      }
+    }
+  ],
+  "approvedAt": "2026-11-21T12:30:00.000Z",
+  "createdAt": "2026-11-21T11:59:00.000Z",
+  "updatedAt": "2026-11-21T12:30:00.000Z"
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "targetDurationSec": 30,
+  "scenes": [
+    {
+      "sceneId": "scene_title",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_stack",
+      "template": "STACK_QUEUE",
+      "narration": "Function calls enter the call stack. The newest call completes first, then control returns to the function below it.",
+      "visualProps": {
+        "title": "The call stack",
+        "items": [
+          "main()",
+          "greet()",
+          "format()"
+        ],
+        "layout": "STACK"
+      },
+      "estimatedDurationSec": 8
+    },
+    {
+      "sceneId": "scene_flow",
+      "template": "FLOWCHART",
+      "narration": "When the current task finishes, the browser drains microtasks before running the next task, such as a ready timer callback.",
+      "visualProps": {
+        "title": "Choosing the next work",
+        "nodes": [
+          {
+            "id": "task",
+            "label": "Current task finishes"
+          },
+          {
+            "id": "microtasks",
+            "label": "Drain microtasks"
+          },
+          {
+            "id": "next",
+            "label": "Next task"
+          }
+        ],
+        "edges": [
+          {
+            "from": "task",
+            "to": "microtasks"
+          },
+          {
+            "from": "microtasks",
+            "to": "next"
+          }
+        ]
+      },
+      "estimatedDurationSec": 10
+    },
+    {
+      "sceneId": "scene_summary",
+      "template": "KEY_POINTS",
+      "narration": "Remember the order: finish the task, drain microtasks, then take the next task.",
+      "visualProps": {
+        "title": "Three things to remember",
+        "points": [
+          "Finish the current task",
+          "Drain microtasks",
+          "Take the next task"
+        ]
+      },
+      "estimatedDurationSec": 6
+    }
+  ]
+}

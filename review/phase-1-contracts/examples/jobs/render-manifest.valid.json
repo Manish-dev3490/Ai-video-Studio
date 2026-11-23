@@ -1,0 +1,147 @@
+{
+  "manifestVersion": 1,
+  "generationId": "gen_event_loop_001",
+  "attempt": 1,
+  "approvedInput": {
+    "storyboardId": "sb_event_loop_001",
+    "approvedRevision": 2,
+    "storyboardHash": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "provenance": {
+    "engineVersion": "synthetic-engine-v1",
+    "bundleSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "templateRegistryVersion": "synthetic-registry-v1",
+    "remotionVersion": "synthetic-remotion-v1",
+    "browserVersion": "synthetic-browser-v1",
+    "ffmpegVersion": "synthetic-ffmpeg-v1",
+    "ffprobeVersion": "synthetic-ffprobe-v1",
+    "speech": {
+      "provider": "SYNTHETIC_REVIEW_PROVIDER",
+      "modelVersion": "synthetic-model-v1",
+      "voiceId": "synthetic-voice-01",
+      "configurationSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "configurationSnapshotId": "config_speech_demo"
+    },
+    "fonts": [
+      {
+        "family": "Synthetic review font",
+        "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+      }
+    ],
+    "encoding": {
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "pixelFormat": "yuv420p",
+      "width": 1280,
+      "height": 720,
+      "fps": 30,
+      "configurationSha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "captions": {
+      "mimeType": "text/vtt",
+      "exportBurnIn": false,
+      "configurationSha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "timeline": {
+    "schemaVersion": 1,
+    "fps": 30,
+    "durationInFrames": 900,
+    "scenes": [
+      {
+        "sceneId": "scene_title",
+        "startFrame": 0,
+        "durationInFrames": 180,
+        "audioAssetId": "audio_scene_title",
+        "audioOffsetInFrames": 6,
+        "measuredAudioDurationMs": 5400,
+        "captionSegments": [
+          {
+            "startFrame": 6,
+            "endFrame": 168,
+            "text": "JavaScript runs one task at a time, while the browser coordinates other work."
+          }
+        ]
+      },
+      {
+        "sceneId": "scene_stack",
+        "startFrame": 180,
+        "durationInFrames": 240,
+        "audioAssetId": "audio_scene_stack",
+        "audioOffsetInFrames": 6,
+        "measuredAudioDurationMs": 7400,
+        "captionSegments": [
+          {
+            "startFrame": 186,
+            "endFrame": 408,
+            "text": "Function calls enter the call stack. The newest call completes first, then control returns to the function below it."
+          }
+        ]
+      },
+      {
+        "sceneId": "scene_flow",
+        "startFrame": 420,
+        "durationInFrames": 300,
+        "audioAssetId": "audio_scene_flow",
+        "audioOffsetInFrames": 6,
+        "measuredAudioDurationMs": 9400,
+        "captionSegments": [
+          {
+            "startFrame": 426,
+            "endFrame": 708,
+            "text": "When the current task finishes, the browser drains microtasks before running the next task, such as a ready timer callback."
+          }
+        ]
+      },
+      {
+        "sceneId": "scene_summary",
+        "startFrame": 720,
+        "durationInFrames": 180,
+        "audioAssetId": "audio_scene_summary",
+        "audioOffsetInFrames": 6,
+        "measuredAudioDurationMs": 5400,
+        "captionSegments": [
+          {
+            "startFrame": 726,
+            "endFrame": 888,
+            "text": "Remember the order: finish the task, drain microtasks, then take the next task."
+          }
+        ]
+      }
+    ]
+  },
+  "narrationAssets": [
+    {
+      "sceneId": "scene_title",
+      "assetId": "audio_scene_title",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000006",
+      "durationMs": 5400
+    },
+    {
+      "sceneId": "scene_stack",
+      "assetId": "audio_scene_stack",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000007",
+      "durationMs": 7400
+    },
+    {
+      "sceneId": "scene_flow",
+      "assetId": "audio_scene_flow",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000008",
+      "durationMs": 9400
+    },
+    {
+      "sceneId": "scene_summary",
+      "assetId": "audio_scene_summary",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000009",
+      "durationMs": 5400
+    }
+  ],
+  "createdAt": "2026-11-21T12:01:00.000Z",
+  "captionArtifact": {
+    "assetId": "caption_event_loop_001",
+    "sha256": "6587ec1b36dd059af9d852bc7c7f8ce89560ecae4bf5c5b78d486c5989a50f8c",
+    "mimeType": "text/vtt",
+    "language": "en",
+    "timelineSha256": "cd800704c87e2e2a647bf7a8b47f82d1d1dc4c6222aabe783b5e00586c7698f7"
+  }
+}

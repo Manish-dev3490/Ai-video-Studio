@@ -1,0 +1,12 @@
+{
+  "data": {
+    "user": {
+      "id": "user_review",
+      "displayName": "Review User",
+      "email": "review@example.com"
+    }
+  },
+  "meta": {
+    "requestId": "req_example"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Example",
+  "prompt": "Explain queues.",
+  "settings": {
+    "mode": "FACELESS",
+    "durationSec": 30,
+    "language": "en",
+    "aspectRatio": "16:9",
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS"
+  },
+  "ownerId": "user_other"
+}

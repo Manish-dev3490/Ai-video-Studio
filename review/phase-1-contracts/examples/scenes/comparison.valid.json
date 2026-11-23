@@ -1,0 +1,21 @@
+{
+  "sceneId": "scene_compare",
+  "template": "COMPARISON",
+  "narration": "A task and a microtask are separate kinds of queued work.",
+  "visualProps": {
+    "title": "Tasks and microtasks",
+    "left": {
+      "heading": "Task",
+      "points": [
+        "Example: ready timer callback"
+      ]
+    },
+    "right": {
+      "heading": "Microtask",
+      "points": [
+        "Example: resolved promise callback"
+      ]
+    }
+  },
+  "estimatedDurationSec": 8
+}

@@ -1,0 +1,241 @@
+{
+  "description": "Structural contract review cases updated with approved initial policies. Schema-valid semantic cases do not implement or prove capability, ownership, timing or settings-reapproval behavior.",
+  "cases": [
+    {
+      "name": "TITLE valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "title.valid.json",
+      "valid": true
+    },
+    {
+      "name": "STEPS valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "steps.valid.json",
+      "valid": true
+    },
+    {
+      "name": "STACK_QUEUE valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "stack_queue.valid.json",
+      "valid": true
+    },
+    {
+      "name": "FLOWCHART valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "flowchart.valid.json",
+      "valid": true
+    },
+    {
+      "name": "COMPARISON valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "comparison.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Canonical registry shape only; template is later capability-gated, not in the initial enabled set."
+      ]
+    },
+    {
+      "name": "TIMELINE valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "timeline.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Canonical registry shape only; template is later capability-gated, not in the initial enabled set."
+      ]
+    },
+    {
+      "name": "KEY_POINTS valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "key_points.valid.json",
+      "valid": true
+    },
+    {
+      "name": "IMAGE_WITH_LABELS valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "image_with_labels.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Canonical registry shape only; template is later capability-gated, not in the initial enabled set."
+      ]
+    },
+    {
+      "name": "CHARACTER_PRESENTER_2D valid shape",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "character_presenter_2d.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Canonical P1 registry shape only; character presenter remains disabled initially."
+      ]
+    },
+    {
+      "name": "Full 30-second DRAFT storyboard",
+      "schema": "../../schemas/scene.schema.json#/$defs/Storyboard",
+      "file": "storyboard-draft.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Full 30-second APPROVED storyboard",
+      "schema": "../../schemas/scene.schema.json#/$defs/Storyboard",
+      "file": "storyboard-approved.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Untrusted planning output",
+      "schema": "../../schemas/scene.schema.json#/$defs/PlanningOutput",
+      "file": "planning-output.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Empty assistant suggestions",
+      "schema": "../../schemas/scene.schema.json#/$defs/SettingsPatch",
+      "file": "empty-settings-patch.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Character project pending upload",
+      "schema": "../../schemas/scene.schema.json#/$defs/Settings",
+      "file": "pending-character-settings.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Reserved future draft shape only; CHARACTER_2D is disabled initially. Future rendering still requires capability, owned READY media, consent and approval."
+      ]
+    },
+    {
+      "name": "Reject pipeline template alias",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "legacy-template.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject arbitrary renderer code",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "executable-props.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject pipeline field aliases",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "legacy-fields.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject raw image URL",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "raw-image-url.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject worker timing in planned scene",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "client-timing.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject mismatched template props",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "mismatched-props.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject blank narration",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "blank-narration.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject unsupported public voice-selection field",
+      "schema": "../../schemas/scene.schema.json#/$defs/Settings",
+      "file": "voice-field.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject model-owned project metadata",
+      "schema": "../../schemas/scene.schema.json#/$defs/PlanningOutput",
+      "file": "planning-owner.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject approved storyboard without timestamp",
+      "schema": "../../schemas/scene.schema.json#/$defs/Storyboard",
+      "file": "approved-timestamp.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Duplicate scene IDs need semantic validation",
+      "schema": "../../schemas/scene.schema.json#/$defs/Storyboard",
+      "file": "duplicate-scene-ids.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "SCENE_ID_UNIQUE"
+      ]
+    },
+    {
+      "name": "Unknown flow endpoint needs semantic validation",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "unknown-flow-endpoint.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "GRAPH_REFERENCES"
+      ]
+    },
+    {
+      "name": "Target/settings mismatch needs semantic validation",
+      "schema": "../../schemas/scene.schema.json#/$defs/Storyboard",
+      "file": "settings-target-mismatch.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "SETTINGS_MATCH"
+      ]
+    },
+    {
+      "name": "Internal measured integer-frame timeline",
+      "schema": "../../schemas/scene.schema.json#/$defs/RenderTimeline",
+      "file": "render-timeline.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Reject planner millisecond timing fields on internal timeline",
+      "schema": "../../schemas/scene.schema.json#/$defs/RenderTimeline",
+      "file": "timeline-legacy-fields.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Logical WebVTT sidecar from canonical timeline",
+      "schema": "../../schemas/scene.schema.json#/$defs/WebVttCaptionTrack",
+      "file": "webvtt-track.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Reject injected WebVTT style field",
+      "schema": "../../schemas/scene.schema.json#/$defs/WebVttCaptionTrack",
+      "file": "webvtt-raw-markup-field.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Reject HTML instead of WebVTT",
+      "schema": "../../schemas/scene.schema.json#/$defs/WebVttCaptionTrack",
+      "file": "webvtt-wrong-mime.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Enforce approved 120-character title upper limit",
+      "schema": "../../schemas/scene.schema.json#/$defs/Scene",
+      "file": "title-length-limit.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Enforce approved two-scene minimum",
+      "schema": "../../schemas/scene.schema.json#/$defs/PlanningOutput",
+      "file": "one-scene-plan.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Enforce approved eighteen-scene maximum",
+      "schema": "../../schemas/scene.schema.json#/$defs/PlanningOutput",
+      "file": "too-many-scenes.invalid.json",
+      "valid": false
+    }
+  ],
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "x-updated-on": "2026-11-21"
+}

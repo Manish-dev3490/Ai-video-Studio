@@ -1,0 +1,13 @@
+{
+  "title": "Event loop review example",
+  "prompt": "Explain the JavaScript event loop for beginners",
+  "settings": {
+    "mode": "FACELESS",
+    "durationSec": 30,
+    "language": "en",
+    "aspectRatio": "16:9",
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS",
+    "characterAssetId": null
+  }
+}

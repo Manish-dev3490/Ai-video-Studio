@@ -1,0 +1,217 @@
+{
+  "status": "APPROVED_RECOMMENDATIONS",
+  "version": "1.0.0-draft.2",
+  "date": "2026-11-21",
+  "approvalSource": "User approved all twelve Hinglish recommendations in this conversation",
+  "purpose": "Record approved initial policies and update Phase1 drafts only. Original approved docs remain unchanged. This approval does not authorize application implementation, dependency installation or commits.",
+  "implementationAuthorized": false,
+  "policyFile": "approved-policy.json",
+  "decisions": [
+    {
+      "id": "D-01",
+      "topic": "Canonical scene registry and legacy names",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "CONTRACT_APPROVAL",
+      "baselineContext": "HLD section 7 and Database Design section 3.5 use TITLE, STEPS, STACK_QUEUE, FLOWCHART, COMPARISON, TIMELINE, KEY_POINTS, IMAGE_WITH_LABELS and CHARACTER_PRESENTER_2D. Pipeline section 4 uses different illustrative names.",
+      "approvedRecommendation": "Use the canonical nine-template registry and reject legacy aliases at input. First develop/test TITLE, STEPS, STACK_QUEUE, FLOWCHART and KEY_POINTS. Activate other templates only after tests; CHARACTER_PRESENTER_2D remains gated P1.",
+      "policyReferences": [
+        "approved-policy.json#/initialProfile"
+      ],
+      "verification": [
+        "Unknown templates and legacy field names fail schema validation.",
+        "Repeated template types are allowed, but sceneId values must be unique by semantic validation."
+      ]
+    },
+    {
+      "id": "D-02",
+      "topic": "Scene and input limits and template props",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "CONTRACT_APPROVAL",
+      "baselineContext": "API section 6, HLD section 7 and Database Design section 3.5 require bounded scenes, text and per-template visualProps, but do not fully define their schemas. DB illustrative project limits are title 120 and prompt 2000 characters.",
+      "approvedRecommendation": "Adopt existing draft bounds as initial upper limits: 2-18 scenes, prompt 2000 characters, title 120, and strict bounded per-template props. Inert text and owner-resolved IDs only; bounds do not guarantee layout or spoken duration.",
+      "policyReferences": [
+        "approved-policy.json#/limits"
+      ],
+      "verification": [
+        "Valid and invalid examples exercise every template.",
+        "Long text, unsupported props, executable fields, raw media URLs and unsafe reference values are rejected or handled by the documented semantic checks."
+      ]
+    },
+    {
+      "id": "D-03",
+      "topic": "Canonical timing and narration overflow",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "CONTRACT_APPROVAL",
+      "baselineContext": "API uses estimatedDurationSec; pipeline sections 2, 5 and 7 require measured audio durations, integer-frame composition and no silent clipping. Target tolerance of plus/minus 5 seconds is provisional.",
+      "approvedRecommendation": "Initial 1280x720,30FPS and target tolerance plus/minus5seconds. Measure speech, use integer timing/ceiling frame count and contiguous scenes. Sensible small pauses only; large mismatch fails with revision-required error, new draft and approval. No clipping or unnatural speedup.",
+      "policyReferences": [
+        "approved-policy.json#/timing"
+      ],
+      "verification": [
+        "Timeline covers all measured speech without clipping.",
+        "Total duration and transition overlap are checked semantically.",
+        "Revised narration never renders under the old approval hash."
+      ]
+    },
+    {
+      "id": "D-04",
+      "topic": "Caption delivery and player toggle",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "PLAYER_AND_MEDIA_CONTRACT",
+      "baselineContext": "PRD FR-017 requires synchronized captions; UI/UX section 4E requests a captions toggle. API and DB currently describe MP4 and existing asset kinds without a subtitle asset contract.",
+      "approvedRecommendation": "Deliver a clean MP4 plus separate owner-authorized WebVTT caption asset from the same timeline. Browser toggle and separate downloads; MP4 alone has no captions. Reuse existing asset delivery route; burned-in export deferred.",
+      "policyReferences": [
+        "approved-policy.json#/captions"
+      ],
+      "verification": [
+        "A burned-in-only export cannot be described as supporting a captions toggle.",
+        "Future caption delivery must preserve ownership, retention and timing invariants."
+      ]
+    },
+    {
+      "id": "D-05",
+      "topic": "Voice and style availability",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "CONTRACT_APPROVAL",
+      "baselineContext": "Approved stack uses Gemini planning, preferred local Kokoro and Remotion. API settings illustrate EDUCATIONAL tone and MOTION_GRAPHICS style; exact voice presets and broader enumerations are open.",
+      "approvedRecommendation": "Preferred local Kokoro, one tested English voice, EDUCATIONAL tone and MOTION_GRAPHICS. Defer public voice selector. Extra voices,Hindi,vertical and character remain gated until quality tests; no automatic cloud fallback.",
+      "policyReferences": [
+        "approved-policy.json#/initialProfile/speech"
+      ],
+      "verification": [
+        "Capability checks run in addition to schema enum checks.",
+        "Internal TTS configuration cannot be supplied as arbitrary provider commands or paths by a client."
+      ]
+    },
+    {
+      "id": "D-06",
+      "topic": "Idempotency identity retention and replay",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "JOB_ADMISSION_CONTRACT",
+      "baselineContext": "API section 7 scopes idempotency to authenticated user, endpoint/action and key; DB section 3.6 records owner/action/key hashes and a canonical request digest. The 24-hour window is a proposal.",
+      "approvedRecommendation": "Protect repeated requests for24hours. Keep owner/action/key namespace and route-target-inclusive request fingerprint. Matching request replays original admission receipt/job without new reservation; changed body/target conflicts. Poll for live state; preserve job history independently.",
+      "policyReferences": [
+        "approved-policy.json#/idempotency"
+      ],
+      "verification": [
+        "Same key/body/target returns the original generationId without another reservation.",
+        "Changing payload or route target conflicts.",
+        "Replay still succeeds when the original job is active, complete or the worker is now offline."
+      ]
+    },
+    {
+      "id": "D-07",
+      "topic": "Quota reservation and crash reconciliation",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "JOB_ADMISSION_CONTRACT",
+      "baselineContext": "Database Design section 3.8 defines UTC daily usage buckets and leaves reserve/consume/refund policy open. Section 4 requires atomic or reconciled bucket/job writes.",
+      "approvedRecommendation": "Initial configurable demo:3 generation slots/user/dayUTC,1 running+2 waiting globally,1 active/project. Reserve1 slot/new admission for any duration. Success consumes; system/provider failure releases; user cancellation before rendering releases and after render start consumes. Job-linked reservations and transaction-capable atomic admission.",
+      "policyReferences": [
+        "approved-policy.json#/quota"
+      ],
+      "verification": [
+        "Concurrent submissions never exceed admitted capacity.",
+        "Crashes between reservation, job insert and settlement are recoverable.",
+        "Dedupe and repeated settlement cannot double-charge or double-refund."
+      ]
+    },
+    {
+      "id": "D-08",
+      "topic": "Leases recovery and cancellation races",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "WORKER_CONTRACT",
+      "baselineContext": "API sections 7 and 10 and DB section 3.6 define six statuses, six stages, leases/fencing, cooperative cancellation and new-job retries.",
+      "approvedRecommendation": "Initial configurable heartbeat10s,renewable lease60s,max2 automatic execution attempts total. Fresh fencing prevents stale publication and workers stop owned processes. First guarded cancel/completion commit wins; CANCELLED only after actual stop. User retry is a new admission; stage timeouts follow duration benchmarks.",
+      "policyReferences": [
+        "approved-policy.json#/worker"
+      ],
+      "verification": [
+        "A stale worker cannot publish after reclaim, cancellation or deletion.",
+        "CANCELLED is recorded only after stop/cleanup is confirmed.",
+        "Transient lease recovery retains the job identity; user retry creates a new identity."
+      ]
+    },
+    {
+      "id": "D-09",
+      "topic": "Private media range delivery and revocation",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "MEDIA_DELIVERY_CONTRACT",
+      "baselineContext": "API section 8 permits an authenticated stream or short-lived redirect and requires immediate access revocation. Signed URLs of at most 60 seconds are proposed; browser range playback is required to work.",
+      "approvedRecommendation": "Private local files with owner-authenticated byte-range streaming initially; signed URLs deferred. New reads check owner,deletion,expiry. Successful intermediates clean after verified delivery; failed temp artifacts max24h; video+caption exports expire together7days after verified publication. Deletion immediately blocks new reads; already-delivered bytes cannot be revoked.",
+      "policyReferences": [
+        "approved-policy.json#/storage"
+      ],
+      "verification": [
+        "Every new read/range request checks owner and deletion state.",
+        "Cross-user reads and stale asset links cannot bypass authorization.",
+        "Range boundaries and expired redirects behave consistently in supported browsers."
+      ]
+    },
+    {
+      "id": "D-10",
+      "topic": "Frozen input and reproducible execution provenance",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "WORKER_CONTRACT",
+      "baselineContext": "Pipeline sections 1 and 6 require reproducible renders and immutable render versions; DB requires approved storyboard/settings hashes and forbids exposing hashes/leases/storage keys in public serializers.",
+      "approvedRecommendation": "Freeze approved narration/settings and retain a separate internal execution recipe with engine/template versions,TTS model/voice,audio hashes,timeline,fonts,encoding and published video/caption hashes. Reuse verified audio only for matching text,voice,model/settings; no unconditional cross-environment byte guarantee.",
+      "policyReferences": [
+        "approved-policy.json#/provenance"
+      ],
+      "verification": [
+        "Public job responses reject internal lease/hash/path fields.",
+        "Retries cannot silently reuse audio from different text/voice/model inputs.",
+        "A retained manifest identifies the artifacts and versions needed to reproduce an export."
+      ]
+    },
+    {
+      "id": "D-11",
+      "topic": "Auth deployment and credential validation",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "AUTH_CONTRACT",
+      "baselineContext": "API sections 2, 3 and 11 require httpOnly JWT/refresh cookies, token rotation, CSRF/Origin checks and strict CORS. Cookie names, lifetimes, password limits and final hostname deployment are not fixed.",
+      "approvedRecommendation": "Same-origin initial deployment; productionHTTPS,httpOnly/Secure cookies,explicitSameSite,CSRF/Origin and no-store. Access15min; rotating refresh7days; logoutrevokes refresh and clears cookies; no tokens in localStorage. Password-only signup15-128characters.",
+      "policyReferences": [
+        "approved-policy.json#/auth"
+      ],
+      "verification": [
+        "No bearer-token or localStorage workflow is implied.",
+        "Refresh authenticates via refresh session even when access expires.",
+        "Mutations fail Origin/CSRF checks; cookie clearing exactly matches issuing scope."
+      ]
+    },
+    {
+      "id": "D-12",
+      "topic": "Incomplete API shapes and gated surface",
+      "status": "APPROVED",
+      "approvedOn": "2026-11-21",
+      "gate": "CONTRACT_APPROVAL",
+      "baselineContext": "API provides approved methods/paths and illustrative bodies but leaves detailed list/usage/deletion/cancellation/reporting shapes and several field limits unspecified. Fork and character upload remain P1/gated.",
+      "approvedRecommendation": "Preserve32 approved methods/paths and consistent envelopes/errors/pagination. Generation settings changed after approval require new draft/review/approval; title-only changes do not. Preserve prior snapshots/outputs; never mix new settings with old approval. Direct prompt PATCH deferred; explain disabledP1 features.",
+      "policyReferences": [
+        "approved-policy.json#/projectApproval"
+      ],
+      "verification": [
+        "Every approved endpoint is represented, including assistant-history pagination.",
+        "Every local schema reference resolves and examples match the selected draft schema.",
+        "Server-owned fields are absent from client write schemas and secrets absent from public responses."
+      ]
+    }
+  ],
+  "deferredImplementationDetailsReference": "approved-policy.json#/deferredImplementationDetails",
+  "relatedOpenItemsOutsideThisUpdate": [
+    "The referenced approved clickable UI prototype is still absent; this phase does not create a replacement UI.",
+    "Provider model/voice quality, production hosting, operational moderation, retention, and feature capability activation require separate validation.",
+    "The approved design-token contrast issue remains unchanged and outside this contract-only task."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": "asset_caption_review",
+    "ownerId": "user_review",
+    "projectId": "prj_review",
+    "generationId": "gen_review",
+    "kind": "CAPTION_TRACK",
+    "mimeType": "image/png",
+    "sizeBytes": 321,
+    "status": "READY",
+    "aiGenerated": true,
+    "createdAt": "2026-11-21T12:00:00.000Z",
+    "expiresAt": "2026-11-28T12:00:00.000Z",
+    "availability": "AVAILABLE"
+  },
+  "meta": {
+    "requestId": "req_review"
+  }
+}

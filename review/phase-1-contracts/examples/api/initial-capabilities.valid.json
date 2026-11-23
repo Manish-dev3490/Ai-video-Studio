@@ -1,0 +1,36 @@
+{
+  "data": {
+    "durationsSec": [
+      30,
+      60,
+      90
+    ],
+    "languages": [
+      "en"
+    ],
+    "modes": [
+      "FACELESS"
+    ],
+    "aspectRatios": [
+      "16:9"
+    ],
+    "worker": {
+      "available": true,
+      "status": "ONLINE"
+    },
+    "characterMode": {
+      "enabled": false,
+      "reason": "EXPERIMENTAL"
+    },
+    "templates": [
+      "TITLE",
+      "STEPS",
+      "STACK_QUEUE",
+      "FLOWCHART",
+      "KEY_POINTS"
+    ]
+  },
+  "meta": {
+    "requestId": "req_review"
+  }
+}

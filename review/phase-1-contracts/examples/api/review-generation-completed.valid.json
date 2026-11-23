@@ -1,0 +1,23 @@
+{
+  "data": {
+    "id": "gen_event_loop_001",
+    "projectId": "prj_event_loop_001",
+    "storyboardId": "sb_event_loop_001",
+    "approvedRevision": 2,
+    "status": "COMPLETED",
+    "stage": "UPLOAD_OUTPUT",
+    "progress": {
+      "completedStages": 6,
+      "totalStages": 6
+    },
+    "attempt": 1,
+    "outputAssetId": "asset_event_loop_video_001",
+    "error": null,
+    "createdAt": "2026-11-21T12:00:00.000Z",
+    "updatedAt": "2026-11-21T12:02:00.000Z",
+    "captionAssetId": "asset_event_loop_caption_001"
+  },
+  "meta": {
+    "requestId": "req_review_completed"
+  }
+}

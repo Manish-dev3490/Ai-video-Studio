@@ -1,0 +1,9 @@
+{
+  "mode": "CHARACTER_2D",
+  "durationSec": 30,
+  "language": "en",
+  "aspectRatio": "16:9",
+  "tone": "EDUCATIONAL",
+  "visualStyle": "MOTION_GRAPHICS",
+  "characterAssetId": null
+}

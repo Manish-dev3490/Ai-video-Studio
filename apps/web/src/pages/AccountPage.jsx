@@ -1,0 +1,21 @@
+import {useEffect} from 'react';
+import {Link} from 'react-router-dom';
+import {AccountProfile} from '../components/AccountProfile.jsx';
+import {Check, LockKeyhole, Monitor, ShieldCheck} from 'lucide-react';
+import {useGetCapabilitiesQuery, useGetUsageQuery} from '../store/api.js';
+import {ErrorPanel} from '../components/ui.jsx';
+import {friendlyError} from '../lib/forms.js';
+import {ReportMisuse} from '../components/ReportMisuse.jsx';
+
+export function AccountPage() {
+  const capabilities = useGetCapabilitiesQuery();
+  const usage = useGetUsageQuery();
+  useEffect(() => { document.title = 'Account · AI Video Studio'; }, []);
+  return <>
+    <div className="page-heading"><p className="eyebrow">YOUR PERSONAL WORKSPACE</p><h1>Account & preferences</h1><p>Keep your profile and sign-in details up to date.</p></div>
+    <div className="account-grid"><AccountProfile /><section className="settings-card"><div className="settings-card-heading"><ShieldCheck size={19} /><h2>Session & privacy</h2></div><p className="settings-intro">Your projects are visible only to your signed-in account.</p><ul className="check-list"><li><Check size={15} />Protected account access</li><li><Check size={15} />Session renewal while you work</li><li><Check size={15} />Sign out from the navigation panel</li></ul><Link className="button button-secondary account-reset-link" to="/forgot-password"><LockKeyhole size={15} />Request password reset</Link><p className="settings-note-text">Reset links expire after 30 minutes. A completed reset ends all previous sessions.</p><div className="settings-note"><LockKeyhole size={15} /><p>Signing out ends this browser's session and clears your unsaved idea.</p></div></section>
+      <section className="settings-card"><div className="settings-card-heading"><Monitor size={19} /><h2>Studio capabilities</h2></div>{capabilities.error ? <ErrorPanel message={friendlyError(capabilities.error)} onRetry={capabilities.refetch} /> : capabilities.data ? <dl className="profile-details"><div><dt>Video length</dt><dd>{capabilities.data.durationsSec.map(value => `${value}s`).join(' · ') || 'Unavailable'}</dd></div><div><dt>Language</dt><dd>{capabilities.data.languages.includes('en') ? 'English' : 'Unavailable'}</dd></div><div><dt>Canvas</dt><dd>{capabilities.data.aspectRatios.join(', ') || 'Unavailable'}</dd></div><div><dt>Video mode</dt><dd>{capabilities.data.modes.includes('FACELESS') ? 'Faceless explainer' : 'Unavailable'}</dd></div><div><dt>Custom character</dt><dd className="muted-copy">{capabilities.data.characterMode.enabled ? 'Enabled' : 'Not available yet'}</dd></div></dl> : <div className="skeleton settings-skeleton" />}</section>
+      <section className="settings-card"><div className="settings-card-heading"><span className="settings-number-icon">01</span><h2>Daily allowance</h2></div>{usage.error ? <ErrorPanel message={friendlyError(usage.error)} onRetry={usage.refetch} /> : usage.data ? <><dl className="profile-details"><div><dt>Daily generation slots</dt><dd>{usage.data.dailyLimit}</dd></div><div><dt>Used today</dt><dd>{usage.data.used}</dd></div><div><dt>Reserved</dt><dd>{usage.data.reserved}</dd></div></dl><p className="settings-note-text">Allowance resets at 00:00 UTC. The studio checks worker availability before accepting a generation.</p></> : <div className="skeleton settings-skeleton" />}</section></div>
+    <section className="settings-card safety-guidance"><div className="settings-card-heading"><ShieldCheck size={19} /><h2>Safety & responsible use</h2></div><p>Create safe educational explanations. Requests for harmful instructions, non-consensual sexual content or deceptive impersonation may be blocked or reviewed. Do not put private credentials into ideas, chat, scripts or reports.</p><p>The current studio creates English faceless videos. Character uploads and real-person voice imitation are unavailable. AI-generated visuals and narration do not imply anyone’s endorsement; review accuracy before sharing.</p><p>Your idea and saved conversation are sent to Gemini when you request AI writing. Kokoro narration and video rendering run in the local worker. Projects and output downloads require your signed-in account. A private operator can review submitted concerns and restrict affected projects.</p><ReportMisuse selectProject /></section>
+  </>;
+}

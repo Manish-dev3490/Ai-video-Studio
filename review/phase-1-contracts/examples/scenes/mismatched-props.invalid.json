@@ -1,0 +1,15 @@
+{
+  "sceneId": "scene_stack",
+  "template": "STEPS",
+  "narration": "Function calls enter the call stack. The newest call completes first, then control returns to the function below it.",
+  "visualProps": {
+    "title": "The call stack",
+    "items": [
+      "main()",
+      "greet()",
+      "format()"
+    ],
+    "layout": "STACK"
+  },
+  "estimatedDurationSec": 8
+}

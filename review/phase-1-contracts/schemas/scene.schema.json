@@ -1,0 +1,1612 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Video Studio canonical scene contract draft",
+  "description": "Phase 1 contract draft updated with product-owner decisions approved on 21 November 2026. Canonical names, initial limits, timing, caption delivery and initial settings are approved decisions; runtime schemas remain draft artifacts and no implementation is claimed.",
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "x-contract-version": "1.0.0-draft.2",
+  "x-baseline-sources": [
+    "docs/AI_Video_Studio_API_Design_v1.0.1.md sections 4 and 6",
+    "docs/AI_Video_Studio_Database_Design_v1.0.md sections 3.3 and 3.5",
+    "docs/AI_Video_Studio_HLD_v1.0.md sections 7 and 8",
+    "docs/AI_Video_Studio_Audio_Video_Pipeline_Design_v1.0.md sections 2 through 7"
+  ],
+  "x-review-alias-map": {
+    "TITLE_CARD": {
+      "candidate": "TITLE",
+      "automaticAcceptance": false
+    },
+    "FLOW_DIAGRAM": {
+      "candidate": "FLOWCHART",
+      "automaticAcceptance": false
+    },
+    "PROCESS_STEPS": {
+      "candidate": "STEPS",
+      "automaticAcceptance": false
+    },
+    "SUMMARY_CARD": {
+      "candidate": "KEY_POINTS",
+      "automaticAcceptance": false
+    },
+    "IMAGE_PRESENTER": {
+      "candidates": [
+        "CHARACTER_PRESENTER_2D",
+        "IMAGE_WITH_LABELS"
+      ],
+      "automaticAcceptance": false,
+      "reason": "Explicitly choose intended IMAGE_WITH_LABELS or CHARACTER_PRESENTER_2D semantics and its capability gate. No automatic alias acceptance."
+    }
+  },
+  "x-review-field-map": {
+    "pipeline.scenes[].id": "sceneId; server assigns/verifies stable local scene identity",
+    "narrationText": "narration",
+    "visualTemplate": "template",
+    "estimatedDurationMs": "estimatedDurationSec; any legacy migration is an explicit boundary conversion, not an accepted alias",
+    "creationMode": "settings.mode with canonical enum; no lowercase alias accepted",
+    "scriptVersion": "No automatic mapping: storyboard document lineage and draft revision are different concepts.",
+    "startMs/endMs/measuredAudioDurationMs/audioAssetId": "Worker-owned RenderTimeline only; not permitted inside planned Scene."
+  },
+  "x-semantic-rules": [
+    {
+      "id": "SCENE_ID_UNIQUE",
+      "baseline": "approved pipeline section 5",
+      "rule": "All scenes in a plan/timeline have distinct sceneId values."
+    },
+    {
+      "id": "ASSET_AUTHORIZATION",
+      "baseline": "approved API sections 6 and 8",
+      "rule": "Resolve all asset references by current owner and permitted purpose; templates never fetch arbitrary URLs or paths."
+    },
+    {
+      "id": "CAPABILITY_GATE",
+      "baseline": "approved API sections 4 and 9",
+      "rule": "After renderer testing, the planned initial template set is TITLE/STEPS/STACK_QUEUE/FLOWCHART/KEY_POINTS with en/FACELESS/16:9. COMPARISON/TIMELINE/IMAGE_WITH_LABELS remain later capability-gated and CHARACTER_PRESENTER_2D is P1 disabled. Schema validity alone does not enable any option."
+    },
+    {
+      "id": "CHARACTER_READY",
+      "baseline": "approved API section 4",
+      "rule": "Before render, CHARACTER_2D requires the same owned READY character image in settings and template props, consent and moderation gates."
+    },
+    {
+      "id": "GRAPH_REFERENCES",
+      "decision": "D-02",
+      "rule": "FLOWCHART node IDs are unique and every edge endpoint names an existing node."
+    },
+    {
+      "id": "NARRATION_BUDGET",
+      "decision": "D-02",
+      "rule": "Approved initial complete-plan narration cap is 6000 Unicode code points. This structural budget is separate from measured-duration acceptance."
+    },
+    {
+      "id": "SETTINGS_MATCH",
+      "decision": "D-12",
+      "rule": "Storyboard targetDurationSec equals settingsSnapshot.durationSec; planning target equals authenticated project's requested target."
+    },
+    {
+      "id": "ESTIMATE_BUDGET",
+      "decision": "D-03",
+      "rule": "Show estimated total against the selected target as a drafting warning; it does not guarantee final duration. Measured audio/timeline governs final target plus or minus 5-second acceptance. A large measured mismatch fails nonretryably for a new reviewed draft and approval."
+    },
+    {
+      "id": "TIMELINE_COHERENCE",
+      "decision": "D-03",
+      "rule": "First startFrame=0; next startFrame=previous start+duration; all approved scenes occur once in the same order; durationInFrames equals final scene end."
+    },
+    {
+      "id": "AUDIO_FITS",
+      "baseline": "approved no-clipping policy and D-03 ceil rounding",
+      "rule": "For each scene audioOffsetInFrames+ceil(measuredAudioDurationMs*fps/1000)<=durationInFrames; never truncate speech."
+    },
+    {
+      "id": "CAPTION_WINDOW",
+      "decision": "D-03/D-04",
+      "rule": "Caption end exceeds start; captions stay within corresponding canonical scene/audio windows and follow approved transcript segments. Derive private WebVTT delivery from this same timeline, without burned-in text in the MP4 or estimated word-timing claims."
+    },
+    {
+      "id": "GENERATION_SETTINGS_REAPPROVAL",
+      "decision": "D-12",
+      "rule": "Any generation-setting change after approval creates a new draft/settings snapshot requiring review and approval. Preserve all older approved snapshots. Title-only project edits do not trigger this workflow."
+    },
+    {
+      "id": "WEBVTT_TIMELINE_MATCH",
+      "decision": "D-03/D-04",
+      "rule": "The WebVTT sidecar cue content/timing and the clean MP4 reference one canonical measured timeline. Validate exact cue order, transcript text and boundaries before publication; publish only with the same owner/access/deletion policy as the video."
+    }
+  ],
+  "$ref": "#/$defs/Storyboard",
+  "$defs": {
+    "OpaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "D-02 approved initial limit: opaque identifier label, at most 128 characters; ownership and existence are service checks."
+    },
+    "SceneId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "D-02 approved initial limit: opaque identifier label, at most 64 characters; ownership and existence are service checks."
+    },
+    "DurationSec": {
+      "type": "integer",
+      "enum": [
+        30,
+        60,
+        90
+      ],
+      "description": "Approved duration presets; measured exported duration is evaluated separately."
+    },
+    "CreationMode": {
+      "type": "string",
+      "enum": [
+        "FACELESS",
+        "CHARACTER_2D"
+      ],
+      "description": "Approved mode names. CHARACTER_2D is P1 and unavailable unless advertised and safety gates pass."
+    },
+    "Language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "hi"
+      ],
+      "description": "Initial capability is English only. Hindi remains later capability-gated after voice and caption quality tests."
+    },
+    "AspectRatio": {
+      "type": "string",
+      "enum": [
+        "16:9",
+        "9:16"
+      ],
+      "description": "Initial output is 16:9 at 1280x720. The canonical registry reserves 9:16 for later capability-gated layout and media testing."
+    },
+    "TemplateId": {
+      "type": "string",
+      "enum": [
+        "TITLE",
+        "STEPS",
+        "STACK_QUEUE",
+        "FLOWCHART",
+        "COMPARISON",
+        "TIMELINE",
+        "KEY_POINTS",
+        "IMAGE_WITH_LABELS",
+        "CHARACTER_PRESENTER_2D"
+      ],
+      "description": "Approved canonical nine-template registry. Planned initial templates after testing are TITLE, STEPS, STACK_QUEUE, FLOWCHART and KEY_POINTS. COMPARISON, TIMELINE and IMAGE_WITH_LABELS remain later capability-gated; CHARACTER_PRESENTER_2D is P1 disabled. Registry membership is not implementation."
+    },
+    "Tone": {
+      "type": "string",
+      "enum": [
+        "EDUCATIONAL"
+      ],
+      "description": "Approved initial tone: EDUCATIONAL. Additional tones remain outside the initial capability profile."
+    },
+    "VisualStyle": {
+      "type": "string",
+      "enum": [
+        "MOTION_GRAPHICS"
+      ],
+      "description": "Approved initial visual style: MOTION_GRAPHICS. No arbitrary CSS or source-code style fields."
+    },
+    "Settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/CreationMode"
+        },
+        "durationSec": {
+          "$ref": "#/$defs/DurationSec"
+        },
+        "language": {
+          "$ref": "#/$defs/Language"
+        },
+        "aspectRatio": {
+          "$ref": "#/$defs/AspectRatio"
+        },
+        "tone": {
+          "$ref": "#/$defs/Tone"
+        },
+        "visualStyle": {
+          "$ref": "#/$defs/VisualStyle"
+        },
+        "characterAssetId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaqueId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "durationSec",
+        "language",
+        "aspectRatio",
+        "tone",
+        "visualStyle"
+      ],
+      "description": "Approved complete settings representation. Initial enabled profile is en/FACELESS/16:9/EDUCATIONAL/MOTION_GRAPHICS after implementation and testing. CHARACTER_2D remains disabled; its future draft may await image selection, but rendering requires an owned READY image, consent and capability checks. No public voice field or automatic cloud fallback. Any generation-setting change after approval needs a new reviewed draft and approval; preserved approved snapshots never change."
+    },
+    "SettingsPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/CreationMode"
+        },
+        "durationSec": {
+          "$ref": "#/$defs/DurationSec"
+        },
+        "language": {
+          "$ref": "#/$defs/Language"
+        },
+        "aspectRatio": {
+          "$ref": "#/$defs/AspectRatio"
+        },
+        "tone": {
+          "$ref": "#/$defs/Tone"
+        },
+        "visualStyle": {
+          "$ref": "#/$defs/VisualStyle"
+        },
+        "characterAssetId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaqueId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [],
+      "description": "Partial assistant suggestions or project settings updates; {} remains structurally valid for no assistant suggestions. Validate merged complete Settings and active capabilities. Omitted fields remain unchanged; explicit null only clears characterAssetId. A generation-setting change after approval requires a new reviewed draft and approval. Title-only project metadata edits do not require reapproval."
+    },
+    "TitleProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "subtitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 240 Unicode code points. Render as text; never interpret as markup or code."
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "x-decision-ref": "D-02"
+    },
+    "StepsProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "pattern": "\\S",
+            "description": "D-02 approved initial limit: nonblank literal text, at most 240 Unicode code points. Render as text; never interpret as markup or code."
+          },
+          "minItems": 2,
+          "maxItems": 8,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "title",
+        "steps"
+      ],
+      "x-decision-ref": "D-02"
+    },
+    "StackQueueProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "\\S",
+            "description": "D-02 approved initial limit: nonblank literal text, at most 100 Unicode code points. Render as text; never interpret as markup or code."
+          },
+          "minItems": 1,
+          "maxItems": 12,
+          "x-decision-ref": "D-02"
+        },
+        "layout": {
+          "type": "string",
+          "enum": [
+            "STACK",
+            "QUEUE",
+            "STACK_AND_QUEUE"
+          ],
+          "description": "D-02 approved initial limit: static layout selector; animation is owned by the trusted template."
+        }
+      },
+      "required": [
+        "title",
+        "items"
+      ],
+      "x-decision-ref": "D-02"
+    },
+    "FlowNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "description": "D-02 approved initial limit: opaque identifier label, at most 64 characters; ownership and existence are service checks."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 100 Unicode code points. Render as text; never interpret as markup or code."
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ]
+    },
+    "FlowEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "description": "D-02 approved initial limit: opaque identifier label, at most 64 characters; ownership and existence are service checks."
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "description": "D-02 approved initial limit: opaque identifier label, at most 64 characters; ownership and existence are service checks."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 100 Unicode code points. Render as text; never interpret as markup or code."
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "FlowchartProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FlowNode"
+          },
+          "minItems": 2,
+          "maxItems": 12,
+          "x-decision-ref": "D-02"
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FlowEdge"
+          },
+          "minItems": 1,
+          "maxItems": 18,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "title",
+        "nodes",
+        "edges"
+      ],
+      "x-decision-ref": "D-02",
+      "description": "D-02 approved initial graph limits. Node IDs must be unique; edge endpoints must reference nodes in this scene. Those graph constraints require semantic validation."
+    },
+    "ComparisonSide": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 100 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "pattern": "\\S",
+            "description": "D-02 approved initial limit: nonblank literal text, at most 240 Unicode code points. Render as text; never interpret as markup or code."
+          },
+          "minItems": 1,
+          "maxItems": 6,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "heading",
+        "points"
+      ]
+    },
+    "ComparisonProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "left": {
+          "$ref": "#/$defs/ComparisonSide"
+        },
+        "right": {
+          "$ref": "#/$defs/ComparisonSide"
+        }
+      },
+      "required": [
+        "title",
+        "left",
+        "right"
+      ],
+      "x-decision-ref": "D-02"
+    },
+    "TimelineEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 100 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 240 Unicode code points. Render as text; never interpret as markup or code."
+        }
+      },
+      "required": [
+        "label"
+      ]
+    },
+    "TimelineProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimelineEvent"
+          },
+          "minItems": 2,
+          "maxItems": 8,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "title",
+        "events"
+      ],
+      "x-decision-ref": "D-02",
+      "description": "Ordered concept events, not compositor timing. Animation scheduling is computed internally."
+    },
+    "KeyPointsProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "pattern": "\\S",
+            "description": "D-02 approved initial limit: nonblank literal text, at most 240 Unicode code points. Render as text; never interpret as markup or code."
+          },
+          "minItems": 1,
+          "maxItems": 8,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "title",
+        "points"
+      ],
+      "x-decision-ref": "D-02"
+    },
+    "ImageLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 100 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "xPercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "yPercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "text",
+        "xPercent",
+        "yPercent"
+      ]
+    },
+    "ImageWithLabelsProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "assetId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ImageLabel"
+          },
+          "minItems": 1,
+          "maxItems": 8,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "title",
+        "assetId",
+        "labels"
+      ],
+      "x-decision-ref": "D-02",
+      "description": "Owned image asset ID only. No remote URLs, storage keys, file paths, SVG/HTML source, or CSS."
+    },
+    "CharacterPresenterProps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 120 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "characterAssetId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "pattern": "\\S",
+            "description": "D-02 approved initial limit: nonblank literal text, at most 240 Unicode code points. Render as text; never interpret as markup or code."
+          },
+          "minItems": 1,
+          "maxItems": 6,
+          "x-decision-ref": "D-02"
+        },
+        "motionPreset": {
+          "type": "string",
+          "enum": [
+            "STATIC",
+            "PAN_ZOOM",
+            "BOB"
+          ],
+          "description": "D-02 approved allowlisted 2D transforms; no lip-sync, gestures-as-code, or voice cloning."
+        }
+      },
+      "required": [
+        "title",
+        "characterAssetId",
+        "points"
+      ],
+      "x-decision-ref": "D-02",
+      "x-feature-gate": "CHARACTER_2D_P1",
+      "description": "P1 contract registry entry only, disabled initially. Future use needs enabled character mode, matching settings asset, ownership, READY media, consent, moderation and tested renderer. No realistic lip-sync or voice cloning."
+    },
+    "TitleScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "TITLE"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/TitleProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "INITIAL_AFTER_TESTING"
+    },
+    "StepsScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "STEPS"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/StepsProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "INITIAL_AFTER_TESTING"
+    },
+    "StackQueueScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "STACK_QUEUE"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/StackQueueProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "INITIAL_AFTER_TESTING"
+    },
+    "FlowchartScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "FLOWCHART"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/FlowchartProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "INITIAL_AFTER_TESTING"
+    },
+    "ComparisonScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "COMPARISON"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/ComparisonProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "LATER_CAPABILITY_GATED"
+    },
+    "TimelineScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "TIMELINE"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/TimelineProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "LATER_CAPABILITY_GATED"
+    },
+    "KeyPointsScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "KEY_POINTS"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/KeyPointsProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "INITIAL_AFTER_TESTING"
+    },
+    "ImageWithLabelsScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "IMAGE_WITH_LABELS"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/ImageWithLabelsProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "LATER_CAPABILITY_GATED"
+    },
+    "CharacterPresenter2dScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "template": {
+          "const": "CHARACTER_PRESENTER_2D"
+        },
+        "narration": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 1200 Unicode code points. Render as text; never interpret as markup or code."
+        },
+        "visualProps": {
+          "$ref": "#/$defs/CharacterPresenterProps"
+        },
+        "estimatedDurationSec": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 30,
+          "description": "D-02 approved initial planning range, in seconds. It is an estimate, never authoritative narration/compositor timing."
+        },
+        "assetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OpaqueId"
+          },
+          "minItems": 0,
+          "maxItems": 6,
+          "x-decision-ref": "D-02",
+          "uniqueItems": true,
+          "description": "Optional explicit asset references; all referenced IDs must be owned and allowed. If supplied, service reconciles this list with template asset fields."
+        }
+      },
+      "required": [
+        "sceneId",
+        "template",
+        "narration",
+        "visualProps",
+        "estimatedDurationSec"
+      ],
+      "x-decision-ref": "D-02",
+      "x-availability-phase": "P1_DISABLED"
+    },
+    "Scene": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TitleScene"
+        },
+        {
+          "$ref": "#/$defs/StepsScene"
+        },
+        {
+          "$ref": "#/$defs/StackQueueScene"
+        },
+        {
+          "$ref": "#/$defs/FlowchartScene"
+        },
+        {
+          "$ref": "#/$defs/ComparisonScene"
+        },
+        {
+          "$ref": "#/$defs/TimelineScene"
+        },
+        {
+          "$ref": "#/$defs/KeyPointsScene"
+        },
+        {
+          "$ref": "#/$defs/ImageWithLabelsScene"
+        },
+        {
+          "$ref": "#/$defs/CharacterPresenter2dScene"
+        }
+      ],
+      "description": "One strict allowlisted scene variant. Only the matching visualProps shape is accepted. No model-authored executable render code or worker fields."
+    },
+    "SceneList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Scene"
+      },
+      "minItems": 2,
+      "maxItems": 18,
+      "x-decision-ref": "D-02",
+      "description": "Approved initial bound: 2-18 scenes for a complete 30/60/90-second plan. Scene IDs must be unique by value; uniqueItems does not enforce that. These structural limits do not guarantee measured spoken duration."
+    },
+    "PlanningOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "targetDurationSec": {
+          "$ref": "#/$defs/DurationSec"
+        },
+        "scenes": {
+          "$ref": "#/$defs/SceneList"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "targetDurationSec",
+        "scenes"
+      ],
+      "description": "Approved untrusted Gemini planning shape. Server derives project, owner, settings, revision, approval and persistence metadata. Verify target against requested settings and assign/verify local scene labels. No project IDs, asset paths, status, output timing or approval can be supplied. Apply capability gates and duration review separately.",
+      "x-decision-refs": [
+        "D-01",
+        "D-02",
+        "D-03"
+      ]
+    },
+    "Storyboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/OpaqueId",
+          "readOnly": true
+        },
+        "projectId": {
+          "$ref": "#/$defs/OpaqueId",
+          "readOnly": true
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "readOnly": true
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "APPROVED"
+          ],
+          "readOnly": true
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "targetDurationSec": {
+          "$ref": "#/$defs/DurationSec"
+        },
+        "settingsSnapshot": {
+          "$ref": "#/$defs/Settings"
+        },
+        "scenes": {
+          "$ref": "#/$defs/SceneList"
+        },
+        "parentStoryboardId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaqueId"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "readOnly": true
+        },
+        "approvedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "readOnly": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "revision",
+        "status",
+        "schemaVersion",
+        "targetDurationSec",
+        "settingsSnapshot",
+        "scenes",
+        "approvedAt",
+        "createdAt",
+        "updatedAt"
+      ],
+      "description": "Full public storyboard read with schemaVersion, settingsSnapshot, approvedAt and timestamps. Server-only hashes, leases and storage keys remain absent. Approved snapshots are immutable. Changes to generation settings need a new reviewed draft and approval; title-only metadata edits do not. A single-scene prose fragment is not a complete storyboard.",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "DRAFT"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approvedAt": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approvedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              }
+            }
+          }
+        }
+      ],
+      "x-decision-refs": [
+        "D-12",
+        "D-02",
+        "D-03"
+      ]
+    },
+    "StoryboardEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scenes": {
+          "$ref": "#/$defs/SceneList"
+        }
+      },
+      "required": [
+        "expectedRevision",
+        "scenes"
+      ],
+      "description": "Replace and validate the complete scene list only while DRAFT, using atomic compare-and-set on expectedRevision. Do not edit approved snapshots or their settings here. A generation-setting change after approval requires a new draft with the changed settings and new approval."
+    },
+    "ApproveStoryboardRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "expectedRevision"
+      ],
+      "description": "Approve exactly the saved DRAFT revision and its generation settings. The server freezes canonical content and settings; no generation job starts in this request. Later generation-setting changes require a new reviewed draft and approval."
+    },
+    "StoryboardApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "const": "APPROVED"
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "status",
+        "approvedAt"
+      ],
+      "description": "Approved compact approval response. No content hash, worker details or media credentials."
+    },
+    "CaptionSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startFrame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2849
+        },
+        "endFrame": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2850
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S",
+          "description": "D-02 approved initial limit: nonblank literal text, at most 300 Unicode code points. Render as text; never interpret as markup or code."
+        }
+      },
+      "required": [
+        "startFrame",
+        "endFrame",
+        "text"
+      ],
+      "x-decision-refs": [
+        "D-03",
+        "D-04"
+      ],
+      "description": "Canonical composition-absolute half-open [startFrame,endFrame) caption boundaries. End exceeds start and text follows approved narration inside the corresponding scene. The browser receives a separate WebVTT sidecar derived from these same measured boundaries; the MP4 is clean and caption-free. No estimated word-level alignment or raw WebVTT styling/markup is supplied by clients/models."
+    },
+    "TimedScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "$ref": "#/$defs/SceneId"
+        },
+        "startFrame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2849
+        },
+        "durationInFrames": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2850
+        },
+        "audioAssetId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "audioOffsetInFrames": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2849
+        },
+        "measuredAudioDurationMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 95000
+        },
+        "captionSegments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CaptionSegment"
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "sceneId",
+        "startFrame",
+        "durationInFrames",
+        "audioAssetId",
+        "audioOffsetInFrames",
+        "measuredAudioDurationMs",
+        "captionSegments"
+      ],
+      "x-decision-refs": [
+        "D-03",
+        "D-04"
+      ],
+      "description": "Internal worker-derived timing, never Gemini/client input. Measured audio duration uses integer milliseconds and compositor timing uses integer frames. Audio offset is scene-local; captions are composition-absolute. Enforce audioOffset+ceil(measuredAudioDurationMs*fps/1000)<=durationInFrames. Never cut speech or use unnatural speed-up to force duration."
+    },
+    "RenderTimeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "fps": {
+          "const": 30
+        },
+        "durationInFrames": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2850
+        },
+        "scenes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimedScene"
+          },
+          "minItems": 2,
+          "maxItems": 18,
+          "x-decision-ref": "D-02"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "fps",
+        "durationInFrames",
+        "scenes"
+      ],
+      "x-internal": true,
+      "x-decision-refs": [
+        "D-03",
+        "D-04"
+      ],
+      "description": "Internal canonical 30 FPS measured timeline for initial 1280x720 output. Scene windows are contiguous without overlap and transitions fit inside them. Total equals final scene end. Final duration must be within target plus or minus 5 seconds; only small pause changes are allowed. A large mismatch produces nonretryable failure requiring a new draft and approval. The clean MP4 and separate WebVTT sidecar use this same timeline.",
+      "x-output-profile": {
+        "width": 1280,
+        "height": 720,
+        "fps": 30,
+        "aspectRatio": "16:9"
+      }
+    },
+    "WebVttCaptionTrack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "format",
+        "mimeType",
+        "language",
+        "cues"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "format": {
+          "const": "WEBVTT"
+        },
+        "mimeType": {
+          "const": "text/vtt"
+        },
+        "language": {
+          "$ref": "#/$defs/Language"
+        },
+        "cues": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1800,
+          "items": {
+            "$ref": "#/$defs/CaptionSegment"
+          }
+        }
+      },
+      "x-internal": true,
+      "x-decision-refs": [
+        "D-03",
+        "D-04"
+      ],
+      "description": "Logical internal sidecar content before serialization, not a public response or client/model input. Cues derive from the same canonical measured RenderTimeline used by the clean MP4, retain approved transcript order and stay inside scene/audio windows. Serialize to UTF-8 WebVTT text/vtt, with literal text escaped for the format; clients cannot inject markup, CSS or paths. Exact deterministic frame-to-millisecond timestamp formatting and line wrapping are implementation details to validate. Sidecar asset IDs/hash/delivery belong to the job/media contract. The MP4 alone has no captions; burned-in export is deferred."
+    }
+  },
+  "x-updated-on": "2026-11-21",
+  "x-approved-decisions": {
+    "D-01": "The nine HLD/database template IDs are canonical. Planned initial templates are TITLE, STEPS, STACK_QUEUE, FLOWCHART and KEY_POINTS after testing. COMPARISON, TIMELINE and IMAGE_WITH_LABELS are later capability-gated. CHARACTER_PRESENTER_2D remains P1 and disabled. Legacy alias mappings are review data only, not automatically accepted input.",
+    "D-02": "Existing draft scene/list/string/identifier/graph bounds and bounded per-template visualProps are approved initial limits, including 2-18 scenes, title 120 and complete-plan narration 6000 characters. Strict properties carry inert text and owned identifiers, never raw render code, asset URLs or filesystem paths. Limits need layout testing and do not guarantee spoken duration.",
+    "D-03": "Initial output is 1280x720 at 30 FPS. Measured integer audio milliseconds determine integer-frame timing with ceil(audioMs*fps/1000). Scene windows do not overlap and transitions fit inside them. Target tolerance is plus or minus 5 seconds; only small pause adjustments are permitted. No speech clipping or unnatural speed-up. A large measured mismatch fails nonretryably for a new reviewed draft and approval.",
+    "D-04": "Deliver a clean MP4 without burned-in captions plus a separate WebVTT sidecar for the browser caption toggle. Both derive from the same canonical measured timeline and follow the same private access/deletion policy. The MP4 alone is caption-free; burned-in caption exports are deferred.",
+    "D-05": "Initial capabilities are English, 16:9, EDUCATIONAL and MOTION_GRAPHICS with one tested local Kokoro voice. Actual runtime/model/voice choice remains an implementation validation detail. There is no public voice-selection field or automatic cloud fallback.",
+    "D-12": "Full storyboard reads include required schemaVersion/settingsSnapshot/approvedAt/timestamps and no private digest. A generation-setting change after approval requires a new reviewed draft and approval; title-only edits do not. Existing approved snapshots remain immutable."
+  },
+  "x-template-availability-policy": {
+    "initialAfterTesting": [
+      "TITLE",
+      "STEPS",
+      "STACK_QUEUE",
+      "FLOWCHART",
+      "KEY_POINTS"
+    ],
+    "laterCapabilityGated": [
+      "COMPARISON",
+      "TIMELINE",
+      "IMAGE_WITH_LABELS"
+    ],
+    "p1Disabled": [
+      "CHARACTER_PRESENTER_2D"
+    ],
+    "rule": "Schema membership does not implement or enable a renderer. Advertise only tested capabilities."
+  },
+  "x-export-profile": {
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "aspectRatio": "16:9",
+    "targetToleranceSec": 5,
+    "mp4CaptionMode": "NONE",
+    "browserCaptionFormat": "WEBVTT",
+    "browserCaptionMimeType": "text/vtt",
+    "captionTimingSource": "RenderTimeline",
+    "burnedInCaptions": "DEFERRED",
+    "noSpeechClipping": true,
+    "noUnnaturalSpeechSpeedup": true
+  }
+}

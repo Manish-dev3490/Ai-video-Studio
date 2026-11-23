@@ -1,0 +1,20 @@
+{
+  "sceneId": "scene_timeline",
+  "template": "TIMELINE",
+  "narration": "The script runs, microtasks drain, and a later task runs.",
+  "visualProps": {
+    "title": "Order of work",
+    "events": [
+      {
+        "label": "Script"
+      },
+      {
+        "label": "Microtasks"
+      },
+      {
+        "label": "Later task"
+      }
+    ]
+  },
+  "estimatedDurationSec": 6
+}

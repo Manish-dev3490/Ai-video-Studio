@@ -1,0 +1,27 @@
+{
+  "name": "@ai-video-studio/video-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Validated data-driven Remotion engine with offline local Kokoro narration",
+  "engines": { "node": "^22.13.0 || >=24" },
+  "exports": { ".": "./src/index.js" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "setup:kokoro": "node scripts/setup-kokoro.js",
+    "render": "node scripts/render.js",
+    "validate:phase2": "node scripts/validate-phase2.js"
+  },
+  "dependencies": {
+    "@fontsource/inter": "5.3.0",
+    "@huggingface/transformers": "3.8.1",
+    "@remotion/bundler": "4.0.544",
+    "@remotion/renderer": "4.0.544",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "kokoro-js": "1.2.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.544"
+  }
+}

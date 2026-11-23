@@ -1,0 +1,593 @@
+{
+  "contractVersion": 1,
+  "title": "Canonical job lifecycle review draft",
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "description": "Declarative contract draft updated with approved decisions. It documents guarded lifecycle and settlement rules only; it implements no queue, worker, persistence migration, feature or provider runtime.",
+  "sources": [
+    {
+      "file": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+      "sections": [
+        "2",
+        "6",
+        "7",
+        "10",
+        "11"
+      ]
+    },
+    {
+      "file": "../../docs/AI_Video_Studio_Database_Design_v1.0.md",
+      "sections": [
+        "3.5",
+        "3.6",
+        "3.8",
+        "4"
+      ]
+    },
+    {
+      "file": "../../docs/AI_Video_Studio_Audio_Video_Pipeline_Design_v1.0.md",
+      "sections": [
+        "2",
+        "6",
+        "7"
+      ]
+    }
+  ],
+  "entitySeparation": {
+    "projectPhase": [
+      "DRAFT",
+      "REVIEW",
+      "RENDERING",
+      "HAS_OUTPUT"
+    ],
+    "storyboardStatus": [
+      "DRAFT",
+      "APPROVED"
+    ],
+    "generationStatus": [
+      "QUEUED",
+      "PROCESSING",
+      "CANCEL_REQUESTED",
+      "COMPLETED",
+      "FAILED",
+      "CANCELLED"
+    ],
+    "note": "DRAFT and SCRIPT_PENDING_APPROVAL are never generation-job statuses. A failed later generation does not remove an earlier successful project output."
+  },
+  "stageOrder": [
+    "PREPARE_ASSETS",
+    "SYNTHESIZE_AUDIO",
+    "ALIGN_TIMELINE",
+    "RENDER_VIDEO",
+    "VALIDATE_OUTPUT",
+    "UPLOAD_OUTPUT"
+  ],
+  "activeStatuses": [
+    "QUEUED",
+    "PROCESSING",
+    "CANCEL_REQUESTED"
+  ],
+  "terminalStatuses": [
+    "COMPLETED",
+    "FAILED",
+    "CANCELLED"
+  ],
+  "globalInvariants": [
+    "New admission references an owner-scoped live project and an immutable APPROVED storyboard whose revision/hash and generation settings match the currently selected effective project settings. Settings changes require a new draft and approval; a title-only change does not.",
+    "Matching idempotency replay is resolved after authentication/ownership/deletion checks but before new admission checks; it returns the original receipt without another job/reservation even if the worker is now offline or the old job is terminal.",
+    "Every new admission reserves one slot regardless of30/60/90 preset; default 3 slots/user/UTC day. Reservation/job/receipt writes are transaction-linked and repeat-safe.",
+    "Global capacity is one actually running render job plus up to two waiting jobs. At most one active generation exists per project. A pending cancellation retains its slot/reservation until actual process state is confirmed and terminal settlement is guarded.",
+    "Every leased write verifies job ID/current fencing token/lease validity/allowed source state. Heartbeat10 seconds, lease 60 seconds, maximum 2 total automatic execution attempts for the same job/reservation.",
+    "Fencing rejects stale writes but cannot stop CPU usage. A worker that loses its lease stops its owned subprocesses; recovery cannot claim a real free render slot merely because a database lease expired.",
+    "COMPLETED publication requires both a verified owner-accessible READY clean MP4 and matching selectable WebVTT sidecar. Their shared expiry is verified publication UTC+604800 seconds.",
+    "Historical COMPLETED and both artifact IDs remain after media expiry/deletion. Asset metadata/download controls current availability, and every new read/range request checks ownership and revocation.",
+    "Publication and cancellation compare-and-set against state/lease/project tombstone: the first committed guarded result wins. Unknown stop/start evidence keeps cancellation pending rather than publishing or releasing resources prematurely.",
+    "ExecutionState.renderStartedAt records the first actual RENDER_VIDEO execution and never resets on reclaim. It is internal settlement evidence, not inferred from the current stage alone.",
+    "Success consumes the one-slot reservation. System/provider failure releases it. Confirmed cancellation before actual RENDER_VIDEO starts releases it; after any actual render start consumes it, including after a later reclaim. Repeated settlement never double-charges/releases.",
+    "Approved narration/settings are never silently rewritten, clipped or sped up. Canonical measured timeline/FPS/dimensions match the approved snapshot.",
+    "Narration and caption artifact IDs/hashes/configuration match the canonical timeline. Clean MP4 contains no burned-in caption layer. A separate publication manifest captures final MP4/WebVTT hashes without mutating pre-render inputs.",
+    "Successful intermediates clean up after delivery is verified; failed temporary artifacts expire after 24 hours. Final MP4/WebVTT availability lasts 7 days. Hash manifests do not make cleaned/expired blobs available or guarantee byte-identical cross-runtime regeneration.",
+    "JSON Schema cannot prove ownership, process termination, asset readiness, hashing correctness, timeline alignment or cross-document transaction integrity.",
+    "Late render-start evidence may be recorded while CANCEL_REQUESTED only for an already-started pre-cancel process. It cannot launch/resume work or charge an unauthorized post-cancel launch as earlier user rendering.",
+    "New retry of FAILED requires retryable=true; known revision-required snapshots require a corrected new approved draft for any fresh admission. Matching authenticated idempotency receipt replay remains allowed without new work."
+  ],
+  "transitions": [
+    {
+      "event": "ADMIT_NEW_JOB",
+      "from": null,
+      "to": "QUEUED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Authenticated owner and live project",
+        "Exact APPROVED storyboard revision/hash with current generation settings; new draft/approval after a settings change",
+        "No active generation for the project",
+        "Online worker and global capacity of 1 running plus 2 waiting",
+        "Available one-slot reservation within default 3 slots/user/UTC day",
+        "New idempotency identity; existing matching identity replays instead",
+        "Reject a snapshot with known unresolved revision-required failure until a corrected draft is reviewed and approved; matching existing receipt replay is not new admission"
+      ],
+      "effects": [
+        "Create new generation ID with attempt 0, stage=null, completedStages 0,totalStages 6",
+        "Persist transaction-linked job/reservation/original data receipt together",
+        "Initialize internal renderStartedAt=null; reserve exactly one GENERATION_SLOT"
+      ],
+      "approvedDecisions": [
+        "D-06",
+        "D-07",
+        "D-08",
+        "D-12"
+      ]
+    },
+    {
+      "event": "CLAIM",
+      "from": "QUEUED",
+      "to": "PROCESSING",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Atomic eligible-job claim",
+        "No cancellation or project deletion",
+        "Worker has a real execution slot under global one-running limit",
+        "No prior automatic attempt beyond total 2"
+      ],
+      "effects": [
+        "Assign fresh lease/fencing token; renew on10-second heartbeat with60-second lease",
+        "Increment attempt up to2 and set PREPARE_ASSETS",
+        "Persist per-attempt execution versions/configuration before work; keep approved logical input immutable",
+        "Never reset job-level renderStartedAt across recovery"
+      ],
+      "approvedDecisions": [
+        "D-08",
+        "D-10"
+      ]
+    },
+    {
+      "event": "ADVANCE_STAGE",
+      "from": "PROCESSING",
+      "to": "PROCESSING",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Current unexpired lease and fencing token",
+        "Prior stage output validated",
+        "No cancellation or deletion",
+        "Next stage follows canonical order"
+      ],
+      "effects": [
+        "Persist next stage and confirmed completedStages count",
+        "Revalidate any cached stage artifact against input/voice/model/configuration hashes",
+        "Entering RENDER_VIDEO is not alone proof of actual subprocess execution; record actual start durably",
+        "Do not fabricate percentages or completion-time estimates"
+      ],
+      "approvedDecisions": [
+        "D-08"
+      ]
+    },
+    {
+      "event": "RECORD_RENDER_STARTED",
+      "from": "PROCESSING",
+      "to": "PROCESSING",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Current lease/fencing token and RENDER_VIDEO stage",
+        "Confirmed owned renderer execution start",
+        "No earlier first-start timestamp may be overwritten"
+      ],
+      "effects": [
+        "Persist job-level renderStartedAt on first actual render start, preserving it across all reclaims",
+        "Resolve any in-flight launch/cancel uncertainty before terminal quota settlement"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08"
+      ]
+    },
+    {
+      "event": "REQUEST_CANCEL_QUEUED",
+      "from": "QUEUED",
+      "to": "CANCEL_REQUESTED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Authenticated owner",
+        "Atomic status check prevents simultaneous claim from succeeding unnoticed"
+      ],
+      "effects": [
+        "Persist cancelRequestedAt",
+        "Keep active-job uniqueness/capacity guard until final cancellation",
+        "Coordinator may finalize without starting a render"
+      ],
+      "approvedDecisions": [
+        "D-08",
+        "D-12"
+      ]
+    },
+    {
+      "event": "CANCEL_UNCLAIMED_JOB",
+      "from": "QUEUED",
+      "to": "CANCELLED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Authenticated owner or authorized deletion coordinator",
+        "Atomic guard proves no worker lease/execution was acquired"
+      ],
+      "effects": [
+        "Do not start a renderer; confirm cancellation",
+        "Release the reserved slot exactly once because renderStartedAt is null",
+        "Retain terminal job history"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08"
+      ]
+    },
+    {
+      "event": "REQUEST_CANCEL_RUNNING",
+      "from": "PROCESSING",
+      "to": "CANCEL_REQUESTED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Authenticated owner or authorized deletion coordinator",
+        "Atomic state check; a completed publication wins if already committed"
+      ],
+      "effects": [
+        "Persist cancelRequestedAt",
+        "Ask worker to stop owned subprocesses cooperatively",
+        "Do not publish output or release real execution capacity yet"
+      ],
+      "approvedDecisions": [
+        "D-08",
+        "D-12"
+      ]
+    },
+    {
+      "event": "CONFIRM_CANCELLED",
+      "from": "CANCEL_REQUESTED",
+      "to": "CANCELLED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Unclaimed job or confirmed termination of owned execution",
+        "Current lease/fencing token when a worker performs finalization",
+        "No completed publication exists"
+      ],
+      "effects": [
+        "Confirm owned execution stopped; revoke unpublished assets and schedule cleanup",
+        "If durable renderStartedAt is null, release reservation; otherwise consume it once",
+        "Release actual execution capacity only after stop confirmation",
+        "Clean failed/cancelled temp artifacts within 24 hours"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08"
+      ]
+    },
+    {
+      "event": "PUBLISH_COMPLETED",
+      "from": "PROCESSING",
+      "to": "COMPLETED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Current unexpired lease/fencing token",
+        "No cancellation, deletion, ownership change or mixed settings snapshot",
+        "All six stages verified",
+        "READY private clean MP4 and matching WebVTT uploaded/validated/accessible at publication",
+        "Guarded publication, project output pointers and quota settlement are transaction-consistent"
+      ],
+      "effects": [
+        "Set outputAssetId and captionAssetId,completedStages 6,retained stage UPLOAD_OUTPUT,error=null",
+        "Record both artifact hashes and shared expiresAt=verifiedPublishedAt+604800 seconds in publication manifest",
+        "Consume one reserved slot once",
+        "Preserve prior outputs/job history; later media expiry/deletion changes availability only",
+        "Clean successful intermediates after delivery verification"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08",
+        "D-12"
+      ]
+    },
+    {
+      "event": "FAIL_ATTEMPT",
+      "from": "PROCESSING",
+      "to": "FAILED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Current fenced execution or authorized recovery coordinator",
+        "Nonretryable system/provider failure or max2 automatic execution attempts exhausted",
+        "Owned execution is confirmed stopped; fencing alone is not stop proof",
+        "No completed publication or winning cancellation outcome exists"
+      ],
+      "effects": [
+        "Record sanitized code/message/retryable and retain approved storyboard/prior output",
+        "Never expose partial media as final output",
+        "Release reservation once for system/provider failure",
+        "Retain failed temp artifacts no longer than24 hours"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08"
+      ]
+    },
+    {
+      "event": "FAIL_UNCLAIMED_JOB",
+      "from": "QUEUED",
+      "to": "FAILED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Authorized recovery coordinator",
+        "No active worker execution",
+        "A reviewed operational waiting policy has expired; exact timeout is still deferred"
+      ],
+      "effects": [
+        "Keep attempt 0,stage=null,completedStages 0",
+        "Record sanitized actionable system failure",
+        "Release reservation exactly once"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08"
+      ],
+      "deferredDetails": [
+        "Exact queue/stage waiting deadlines require duration-specific benchmarking and operational validation; no guessed timeout is frozen."
+      ]
+    },
+    {
+      "event": "CONFIRM_PRE_CANCEL_RENDER_START",
+      "from": "CANCEL_REQUESTED",
+      "to": "CANCEL_REQUESTED",
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "guards": [
+        "Current authorized fencing/recovery coordination and identifiable execution evidence",
+        "Actual process started BEFORE the cancellation was accepted; late reporting is not a new launch",
+        "Preserve the earliest confirmed legitimate renderStartedAt; do not replace it on reclaim",
+        "No completion/publication can occur after cancellation won"
+      ],
+      "effects": [
+        "Persist only late evidence of already-started pre-cancel execution",
+        "Do not launch,resume or restart work",
+        "Stop owned processes and confirm termination before settling",
+        "If actual start/stop ordering remains uncertain, keep cancellation and reservation pending",
+        "A process launched after accepted cancellation is not evidence of pre-cancel user-rendered work"
+      ],
+      "approvedDecisions": [
+        "D-07",
+        "D-08"
+      ]
+    }
+  ],
+  "recoveryAndRetry": {
+    "leaseExpiredWhileProcessing": {
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "action": "Reclaim the same generation/reservation under a fresh token at most once, for maximum 2 total execution attempts. Increment attempt; preserve the first actual renderStartedAt and immutable approved input. Revalidate reused artifacts and record new per-attempt execution provenance.",
+      "guard": "Old worker stops owned subprocesses on lease loss. Coordinator confirms real capacity/process state before replacement execution; state/fencing guards reject stale progress/publication.",
+      "approvedDecisions": [
+        "D-08"
+      ],
+      "deferredDetails": [
+        "Exact per-stage timeouts await 30/60/90 benchmarks; the current 30-second fixture does not establish 60/90 runtime predictions."
+      ]
+    },
+    "leaseExpiredWhileCancelRequested": {
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "action": "Adopt cancellation cleanup without restarting narration/rendering or resetting renderStartedAt. Keep CANCEL_REQUESTED/reservation pending while actual process state is uncertain; finalize CANCELLED only after proof of no execution or confirmed termination.",
+      "approvedDecisions": [
+        "D-08"
+      ]
+    },
+    "retryAfterTerminalFailureOrCancellation": {
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "eligibleStatuses": [
+        "FAILED",
+        "CANCELLED"
+      ],
+      "action": "FAILED/CANCELLED user retry creates a NEW generation ID,attempt 0 and new one-slot reservation, linked by retryOf to the original frozen snapshot. Recheck live project/settings approval, owner,3-slot UTC allowance and global1-running/2-waiting capacity. Never mutate old terminal state back to QUEUED; matching idempotent replay still creates nothing.",
+      "approvedDecisions": [
+        "D-06",
+        "D-07",
+        "D-08"
+      ],
+      "failureEligibilityGuard": "After an authenticated matching receipt replay is resolved, NEW retry of FAILED requires error.retryable=true. Otherwise reject409 GENERATION_NOT_RETRYABLE. Revision/duration-required failures specifically need a corrected newly reviewed/approved draft; other nonretryable errors require their indicated corrective action. CANCELLED may request new admission subject to normal guards."
+    },
+    "completedJobRetry": {
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "action": "Reject retry with state conflict. A revised approved storyboard is a separate workflow, not retry of a successful job."
+    },
+    "terminalCancellation": {
+      "basis": "APPROVED_DECISIONS_DRAFT",
+      "action": "Return409 for already terminal jobs. A still-pending cancellation may acknowledge stored CANCEL_REQUESTED; no acknowledgement claims actual process termination.",
+      "approvedDecisions": [
+        "D-08",
+        "D-12"
+      ]
+    }
+  },
+  "pipelineLabelMapping": [
+    {
+      "pipelineLabel": "DRAFT",
+      "entity": "storyboard",
+      "canonicalStatus": "DRAFT",
+      "note": "No generation job yet."
+    },
+    {
+      "pipelineLabel": "SCRIPT_PENDING_APPROVAL",
+      "entity": "storyboard",
+      "canonicalStatus": "DRAFT",
+      "note": "Project may be in REVIEW; not a generation status."
+    },
+    {
+      "pipelineLabel": "QUEUED",
+      "entity": "generation",
+      "canonicalStatus": "QUEUED",
+      "canonicalStage": null
+    },
+    {
+      "pipelineLabel": "SYNTHESIZING_AUDIO",
+      "entity": "generation",
+      "canonicalStatus": "PROCESSING",
+      "canonicalStage": "SYNTHESIZE_AUDIO"
+    },
+    {
+      "pipelineLabel": "BUILDING_VISUALS",
+      "entity": "generation",
+      "canonicalStatus": "PROCESSING",
+      "canonicalStages": [
+        "PREPARE_ASSETS",
+        "ALIGN_TIMELINE"
+      ],
+      "note": "Proposed activity split: validate/resolve templates/assets during preparation; bind geometry/timing during alignment. Legacy label is not accepted as an API enum."
+    },
+    {
+      "pipelineLabel": "COMPOSING",
+      "entity": "generation",
+      "canonicalStatus": "PROCESSING",
+      "canonicalStage": "ALIGN_TIMELINE"
+    },
+    {
+      "pipelineLabel": "RENDERING",
+      "entity": "generation",
+      "canonicalStatus": "PROCESSING",
+      "canonicalStage": "RENDER_VIDEO"
+    },
+    {
+      "pipelineLabel": "VALIDATING",
+      "entity": "generation",
+      "canonicalStatus": "PROCESSING",
+      "canonicalStage": "VALIDATE_OUTPUT"
+    },
+    {
+      "pipelineLabel": "delivery/upload activity",
+      "entity": "generation",
+      "canonicalStatus": "PROCESSING",
+      "canonicalStage": "UPLOAD_OUTPUT",
+      "note": "Explicit canonical stage absent from the illustrative flattened lifecycle."
+    },
+    {
+      "pipelineLabel": "COMPLETED",
+      "entity": "generation",
+      "canonicalStatus": "COMPLETED",
+      "canonicalStage": "UPLOAD_OUTPUT"
+    }
+  ],
+  "reviewScenarios": [
+    {
+      "case": "Two starts for one project race",
+      "expected": "One active job; unique constraint holds; loser receives conflict or same receipt on a matching idempotency replay."
+    },
+    {
+      "case": "Retry key reused on another generation",
+      "expected": "409 rather than returning the first generation's job."
+    },
+    {
+      "case": "Claim racing queued cancellation",
+      "expected": "One guarded outcome; no claim after cancellation wins."
+    },
+    {
+      "case": "Completion racing cancellation",
+      "expected": "First committed guarded outcome wins; a cancellation accepted first prevents later completion publication."
+    },
+    {
+      "case": "Deleted project during upload",
+      "expected": "No accessible completed publication; schedule orphan media cleanup."
+    },
+    {
+      "case": "Stale worker wakes after reclaim",
+      "expected": "Fencing rejects heartbeat/progress/publication; stale worker stops owned processes."
+    },
+    {
+      "case": "Worker dies with cancellation pending",
+      "expected": "Recover cancellation; do not start another render to satisfy cancellation."
+    },
+    {
+      "case": "Crash after reservation before response",
+      "expected": "Job-linked reconciliation and idempotent response recovery prevent orphan or duplicate charging."
+    },
+    {
+      "case": "Cancellation after reclaim of a render that previously started",
+      "expected": "Retained renderStartedAt causes one-slot consumption, even if current attempt is back in an earlier stage."
+    },
+    {
+      "case": "Expired video/caption pair on a historical successful job",
+      "expected": "Job remains COMPLETED with both IDs; asset metadata says expired and new reads/downloads are denied."
+    },
+    {
+      "case": "Caption missing or not aligned/READY at publication",
+      "expected": "Do not publish COMPLETED or expose a clean MP4 as a completed captioned export."
+    },
+    {
+      "case": "Same reservation is settled twice after restart",
+      "expected": "Guarded ledger permits only one reserve-to-consume/release outcome."
+    },
+    {
+      "case": "Project generation settings changed after approval",
+      "expected": "New admission requires a new reviewed/approved draft; title-only edits do not invalidate approval."
+    },
+    {
+      "case": "Render starts before cancellation but start evidence arrives after cancel CAS",
+      "expected": "Evidence-only guarded update persists proven pre-cancel start while CANCEL_REQUESTED, then confirmed stop consumes once; no resumed work or completion."
+    },
+    {
+      "case": "Duration-mismatch failure is retried or newly admitted with same known-invalid snapshot",
+      "expected": "Matching original receipt may replay, but fresh retry/admission is rejected without quota reservation; correct and approve a new draft."
+    }
+  ],
+  "draftVersion": "1.0.1-draft.2",
+  "decisionApprovalDate": "2026-11-21",
+  "policyRef": "./approved-policy.json",
+  "idempotencyContract": {
+    "decision": "D-06",
+    "scope": [
+      "authenticatedOwnerId",
+      "START_or_RETRY",
+      "idempotencyKeyHash"
+    ],
+    "canonicalRequestIdentity": [
+      "HTTP method",
+      "normalized route template",
+      "concrete projectId or original generationId target",
+      "canonical JSON body digest"
+    ],
+    "sameKeySameIdentity": "After auth/ownership/deletion checks, return original admission data receipt before fresh availability/quota checks. Same generationId; no duplicate reservation. Polling reports current state.",
+    "sameKeyDifferentIdentity": "409 IDEMPOTENCY_CONFLICT, including reuse against another target.",
+    "retentionSeconds": 86400,
+    "retention": "Separate receipt expiration after 24 hours; retained job history is never TTL-deleted to expire receipts.",
+    "deferredDetails": [
+      "Canonical serializer implementation and post-expiry key treatment must be documented consistently before runtime use; neither authorizes silently changing the owner/action/key namespace."
+    ]
+  },
+  "quotaContract": {
+    "decision": "D-07",
+    "defaultDailySlotsPerUser": 3,
+    "period": "UTC_DAY",
+    "slotsPerAdmission": 1,
+    "unit": "GENERATION_SLOT",
+    "globalRunningLimit": 1,
+    "globalWaitingLimit": 2,
+    "activePerProjectLimit": 1,
+    "transactionLinked": true,
+    "settlement": {
+      "COMPLETED": "CONSUME",
+      "FAILED_SYSTEM_OR_PROVIDER": "RELEASE",
+      "FAILED_PIPELINE_VALIDATION_OR_DURATION_MISMATCH": "RELEASE",
+      "CANCELLED_BEFORE_ACTUAL_RENDER_START": "RELEASE",
+      "CANCELLED_AFTER_ANY_ACTUAL_RENDER_START": "CONSUME",
+      "CANCEL_REQUESTED_OR_UNKNOWN_PROCESS_STATE": "KEEP_RESERVED"
+    },
+    "automaticRecovery": "Same job and reservation, up to2 total execution attempts; no new quota.",
+    "userRetry": "New job/admission/reservation; recheck limits."
+  },
+  "retentionContract": {
+    "decisions": [
+      "D-04",
+      "D-09",
+      "D-10"
+    ],
+    "successIntermediates": "Clean after verified delivery",
+    "failedTempRetentionSeconds": 86400,
+    "pairedExportAvailabilitySeconds": 604800,
+    "pairedExpiryRule": "clean MP4 and WebVTT expiresAt=the same verifiedPublishedAt UTC+604800 seconds",
+    "historicalOutcome": "Keep COMPLETED and artifact IDs after expiry/deletion; current asset metadata/read authorization decides availability.",
+    "provenance": "Retain immutable input/provenance/publication metadata subject to disclosed metadata policy; metadata alone cannot reproduce deleted intermediate blobs."
+  },
+  "deferredOperationalDetails": [
+    "Exact stage/queue waiting timeouts pending30/60/90 benchmarks",
+    "Precise caption serialization/escaping implementation, preserving canonical timing",
+    "Selected Kokoro runtime/model/voice and production deployment specifics",
+    "Canonical JSON implementation and post-expiry idempotency-key handling"
+  ]
+}

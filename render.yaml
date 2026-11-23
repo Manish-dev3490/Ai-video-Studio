@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: ai-video-studio
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev --ignore-scripts && npm ci --prefix packages/video-engine --omit=dev --ignore-scripts && npm run build
+    startCommand: node scripts/start-render.mjs
+    healthCheckPath: /api/v1/ready
+    autoDeployTrigger: "off"
+    envVars:
+      - key: NODE_VERSION
+        value: 22.20.0
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CSRF_SECRET
+        generateValue: true
+      - key: MAIL_ENCRYPTION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: DAILY_GENERATION_LIMIT
+        value: "3"
+      - key: ASSISTANT_DAILY_LIMIT
+        value: "10"
+      - key: REPORT_DAILY_LIMIT
+        value: "5"

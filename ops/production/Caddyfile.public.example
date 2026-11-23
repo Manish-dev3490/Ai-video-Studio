@@ -1,0 +1,15 @@
+# Future deployment template only. No public domain/server has been configured.
+# Replace the domain, configure DNS/ports/TLS, set the same APP_ORIGIN and test
+# the installed Caddy version. Do not run alongside the built-in local gateway.
+{
+    admin off
+}
+
+studio.example.com {
+    reverse_proxy 127.0.0.1:4200 {
+        header_up -Forwarded
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-Host {host}
+    }
+}

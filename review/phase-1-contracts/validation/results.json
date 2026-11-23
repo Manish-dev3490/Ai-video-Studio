@@ -1,0 +1,5094 @@
+{
+  "status": "PASS",
+  "contractVersion": "1.0.1-draft.2",
+  "decisionApprovalDate": "2026-11-21",
+  "approvedDecisionCount": 12,
+  "implementationAuthorized": false,
+  "scope": "Updated Phase 1 draft JSON, approved-policy consistency, local references, JSON Schema 2020-12, examples, selected OpenAPI structure, and preservation checks only. No API/worker/renderer implementation or runtime integration tests.",
+  "tools": {
+    "node": "v22.20.0",
+    "ajv": "8.20.0",
+    "dependenciesInstalled": false,
+    "strictSchemaMode": false,
+    "formatsAssertedWithAjvFormats": true
+  },
+  "counts": {
+    "operations": 32,
+    "references": 643,
+    "compiledSchemas": 207,
+    "checks": 987,
+    "examples": 139,
+    "semanticOnlyExamples": 19
+  },
+  "checks": [
+    {
+      "name": "JSON parses: approved-policy.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: decisions.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\admission-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\assistant-request.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\caption-metadata.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\caption-missing-expiry.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\caption-plain-text.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\caption-webvtt.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\caption-wrong-mime.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\cases.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\completed-caption-pair.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\completed-missing-caption.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\error-request-id.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\expired-export.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\incomplete-pair.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\initial-capabilities.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\media-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\missing-meta.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\project-create.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\project-owner.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\project-patch.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\project-phase.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\project-prompt-patch.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\report-both-targets.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\report.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\review-generation-accepted.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\review-generation-completed.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\review-generation-start.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\review-project-create.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\revision-conflict.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\settings-change-old-approval.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\settings-change-patch.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\signup-long129.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\signup-max128.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\signup-min15.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\signup-short14.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\storyboard-approval-request.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\storyboard-approval-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\storyboard-edit.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\storyboard-edited-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\storyboard-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\title-only-patch.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\untested-template-capability.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\usage-configured4.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\usage-initial-default-mismatch.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\usage-negative-limit.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\usage-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\user-response.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\video-expiry-metadata.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\video-missing-availability.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\api\\voice-selector.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\admission-receipt.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\attempt-budget-exceeded.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\cancel-acknowledgement.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\cancel-requested-queued.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\cancel-requested.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\cancelled.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\caption-artifact.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\caption-bytes.fixture.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\caption-track.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\cases.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\completed-null-caption.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\completed-with-error.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\completed-without-caption.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\completed-without-output.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\completed.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\duration-revision-required.failed.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\execution-after-render-reclaim.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\execution-before-render.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\failed-without-error.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\failed.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\idempotency-receipt.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\late-pre-cancel-start-evidence.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\lease.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\legacy-status.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\manifest-audio-mismatch.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\manifest-caption-mismatch.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\manifest-fps-mismatch.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\post-cancel-start.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\processing-with-caption.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\processing.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\publication-expiry.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\publication-manifest.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\queued-with-attempt.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\queued.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\render-manifest.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\reservation-consumed.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\reservation-double-slot.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\reservation-released.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\reservation-reserved.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\start-with-owner.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\start.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\jobs\\worker-field-leak.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\review-flow.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\approved-timestamp.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\blank-narration.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\cases.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\character_presenter_2d.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\client-timing.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\comparison.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\duplicate-scene-ids.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\empty-settings-patch.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\executable-props.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\flowchart.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\image_with_labels.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\key_points.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\legacy-fields.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\legacy-template.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\mismatched-props.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\one-scene-plan.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\pending-character-settings.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\planning-output.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\planning-owner.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\raw-image-url.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\render-timeline.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\settings-target-mismatch.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\stack_queue.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\steps.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\storyboard-approved.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\storyboard-draft.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\timeline-legacy-fields.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\timeline.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\title-length-limit.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\title.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\too-many-scenes.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\unknown-flow-endpoint.semantic-invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\voice-field.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\webvtt-raw-markup-field.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\webvtt-track.valid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: examples\\scenes\\webvtt-wrong-mime.invalid.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: job-transitions.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: openapi.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: schemas\\job.schema.json",
+      "passed": true
+    },
+    {
+      "name": "JSON parses: schemas\\scene.schema.json",
+      "passed": true
+    },
+    {
+      "name": "All local references resolve",
+      "passed": true,
+      "detail": {
+        "referenceCount": 643
+      }
+    },
+    {
+      "name": "OpenAPI 3.1.0 updated draft version",
+      "passed": true
+    },
+    {
+      "name": "Updated draft review status",
+      "passed": true
+    },
+    {
+      "name": "API base remains /api/v1",
+      "passed": true
+    },
+    {
+      "name": "No bearer authentication scheme",
+      "passed": true
+    },
+    {
+      "name": "All twelve recommendations approved without authorizing implementation",
+      "passed": true
+    },
+    {
+      "name": "Approved policy has contract-only scope",
+      "passed": true
+    },
+    {
+      "name": "Updated approved-decision draft marker: scene",
+      "passed": true
+    },
+    {
+      "name": "Updated approved-decision draft marker: job",
+      "passed": true
+    },
+    {
+      "name": "Updated approved-decision draft marker: lifecycle",
+      "passed": true
+    },
+    {
+      "name": "Canonical nine-template registry agrees with policy",
+      "passed": true
+    },
+    {
+      "name": "Initial five templates remain subject to tests",
+      "passed": true
+    },
+    {
+      "name": "Legacy scene aliases are not silently accepted",
+      "passed": true
+    },
+    {
+      "name": "Approved initial scene limits",
+      "passed": true
+    },
+    {
+      "name": "Approved prompt and title caps",
+      "passed": true
+    },
+    {
+      "name": "Shared opaque identifiers remain canonical",
+      "passed": true
+    },
+    {
+      "name": "Measured 720p 30 FPS profile and five-second tolerance",
+      "passed": true
+    },
+    {
+      "name": "No speech clipping speedup or scene overlap",
+      "passed": true
+    },
+    {
+      "name": "Clean MP4 and private WebVTT sidecar policy",
+      "passed": true
+    },
+    {
+      "name": "Caption asset kind and MIME type are documented",
+      "passed": true
+    },
+    {
+      "name": "Generation publication requires separate caption reference",
+      "passed": true
+    },
+    {
+      "name": "Caption delivery reuses authorized asset route",
+      "passed": true
+    },
+    {
+      "name": "Initial voice and visual profile remain controlled",
+      "passed": true
+    },
+    {
+      "name": "Exact runtime and voice remain unselected pending tests",
+      "passed": true
+    },
+    {
+      "name": "Approved idempotency replay is twenty-four hours",
+      "passed": true
+    },
+    {
+      "name": "Route target belongs in request identity not uniqueness namespace",
+      "passed": true
+    },
+    {
+      "name": "Approved initial demo capacity and quota values",
+      "passed": true
+    },
+    {
+      "name": "Quota wire limit reports configuration while defaulting to three",
+      "passed": true
+    },
+    {
+      "name": "One slot reservation and durable render-start evidence",
+      "passed": true
+    },
+    {
+      "name": "Approved quota settlement distinguishes cancellation timing",
+      "passed": true
+    },
+    {
+      "name": "Pipeline duration/validation failure releases its reservation",
+      "passed": true
+    },
+    {
+      "name": "Approved heartbeat lease and attempt test defaults",
+      "passed": true
+    },
+    {
+      "name": "Cancellation requires process stop and bounded recovery",
+      "passed": true
+    },
+    {
+      "name": "Nonretryable revision failures cannot trigger same-snapshot fresh work",
+      "passed": true
+    },
+    {
+      "name": "Late cancellation evidence is evidence-only for pre-cancel work",
+      "passed": true
+    },
+    {
+      "name": "Positive late-evidence fixture has coherent pre-cancel timestamps and lease",
+      "passed": true
+    },
+    {
+      "name": "No unbenchmarked stage timeout or duration SLA invented",
+      "passed": true
+    },
+    {
+      "name": "Private local delivery with deferred remote redirects",
+      "passed": true
+    },
+    {
+      "name": "Approved temporary and paired export retention",
+      "passed": true
+    },
+    {
+      "name": "Expiration preserves historical job outcomes",
+      "passed": true
+    },
+    {
+      "name": "Private provenance separates inputs and publication",
+      "passed": true
+    },
+    {
+      "name": "Approved password bounds are fifteen to one hundred twenty-eight",
+      "passed": true
+    },
+    {
+      "name": "Approved access and refresh session lifetimes",
+      "passed": true
+    },
+    {
+      "name": "Same-origin secure cookie CSRF policy without localStorage tokens",
+      "passed": true
+    },
+    {
+      "name": "Settings require reapproval while title-only edits preserve it",
+      "passed": true
+    },
+    {
+      "name": "Lifecycle vocabulary agrees with shared job schema",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /auth/csrf",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /auth/csrf",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /auth/csrf",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/csrf 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/csrf 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/csrf 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/csrf 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/csrf 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/csrf 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /auth/signup",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /auth/signup",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /auth/signup",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /auth/signup",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /auth/signup",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 201",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 201",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/signup 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/signup 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /auth/login",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /auth/login",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /auth/login",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /auth/login",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /auth/login",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/login 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/login 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /auth/refresh",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /auth/refresh",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /auth/refresh",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /auth/refresh",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /auth/refresh",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/refresh 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/refresh 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/refresh 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/refresh 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/refresh 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/refresh 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/refresh 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/refresh 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/refresh 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/refresh 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/refresh 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/refresh 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /auth/logout",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /auth/logout",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /auth/logout",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /auth/logout",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /auth/logout",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/logout 204",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/logout 204",
+      "passed": true
+    },
+    {
+      "name": "Empty/binary exception has no JSON envelope: POST /auth/logout 204",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/logout 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/logout 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/logout 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/logout 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/logout 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/logout 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/logout 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/logout 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /auth/logout 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /auth/logout 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /auth/me",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /auth/me",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /auth/me",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/me 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/me 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/me 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/me 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/me 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/me 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /auth/me 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /auth/me 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /health",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /health",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /health",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /health 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /health 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /health 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /health 503",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /projects",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /projects",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /projects",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /projects",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 201",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 201",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects 500",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /projects",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /projects",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /projects/{projectId} projectId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId} 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId} 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId} 500",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: PATCH /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: PATCH /projects/{projectId} projectId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: PATCH /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: PATCH /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: PATCH /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId} 500",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: DELETE /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: DELETE /projects/{projectId} projectId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: DELETE /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: DELETE /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: DELETE /projects/{projectId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 202",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 202",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /projects/{projectId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /projects/{projectId} 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 500",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 502",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 502",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 503",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assistant/messages 504",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assistant/messages 504",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /projects/{projectId}/assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /projects/{projectId}/assistant/messages projectId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /projects/{projectId}/assistant/messages",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/assistant/messages 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/assistant/messages 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/assistant/messages 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/assistant/messages 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/assistant/messages 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/assistant/messages 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/assistant/messages 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/assistant/messages 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/assistant/messages 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/assistant/messages 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/assistant/messages 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/assistant/messages 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/storyboards/generate",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /projects/{projectId}/storyboards/generate",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /projects/{projectId}/storyboards/generate projectId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /projects/{projectId}/storyboards/generate",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /projects/{projectId}/storyboards/generate",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /projects/{projectId}/storyboards/generate",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 201",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 201",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 500",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 502",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 502",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 503",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/generate 504",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/generate 504",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/storyboards/current",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /projects/{projectId}/storyboards/current",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /projects/{projectId}/storyboards/current projectId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /projects/{projectId}/storyboards/current",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/current 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/current 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/current 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/current 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/current 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/current 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/current 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/current 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/current 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/current 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /projects/{projectId}/storyboards/{storyboardId} projectId",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /projects/{projectId}/storyboards/{storyboardId} storyboardId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/{storyboardId} 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/{storyboardId} 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/{storyboardId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/{storyboardId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/{storyboardId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/{storyboardId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/{storyboardId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/{storyboardId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/storyboards/{storyboardId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/storyboards/{storyboardId} 500",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: PATCH /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: PATCH /projects/{projectId}/storyboards/{storyboardId} projectId",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: PATCH /projects/{projectId}/storyboards/{storyboardId} storyboardId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: PATCH /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: PATCH /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: PATCH /projects/{projectId}/storyboards/{storyboardId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: PATCH /projects/{projectId}/storyboards/{storyboardId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: PATCH /projects/{projectId}/storyboards/{storyboardId} 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/storyboards/{storyboardId}/approve",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /projects/{projectId}/storyboards/{storyboardId}/approve",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /projects/{projectId}/storyboards/{storyboardId}/approve projectId",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /projects/{projectId}/storyboards/{storyboardId}/approve storyboardId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /projects/{projectId}/storyboards/{storyboardId}/approve",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /projects/{projectId}/storyboards/{storyboardId}/approve",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /projects/{projectId}/storyboards/{storyboardId}/approve",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/approve 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/approve 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/storyboards/{storyboardId}/fork",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /projects/{projectId}/storyboards/{storyboardId}/fork",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /projects/{projectId}/storyboards/{storyboardId}/fork projectId",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /projects/{projectId}/storyboards/{storyboardId}/fork storyboardId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /projects/{projectId}/storyboards/{storyboardId}/fork",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /projects/{projectId}/storyboards/{storyboardId}/fork",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /projects/{projectId}/storyboards/{storyboardId}/fork",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 201",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 201",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/storyboards/{storyboardId}/fork 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/storyboards/{storyboardId}/fork 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /projects/{projectId}/generations projectId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Idempotency header: POST /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 202",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 202",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 500",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /projects/{projectId}/generations 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /projects/{projectId}/generations 503",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /projects/{projectId}/generations projectId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /projects/{projectId}/generations",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/generations 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/generations 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/generations 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/generations 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/generations 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/generations 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/generations 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/generations 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/generations 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/generations 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /projects/{projectId}/generations 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /projects/{projectId}/generations 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /generations/{generationId}",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /generations/{generationId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /generations/{generationId} generationId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /generations/{generationId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /generations/{generationId} 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /generations/{generationId} 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /generations/{generationId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /generations/{generationId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /generations/{generationId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /generations/{generationId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /generations/{generationId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /generations/{generationId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /generations/{generationId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /generations/{generationId} 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /generations/{generationId}/cancel",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /generations/{generationId}/cancel",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /generations/{generationId}/cancel generationId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /generations/{generationId}/cancel",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /generations/{generationId}/cancel",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /generations/{generationId}/cancel",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 202",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 202",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/cancel 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/cancel 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /generations/{generationId}/retry",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /generations/{generationId}/retry",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: POST /generations/{generationId}/retry generationId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /generations/{generationId}/retry",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /generations/{generationId}/retry",
+      "passed": true
+    },
+    {
+      "name": "Idempotency header: POST /generations/{generationId}/retry",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /generations/{generationId}/retry",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 202",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 202",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 500",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /generations/{generationId}/retry 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /generations/{generationId}/retry 503",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /assets/uploads",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /assets/uploads",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /assets/uploads",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /assets/uploads",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /assets/uploads",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 201",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 201",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 413",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 413",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 415",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 415",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 500",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /assets/uploads 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /assets/uploads 503",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /assets/{assetId} assetId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId} 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId} 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId} 500",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: DELETE /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: DELETE /assets/{assetId} assetId",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: DELETE /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: DELETE /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: DELETE /assets/{assetId}",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 202",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 202",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: DELETE /assets/{assetId} 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: DELETE /assets/{assetId} 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /assets/{assetId}/download",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /assets/{assetId}/download",
+      "passed": true
+    },
+    {
+      "name": "Required path parameter: GET /assets/{assetId}/download assetId",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /assets/{assetId}/download",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 206",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 206",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 302",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 302",
+      "passed": true
+    },
+    {
+      "name": "Empty/binary exception has no JSON envelope: GET /assets/{assetId}/download 302",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 409",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 409",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 416",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 416",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 500",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /assets/{assetId}/download 503",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /assets/{assetId}/download 503",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /reports",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: POST /reports",
+      "passed": true
+    },
+    {
+      "name": "CSRF on mutation: POST /reports",
+      "passed": true
+    },
+    {
+      "name": "Origin policy on mutation: POST /reports",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: POST /reports",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 201",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 201",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 400",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 400",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 403",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 403",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 404",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 404",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 422",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 422",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: POST /reports 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: POST /reports 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /usage",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /usage",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /usage",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /usage 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /usage 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /usage 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /usage 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /usage 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /usage 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /usage 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /usage 500",
+      "passed": true
+    },
+    {
+      "name": "No public worker route: /capabilities",
+      "passed": true
+    },
+    {
+      "name": "Unique operationId: GET /capabilities",
+      "passed": true
+    },
+    {
+      "name": "Responses declared: GET /capabilities",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /capabilities 200",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /capabilities 200",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /capabilities 401",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /capabilities 401",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /capabilities 429",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /capabilities 429",
+      "passed": true
+    },
+    {
+      "name": "Response description: GET /capabilities 500",
+      "passed": true
+    },
+    {
+      "name": "Request ID header: GET /capabilities 500",
+      "passed": true
+    },
+    {
+      "name": "Exactly the 32 approved operations",
+      "passed": true,
+      "detail": {
+        "actual": 32,
+        "missing": [],
+        "extra": []
+      }
+    },
+    {
+      "name": "JSON Schema 2020-12 meta-validation: scene.schema.json",
+      "passed": true
+    },
+    {
+      "name": "JSON Schema 2020-12 meta-validation: job.schema.json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component OpaqueId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component RequestMeta",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ErrorResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component User",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component SignupRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component LoginRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component EmptyRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component CsrfData",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component UserData",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component Health",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ProjectPhase",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ProjectCreate",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ProjectPatch",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component Project",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ProjectPage",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component DeleteProjectAccepted",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component AssistantMessageRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component AssistantReply",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component AssistantMessage",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component AssistantHistory",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component GenerationPage",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component MediaAsset",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component UploadRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component DeleteAssetAccepted",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ReportRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ReportAccepted",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component Usage",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component Capabilities",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component CsrfDataResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component UserDataResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component HealthResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ProjectResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ProjectPageResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component DeleteProjectAcceptedResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component AssistantReplyResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component AssistantHistoryResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component GenerationPageResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component MediaAssetResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component DeleteAssetAcceptedResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component ReportAcceptedResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component UsageResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component CapabilitiesResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component StoryboardResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component StoryboardApprovalResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component GenerationResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component GenerationAcceptedResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component CancelGenerationAcceptedResponse",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component MediaAvailability",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI component WebVttDocument",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json OpaqueId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json SceneId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json DurationSec",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json CreationMode",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json Language",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json AspectRatio",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TemplateId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json Tone",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json VisualStyle",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json Settings",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json SettingsPatch",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TitleProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json StepsProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json StackQueueProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json FlowNode",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json FlowEdge",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json FlowchartProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ComparisonSide",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ComparisonProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TimelineEvent",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TimelineProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json KeyPointsProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ImageLabel",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ImageWithLabelsProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json CharacterPresenterProps",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TitleScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json StepsScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json StackQueueScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json FlowchartScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ComparisonScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TimelineScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json KeyPointsScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ImageWithLabelsScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json CharacterPresenter2dScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json Scene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json SceneList",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json PlanningOutput",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json Storyboard",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json StoryboardEdit",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json ApproveStoryboardRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json StoryboardApproval",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json CaptionSegment",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json TimedScene",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json RenderTimeline",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: scene.schema.json WebVttCaptionTrack",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json OpaqueId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json UtcDateTime",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json Sha256",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json GenerationStatus",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json GenerationStage",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json GenerationProgress",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json GenerationError",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json StartGenerationRequest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json GenerationAccepted",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json CancelGenerationAccepted",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json Generation",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json WorkerLease",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json IdempotencyIdentity",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json UsageReservation",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json ApprovedInputReference",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json ExecutionProvenance",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json RenderManifest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json ExecutionState",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json CaptionArtifact",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: job.schema.json PublishedExportManifest",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1csrf/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1signup/post/responses/201/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1signup/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1login/post/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1login/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1refresh/post/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1refresh/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1logout/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1auth~1me/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1health/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects/post/responses/201/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}/patch/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}/patch/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}/delete/responses/202/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assistant~1messages/post/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assistant~1messages/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1assistant~1messages/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1generate/post/responses/201/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1generate/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1current/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}/patch/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}/patch/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}~1approve/post/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}~1approve/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}~1fork/post/responses/201/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1storyboards~1{storyboardId}~1fork/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1generations/post/responses/202/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1generations/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1projects~1{projectId}~1generations/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1generations~1{generationId}/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1generations~1{generationId}~1cancel/post/responses/202/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1generations~1{generationId}~1cancel/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1generations~1{generationId}~1retry/post/responses/202/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1generations~1{generationId}~1retry/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1uploads/post/responses/201/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1uploads/post/requestBody/content/multipart~1form-data",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}/delete/responses/202/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/video~1mp4",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/audio~1wav",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/image~1jpeg",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/image~1png",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/image~1webp",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/application~1octet-stream",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/200/content/text~1vtt",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/headers/Content-Range",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/video~1mp4",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/audio~1wav",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/image~1jpeg",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/image~1png",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/image~1webp",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/application~1octet-stream",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/206/content/text~1vtt",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1assets~1{assetId}~1download/get/responses/302/headers/Location",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1reports/post/responses/201/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1reports/post/requestBody/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1usage/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /paths/~1capabilities/get/responses/200/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/Limit",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/Cursor",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/Csrf",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/Origin",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/IdempotencyKey",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/Range",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/projectId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/storyboardId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/generationId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/parameters/assetId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/headers/RequestId",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/headers/RetryAfter",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/headers/SetCookie",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/headers/NoStore",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/headers/ContentLength",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/headers/AcceptRanges",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/BadRequest/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/Unauthorized/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/Forbidden/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/NotFound/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/Conflict/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/TooLarge/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/UnsupportedMedia/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/Unprocessable/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/RateLimited/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/InternalError/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/BadGateway/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/Unavailable/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/GatewayTimeout/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/RangeNotSatisfiable/headers/Content-Range",
+      "passed": true
+    },
+    {
+      "name": "Schema compiles: OpenAPI schema /components/responses/RangeNotSatisfiable/content/application~1json",
+      "passed": true
+    },
+    {
+      "name": "Approved docs and prototype unchanged",
+      "passed": true,
+      "detail": {
+        "protectedFileCount": 74,
+        "changed": [],
+        "added": []
+      }
+    }
+  ],
+  "examples": [
+    {
+      "name": "project-create.valid.json",
+      "file": "examples\\api\\project-create.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "project-owner.invalid.json",
+      "file": "examples\\api\\project-owner.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "project-patch.valid.json",
+      "file": "examples\\api\\project-patch.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "project-phase.invalid.json",
+      "file": "examples\\api\\project-phase.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "project-prompt-patch.invalid.json",
+      "file": "examples\\api\\project-prompt-patch.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "assistant-request.valid.json",
+      "file": "examples\\api\\assistant-request.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "user-response.valid.json",
+      "file": "examples\\api\\user-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "missing-meta.invalid.json",
+      "file": "examples\\api\\missing-meta.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "revision-conflict.valid.json",
+      "file": "examples\\api\\revision-conflict.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "error-request-id.invalid.json",
+      "file": "examples\\api\\error-request-id.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "usage-response.valid.json",
+      "file": "examples\\api\\usage-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "report.valid.json",
+      "file": "examples\\api\\report.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "report-both-targets.invalid.json",
+      "file": "examples\\api\\report-both-targets.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "media-response.valid.json",
+      "file": "examples\\api\\media-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "admission-response.valid.json",
+      "file": "examples\\api\\admission-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "review-project-create.valid.json",
+      "file": "examples\\api\\review-project-create.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "storyboard-response.valid.json",
+      "file": "examples\\api\\storyboard-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "storyboard-edit.valid.json",
+      "file": "examples\\api\\storyboard-edit.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "storyboard-edited-response.valid.json",
+      "file": "examples\\api\\storyboard-edited-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "storyboard-approval-request.valid.json",
+      "file": "examples\\api\\storyboard-approval-request.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "storyboard-approval-response.valid.json",
+      "file": "examples\\api\\storyboard-approval-response.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "review-generation-start.valid.json",
+      "file": "examples\\api\\review-generation-start.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "review-generation-accepted.valid.json",
+      "file": "examples\\api\\review-generation-accepted.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "signup-min15.valid.json",
+      "file": "examples\\api\\signup-min15.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "signup-max128.valid.json",
+      "file": "examples\\api\\signup-max128.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "signup-short14.invalid.json",
+      "file": "examples\\api\\signup-short14.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "signup-long129.invalid.json",
+      "file": "examples\\api\\signup-long129.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "video-expiry-metadata.valid.json",
+      "file": "examples\\api\\video-expiry-metadata.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "caption-metadata.valid.json",
+      "file": "examples\\api\\caption-metadata.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "caption-wrong-mime.invalid.json",
+      "file": "examples\\api\\caption-wrong-mime.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "caption-missing-expiry.invalid.json",
+      "file": "examples\\api\\caption-missing-expiry.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "video-missing-availability.invalid.json",
+      "file": "examples\\api\\video-missing-availability.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "expired-export.semantic-invalid.json",
+      "file": "examples\\api\\expired-export.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "incomplete-pair.semantic-invalid.json",
+      "file": "examples\\api\\incomplete-pair.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "caption-webvtt.valid.json",
+      "file": "examples\\api\\caption-webvtt.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "caption-plain-text.invalid.json",
+      "file": "examples\\api\\caption-plain-text.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "completed-caption-pair.valid.json",
+      "file": "examples\\api\\completed-caption-pair.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "completed-missing-caption.invalid.json",
+      "file": "examples\\api\\completed-missing-caption.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "title-only-patch.valid.json",
+      "file": "examples\\api\\title-only-patch.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "settings-change-patch.valid.json",
+      "file": "examples\\api\\settings-change-patch.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "settings-change-old-approval.semantic-invalid.json",
+      "file": "examples\\api\\settings-change-old-approval.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "voice-selector.invalid.json",
+      "file": "examples\\api\\voice-selector.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "initial-capabilities.valid.json",
+      "file": "examples\\api\\initial-capabilities.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "untested-template-capability.semantic-invalid.json",
+      "file": "examples\\api\\untested-template-capability.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "usage-configured4.valid.json",
+      "file": "examples\\api\\usage-configured4.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "usage-negative-limit.invalid.json",
+      "file": "examples\\api\\usage-negative-limit.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "usage-initial-default-mismatch.semantic-invalid.json",
+      "file": "examples\\api\\usage-initial-default-mismatch.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Complete reviewed workflow publishes video and captions",
+      "file": "examples\\api\\review-generation-completed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Unclaimed queued job",
+      "file": "examples\\jobs\\queued.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Rendering job",
+      "file": "examples\\jobs\\processing.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Running cancellation request is not cancellation completion",
+      "file": "examples\\jobs\\cancel-requested.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Queued cancellation request does not start execution",
+      "file": "examples\\jobs\\cancel-requested-queued.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Confirmed cancellation before first claim",
+      "file": "examples\\jobs\\cancelled.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Completed export",
+      "file": "examples\\jobs\\completed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Sanitized failure",
+      "file": "examples\\jobs\\failed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Immutable admission receipt",
+      "file": "examples\\jobs\\admission-receipt.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Cancellation acknowledgement",
+      "file": "examples\\jobs\\cancel-acknowledgement.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Start only references approved identity",
+      "file": "examples\\jobs\\start.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Internal lease is separate from polling",
+      "file": "examples\\jobs\\lease.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Completed output reference is required",
+      "file": "examples\\jobs\\completed-without-output.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Completed jobs cannot also contain failure errors",
+      "file": "examples\\jobs\\completed-with-error.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Failed jobs require actionable errors",
+      "file": "examples\\jobs\\failed-without-error.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Queued job has no prior execution claim",
+      "file": "examples\\jobs\\queued-with-attempt.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Public serializer rejects worker internals",
+      "file": "examples\\jobs\\worker-field-leak.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Flattened legacy pipeline label is not a job status",
+      "file": "examples\\jobs\\legacy-status.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Owner cannot be set by client",
+      "file": "examples\\jobs\\start-with-owner.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Structurally valid publication with unready/unowned video or caption must fail service checks",
+      "file": "examples\\jobs\\completed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Structurally valid start using unapproved storyboard must fail service checks",
+      "file": "examples\\jobs\\start.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "render-manifest.valid.json",
+      "file": "examples\\jobs\\render-manifest.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "manifest-fps-mismatch.semantic-invalid.json",
+      "file": "examples\\jobs\\manifest-fps-mismatch.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "manifest-audio-mismatch.semantic-invalid.json",
+      "file": "examples\\jobs\\manifest-audio-mismatch.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Completed job requires caption reference",
+      "file": "examples\\jobs\\completed-without-caption.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Completed caption reference cannot be null",
+      "file": "examples\\jobs\\completed-null-caption.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Unpublished caption reference is not exposed on a running job",
+      "file": "examples\\jobs\\processing-with-caption.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Automatic execution attempts are capped at two",
+      "file": "examples\\jobs\\attempt-budget-exceeded.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Caption artifact descriptor",
+      "file": "examples\\jobs\\caption-artifact.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Logical WebVTT cue payload shares timeline",
+      "file": "examples\\jobs\\caption-track.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Internal cancellation before actual renderer start",
+      "file": "examples\\jobs\\execution-before-render.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Internal first render-start evidence survives a reclaim",
+      "file": "examples\\jobs\\execution-after-render-reclaim.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Exactly one slot is reserved per new admission",
+      "file": "examples\\jobs\\reservation-reserved.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "A consumed reservation has a stable job link",
+      "file": "examples\\jobs\\reservation-consumed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "A released reservation has a stable job link",
+      "file": "examples\\jobs\\reservation-released.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "A longer duration does not reserve two slots",
+      "file": "examples\\jobs\\reservation-double-slot.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Separate retained twenty-four-hour receipt",
+      "file": "examples\\jobs\\idempotency-receipt.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Published clean MP4 and caption pair share seven-day expiry",
+      "file": "examples\\jobs\\publication-manifest.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Wrong caption timeline hash is structurally valid but semantically rejected",
+      "file": "examples\\jobs\\manifest-caption-mismatch.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Wrong publication expiry is structurally valid but semantically rejected",
+      "file": "examples\\jobs\\publication-expiry.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Historical COMPLETED is retained after paired assets expire",
+      "file": "examples\\jobs\\completed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Cancellation winning before completion prevents later publication",
+      "file": "examples\\jobs\\completed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Late cancellation after a reclaim cannot refund prior render work",
+      "file": "examples\\jobs\\reservation-released.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Replaying a receipt does not re-run capacity checks or reserve twice",
+      "file": "examples\\jobs\\idempotency-receipt.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "A repeated terminal reservation settlement cannot count twice",
+      "file": "examples\\jobs\\reservation-consumed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Duration mismatch is a nonretryable pipeline failure",
+      "file": "examples\\jobs\\duration-revision-required.failed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Known nonretryable duration failure cannot create a same-snapshot retry",
+      "file": "examples\\jobs\\duration-revision-required.failed.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Known revision-required snapshot cannot bypass retry guard via new start",
+      "file": "examples\\jobs\\start.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Pre-cancel render evidence can arrive after cancellation accepted",
+      "file": "examples\\jobs\\late-pre-cancel-start-evidence.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Post-cancel launch is not legitimate pre-cancel render evidence",
+      "file": "examples\\jobs\\post-cancel-start.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "TITLE valid shape",
+      "file": "examples\\scenes\\title.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "STEPS valid shape",
+      "file": "examples\\scenes\\steps.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "STACK_QUEUE valid shape",
+      "file": "examples\\scenes\\stack_queue.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "FLOWCHART valid shape",
+      "file": "examples\\scenes\\flowchart.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "COMPARISON valid shape",
+      "file": "examples\\scenes\\comparison.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "TIMELINE valid shape",
+      "file": "examples\\scenes\\timeline.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "KEY_POINTS valid shape",
+      "file": "examples\\scenes\\key_points.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "IMAGE_WITH_LABELS valid shape",
+      "file": "examples\\scenes\\image_with_labels.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "CHARACTER_PRESENTER_2D valid shape",
+      "file": "examples\\scenes\\character_presenter_2d.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Full 30-second DRAFT storyboard",
+      "file": "examples\\scenes\\storyboard-draft.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Full 30-second APPROVED storyboard",
+      "file": "examples\\scenes\\storyboard-approved.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Untrusted planning output",
+      "file": "examples\\scenes\\planning-output.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Empty assistant suggestions",
+      "file": "examples\\scenes\\empty-settings-patch.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Character project pending upload",
+      "file": "examples\\scenes\\pending-character-settings.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Reject pipeline template alias",
+      "file": "examples\\scenes\\legacy-template.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject arbitrary renderer code",
+      "file": "examples\\scenes\\executable-props.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject pipeline field aliases",
+      "file": "examples\\scenes\\legacy-fields.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject raw image URL",
+      "file": "examples\\scenes\\raw-image-url.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject worker timing in planned scene",
+      "file": "examples\\scenes\\client-timing.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject mismatched template props",
+      "file": "examples\\scenes\\mismatched-props.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject blank narration",
+      "file": "examples\\scenes\\blank-narration.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject unsupported public voice-selection field",
+      "file": "examples\\scenes\\voice-field.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject model-owned project metadata",
+      "file": "examples\\scenes\\planning-owner.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject approved storyboard without timestamp",
+      "file": "examples\\scenes\\approved-timestamp.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Duplicate scene IDs need semantic validation",
+      "file": "examples\\scenes\\duplicate-scene-ids.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Unknown flow endpoint needs semantic validation",
+      "file": "examples\\scenes\\unknown-flow-endpoint.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Target/settings mismatch needs semantic validation",
+      "file": "examples\\scenes\\settings-target-mismatch.semantic-invalid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Internal measured integer-frame timeline",
+      "file": "examples\\scenes\\render-timeline.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Reject planner millisecond timing fields on internal timeline",
+      "file": "examples\\scenes\\timeline-legacy-fields.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Logical WebVTT sidecar from canonical timeline",
+      "file": "examples\\scenes\\webvtt-track.valid.json",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "Reject injected WebVTT style field",
+      "file": "examples\\scenes\\webvtt-raw-markup-field.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Reject HTML instead of WebVTT",
+      "file": "examples\\scenes\\webvtt-wrong-mime.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Enforce approved 120-character title upper limit",
+      "file": "examples\\scenes\\title-length-limit.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Enforce approved two-scene minimum",
+      "file": "examples\\scenes\\one-scene-plan.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "Enforce approved eighteen-scene maximum",
+      "file": "examples\\scenes\\too-many-scenes.invalid.json",
+      "expectedValid": false,
+      "actualValid": false,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /paths/~1auth~1csrf/get/responses/200/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /paths/~1health/get/responses/200/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /paths/~1projects/post/requestBody/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /paths/~1assistant~1messages/post/requestBody/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /paths/~1projects~1{projectId}~1generations/post/responses/202/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /paths/~1capabilities/get/responses/200/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    },
+    {
+      "name": "OpenAPI /components/responses/Conflict/content/application~1json example",
+      "expectedValid": true,
+      "actualValid": true,
+      "passed": true
+    }
+  ],
+  "semanticOnlyExamples": [
+    {
+      "name": "expired-export.semantic-invalid.json",
+      "violations": [
+        "MEDIA_RETENTION_EXPIRED"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "incomplete-pair.semantic-invalid.json",
+      "violations": [
+        "PUBLISH_OUTPUT_PAIR"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "settings-change-old-approval.semantic-invalid.json",
+      "violations": [
+        "SETTINGS_CHANGE_REQUIRES_NEW_REVIEW"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "untested-template-capability.semantic-invalid.json",
+      "violations": [
+        "CAPABILITY_TESTED_TEMPLATE"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "usage-initial-default-mismatch.semantic-invalid.json",
+      "violations": [
+        "USAGE_CONFIG_MATCH"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Structurally valid publication with unready/unowned video or caption must fail service checks",
+      "violations": [
+        "At publication, clean MP4 or paired WebVTT is not READY/owned/aligned"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Structurally valid start using unapproved storyboard must fail service checks",
+      "violations": [
+        "Referenced storyboard is DRAFT rather than APPROVED"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "manifest-fps-mismatch.semantic-invalid.json",
+      "violations": [
+        "MANIFEST_TIMELINE_MATCH: encoding FPS differs from timeline FPS"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "manifest-audio-mismatch.semantic-invalid.json",
+      "violations": [
+        "MANIFEST_AUDIO_MATCH: retained audio duration differs from timeline metadata"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Wrong caption timeline hash is structurally valid but semantically rejected",
+      "violations": [
+        "CAPTION_MANIFEST_MATCH: caption timeline hash differs from canonical retained timeline"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Wrong publication expiry is structurally valid but semantically rejected",
+      "violations": [
+        "PUBLICATION_RETENTION: expiresAt is not verifiedPublishedAt plus 604800 seconds"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Cancellation winning before completion prevents later publication",
+      "violations": [
+        "CANCEL_COMPLETE_RACE: cancellation guard committed first for this job"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Late cancellation after a reclaim cannot refund prior render work",
+      "violations": [
+        "QUOTA_SETTLEMENT: execution-after-render-reclaim.valid.json records a prior actual render start, but cancellation settlement released its reservation"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Known nonretryable duration failure cannot create a same-snapshot retry",
+      "violations": [
+        "A NEW retry is requested even though error.retryable=false and revision is required"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Known revision-required snapshot cannot bypass retry guard via new start",
+      "violations": [
+        "Referenced approved snapshot has known unresolved duration-revision failure"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Post-cancel launch is not legitimate pre-cancel render evidence",
+      "violations": [
+        "renderStartedAt is after accepted cancelRequestedAt; cannot claim it as pre-cancel execution"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Duplicate scene IDs need semantic validation",
+      "violations": [
+        "SCENE_ID_UNIQUE"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Unknown flow endpoint needs semantic validation",
+      "violations": [
+        "GRAPH_REFERENCES"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    },
+    {
+      "name": "Target/settings mismatch needs semantic validation",
+      "violations": [
+        "SETTINGS_MATCH"
+      ],
+      "note": "Schema-only pass is expected; no application semantic validator is implemented."
+    }
+  ],
+  "limitations": [
+    "No dedicated full OpenAPI document validator is installed; selected structural checks are not a complete OAS conformance certification.",
+    "Schema-only checks do not establish ownership, unique scene IDs, cross-resource consistency, duration sums, quota accounting or state-transition correctness.",
+    "No features were enabled and no API handlers, database models, queues or rendering code were implemented."
+  ]
+}

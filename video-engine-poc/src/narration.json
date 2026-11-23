@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "file": "intro.wav",
+    "offsetInFrames": 6,
+    "rate": 2,
+    "text": "The JavaScript event loop decides what runs next."
+  },
+  "stack": {
+    "file": "stack.wav",
+    "offsetInFrames": 6,
+    "rate": 2,
+    "text": "Calls push frames onto the stack. The newest call returns first."
+  },
+  "async": {
+    "file": "async.wav",
+    "offsetInFrames": 6,
+    "rate": 2,
+    "text": "The browser tracks the timer. When it expires, the callback enters the task queue."
+  },
+  "queues": {
+    "file": "queues.wav",
+    "offsetInFrames": 6,
+    "rate": 2,
+    "text": "Promise callbacks run as microtasks. Timer callbacks run as tasks once the timer is ready."
+  },
+  "loop": {
+    "file": "loop.wav",
+    "offsetInFrames": 6,
+    "rate": 3,
+    "text": "The script logs A and B. The promise logs C. The timer logs D."
+  }
+}

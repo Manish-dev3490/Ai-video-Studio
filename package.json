@@ -1,0 +1,49 @@
+{
+  "name": "ai-video-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  },
+  "workspaces": [
+    "apps/api",
+    "apps/web",
+    "apps/worker"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:api": "npm run dev --workspace @ai-video-studio/api",
+    "dev:web": "npm run dev --workspace @ai-video-studio/web",
+    "build": "npm run build --workspace @ai-video-studio/web",
+    "start": "npm run start --workspace @ai-video-studio/api",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "node scripts/phase3-e2e.mjs",
+    "test:phase4": "node --env-file=.env scripts/phase4-e2e.mjs",
+    "test:phase4:ui": "node scripts/phase4-ui-check.mjs",
+    "test:phase5": "node scripts/phase5-e2e.mjs",
+    "test:phase6": "node scripts/phase6-ui-check.mjs",
+    "test:phase6:real": "node --env-file=.env scripts/phase6-real-e2e.mjs",
+    "test:phase7": "node scripts/phase7-e2e.mjs",
+    "test:phase8": "node scripts/phase8-ui-check.mjs",
+    "test:phase8:visual": "node scripts/phase8-visual-check.mjs",
+    "test:phase8:real": "node --env-file=.env scripts/phase8-e2e.mjs",
+    "test:phase9": "node scripts/phase9-e2e.mjs",
+    "test:ops": "node --test scripts/test/*.test.mjs",
+    "production:init": "node scripts/start-production.mjs --init",
+    "production:check": "node scripts/production-check.mjs --native",
+    "production:start": "node scripts/start-production.mjs",
+    "email:check": "node --env-file-if-exists=.env scripts/email-delivery-check.mjs",
+    "email:production": "node --env-file-if-exists=.env.production.local scripts/email-delivery-check.mjs",
+    "operator:review": "node --env-file-if-exists=.env scripts/operator-review.mjs",
+    "mail:preview": "node --env-file-if-exists=.env scripts/mail-preview.mjs",
+    "setup:local": "node scripts/setup-local.mjs",
+    "start:worker": "npm run start --workspace @ai-video-studio/worker",
+    "demo:start": "node scripts/start-demo.mjs",
+    "demo:stop": "node scripts/stop-demo.mjs",
+    "demo:check": "node scripts/demo-smoke.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1"
+  }
+}

@@ -1,0 +1,1127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Video Studio job contract draft",
+  "description": "Contract draft updated with user-approved decisions on 21 November 2026. Public polling, admission receipts and internal execution/provenance remain separate. This is contract documentation only: no queue, feature, migration or provider runtime is implemented.",
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "x-review-decisions": [
+    "D-04",
+    "D-06",
+    "D-07",
+    "D-08",
+    "D-09",
+    "D-10",
+    "D-12"
+  ],
+  "x-semantic-rules": [
+    {
+      "id": "MANIFEST_JOB_MATCH",
+      "decision": "D-10",
+      "rule": "Manifest generationId/attempt and approvedInput storyboardId/revision/hash must match the current fenced job and immutable approved settings snapshot."
+    },
+    {
+      "id": "MANIFEST_TIMELINE_MATCH",
+      "decision": "D-03/D-10",
+      "rule": "provenance.encoding.fps equals timeline.fps. Encoding dimensions/aspect ratio and timeline target tolerance agree with approved settings and the selected validated output profile."
+    },
+    {
+      "id": "MANIFEST_AUDIO_MATCH",
+      "decision": "D-10",
+      "rule": "narrationAssets has exactly one entry per timeline sceneId, without duplicates. Its assetId equals that scene's audioAssetId, durationMs equals measuredAudioDurationMs, and sha256 matches the retained audio. All entries resolve to owned assets for the approved narration and selected speech configuration."
+    },
+    {
+      "id": "STAGE_PROGRESS_MATCH",
+      "decision": "D-08/D-12",
+      "rule": "Completed stage count agrees with the current/retained stage and verified artifacts. UPLOAD_OUTPUT includes fenced publication in this draft; only successful publication confirms stage six."
+    },
+    {
+      "id": "CAPTION_MANIFEST_MATCH",
+      "decision": "D-04/D-10",
+      "rule": "Caption artifact assetId/content hash/language and timelineSha256 match the retained canonical WebVTT track, approved language and RenderTimeline; publication caption ID equals public Generation.captionAssetId. Clean MP4 has no burned-in caption layer."
+    },
+    {
+      "id": "PUBLICATION_RETENTION",
+      "decision": "D-09",
+      "rule": "Both final assets share expiresAt=verifiedPublishedAt+604800 seconds. Publication requires READY/owned assets; later expiry/deletion retains historical COMPLETED and its artifact IDs while asset availability/download denies new reads."
+    },
+    {
+      "id": "QUOTA_SETTLEMENT",
+      "decision": "D-07/D-08",
+      "rule": "One admission reserves one slot once; completed consumes, system/provider failure releases, confirmed cancelled consumes iff durable first actual renderStartedAt is nonnull. Recovery never resets this timestamp or reserves another slot. Unknown process state does not permit premature release."
+    },
+    {
+      "id": "LEASE_AND_ATTEMPTS",
+      "decision": "D-08",
+      "rule": "Heartbeat cadence10 seconds, lease60 seconds, at most2 total automatic execution attempts. User retry creates a new job with admission checks; exact stage timeouts remain deferred until duration-specific benchmarks."
+    }
+  ],
+  "$ref": "#/$defs/Generation",
+  "$defs": {
+    "OpaqueId": {
+      "$ref": "./scene.schema.json#/$defs/OpaqueId",
+      "description": "Shared approved D-02 identifier rule; identifiers are opaque and never interpreted as paths or commands."
+    },
+    "UtcDateTime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$",
+      "description": "ISO 8601 UTC timestamp."
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Lowercase hexadecimal SHA-256 representation for approved canonical input/artifact fingerprints; server-computed, never a client admission field.",
+      "x-review-decisions": [
+        "D-06",
+        "D-10"
+      ]
+    },
+    "GenerationStatus": {
+      "type": "string",
+      "enum": [
+        "QUEUED",
+        "PROCESSING",
+        "CANCEL_REQUESTED",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "description": "Authoritative job statuses from API Design section 7 and Database Design section 3.6. Planning and storyboard approval are separate lifecycles."
+    },
+    "GenerationStage": {
+      "type": "string",
+      "enum": [
+        "PREPARE_ASSETS",
+        "SYNTHESIZE_AUDIO",
+        "ALIGN_TIMELINE",
+        "RENDER_VIDEO",
+        "VALIDATE_OUTPUT",
+        "UPLOAD_OUTPUT"
+      ],
+      "description": "Processing-stage vocabulary from the approved API/database contract."
+    },
+    "GenerationProgress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "completedStages",
+        "totalStages"
+      ],
+      "properties": {
+        "completedStages": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6
+        },
+        "totalStages": {
+          "const": 6
+        }
+      },
+      "description": "Confirmed stage count, not a fabricated percentage or time estimate. Reuse of cached stage outputs still requires validation."
+    },
+    "GenerationError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "description": "Sanitized public failure information. No stack traces, provider payloads, executable instructions, credentials or internal paths. Sanitization needs service checks beyond JSON Schema."
+    },
+    "StartGenerationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storyboardId",
+        "approvedRevision"
+      ],
+      "properties": {
+        "storyboardId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "approvedRevision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "description": "Only a reference to an existing approved revision is accepted. Owner, settings, hashes, lease, status and output are server-derived. Ownership, approval and hash checks are semantic admission guards."
+    },
+    "GenerationAccepted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generationId",
+        "projectId",
+        "storyboardId",
+        "approvedRevision",
+        "status",
+        "stage",
+        "statusUrl"
+      ],
+      "properties": {
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "projectId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "storyboardId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "approvedRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "const": "QUEUED"
+        },
+        "stage": {
+          "type": "null"
+        },
+        "statusUrl": {
+          "type": "string",
+          "pattern": "^/api/v1/generations/[^/?#]+$"
+        }
+      },
+      "description": "Original 202 admission data receipt. Approved D-06 replays this exact data receipt for the same owner/action/key and canonical method/route/target/body identity within 24 hours, even if the job has progressed or worker availability has changed. It is not authoritative current status: always poll statusUrl. Current request tracing metadata belongs to the current HTTP response, outside this receipt.",
+      "x-review-decisions": [
+        "D-06"
+      ]
+    },
+    "CancelGenerationAccepted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generationId",
+        "status",
+        "statusUrl"
+      ],
+      "properties": {
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "status": {
+          "enum": [
+            "CANCEL_REQUESTED",
+            "CANCELLED"
+          ]
+        },
+        "statusUrl": {
+          "type": "string",
+          "pattern": "^/api/v1/generations/[^/?#]+$"
+        }
+      },
+      "description": "202 cancellation acknowledgement. Status is the stored state at response time. CANCEL_REQUESTED never asserts that execution stopped. CANCELLED is allowed only for an unclaimed queued job or after actual process termination is confirmed. First guarded cancel/completion commit wins. Polling remains authoritative; already terminal cancellation returns a state conflict.",
+      "x-review-decisions": [
+        "D-08",
+        "D-12"
+      ]
+    },
+    "Generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "projectId",
+        "storyboardId",
+        "approvedRevision",
+        "status",
+        "stage",
+        "progress",
+        "attempt",
+        "outputAssetId",
+        "captionAssetId",
+        "error",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "projectId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "storyboardId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "approvedRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "$ref": "#/$defs/GenerationStatus"
+        },
+        "stage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GenerationStage"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "progress": {
+          "$ref": "#/$defs/GenerationProgress"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "0 before first claim; 1 for the initial execution and at most 2 after one automatic recovery under the same generation ID. Recovery reuses the reservation. User retry is a new admitted job with attempt 0 and rechecked limits.",
+          "maximum": 2
+        },
+        "outputAssetId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaqueId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GenerationError"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "createdAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "captionAssetId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpaqueId"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Private CAPTION_TRACK WebVTT sidecar paired with the clean MP4. Nonnull on historical COMPLETED even after the asset expires or is deleted; current availability is checked through asset metadata/download."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "QUEUED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage": {
+                "type": "null"
+              },
+              "attempt": {
+                "const": 0
+              },
+              "progress": {
+                "properties": {
+                  "completedStages": {
+                    "const": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PROCESSING"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage": {
+                "$ref": "#/$defs/GenerationStage"
+              },
+              "attempt": {
+                "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "stage": {
+                "const": "UPLOAD_OUTPUT"
+              },
+              "attempt": {
+                "minimum": 1
+              },
+              "progress": {
+                "properties": {
+                  "completedStages": {
+                    "const": 6
+                  }
+                }
+              },
+              "outputAssetId": {
+                "$ref": "#/$defs/OpaqueId"
+              },
+              "error": {
+                "type": "null"
+              },
+              "captionAssetId": {
+                "$ref": "#/$defs/OpaqueId"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "outputAssetId": {
+                "type": "null"
+              },
+              "progress": {
+                "properties": {
+                  "completedStages": {
+                    "maximum": 5
+                  }
+                }
+              },
+              "captionAssetId": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "FAILED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "error": {
+                "$ref": "#/$defs/GenerationError"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "error": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stage": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "stage"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attempt": {
+                "const": 0
+              },
+              "progress": {
+                "properties": {
+                  "completedStages": {
+                    "const": 0
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "attempt": {
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "description": "Public historical job outcome. No lease, internal render-start timestamp, storage key, private hash or provenance is exposed. COMPLETED publication requires a verified owner-accessible READY clean MP4 AND WebVTT caption track; both IDs are retained as history. Their shared 7-day availability expiry or later deletion does not retroactively turn COMPLETED into FAILED or clear these references. Asset metadata/download determines current availability. Non-completed output/caption IDs are null; terminal stage retention follows the approved canonical response shape.",
+      "x-review-decisions": [
+        "D-04",
+        "D-08",
+        "D-09",
+        "D-12"
+      ]
+    },
+    "WorkerLease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workerId",
+        "fencingToken",
+        "expiresAt",
+        "heartbeatAt"
+      ],
+      "properties": {
+        "workerId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "fencingToken": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "heartbeatAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        }
+      },
+      "description": "Internal only. A fresh fencing token is assigned on claim; heartbeat every 10 seconds, lease 60 seconds, at most 2 automatic execution attempts in total. Progress/heartbeat/publication compare current token, valid lease and allowed state. A stale worker stops its owned subprocesses; fencing rejects writes but does not itself stop CPU usage. Exact stage timeouts remain deferred until 30/60/90-second benchmarks.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-08"
+      ]
+    },
+    "IdempotencyIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ownerId",
+        "action",
+        "idempotencyKeyHash",
+        "requestHash",
+        "routeTemplate",
+        "targetId",
+        "generationId",
+        "retainUntil",
+        "method",
+        "createdAt",
+        "receipt"
+      ],
+      "properties": {
+        "ownerId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "action": {
+          "enum": [
+            "START",
+            "RETRY"
+          ]
+        },
+        "idempotencyKeyHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "requestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "routeTemplate": {
+          "enum": [
+            "/api/v1/projects/{projectId}/generations",
+            "/api/v1/generations/{generationId}/retry"
+          ]
+        },
+        "targetId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "retainUntil": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "method": {
+          "const": "POST"
+        },
+        "createdAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "receipt": {
+          "$ref": "#/$defs/GenerationAccepted"
+        }
+      },
+      "description": "Internal separate 24-hour admission-receipt record. Uniqueness namespace is owner+START/RETRY action+key hash. requestHash includes method, normalized route template, concrete project/original-generation target and canonical body. Same key with another body/target yields 409; matching replay is resolved before changing worker/quota/active-job admission checks, after authentication/ownership/deletion checks. retainUntil is createdAt+86400 seconds. Receipt expiration never TTL-deletes job history. Canonical serializer implementation and post-expiry key handling must follow approved-policy without inventing another namespace.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-06"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "START"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "properties": {
+              "routeTemplate": {
+                "const": "/api/v1/projects/{projectId}/generations"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "routeTemplate": {
+                "const": "/api/v1/generations/{generationId}/retry"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "UsageReservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservationId",
+        "generationId",
+        "bucketId",
+        "amount",
+        "unit",
+        "state",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "reservationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "bucketId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "amount": {
+          "const": 1
+        },
+        "unit": {
+          "const": "GENERATION_SLOT"
+        },
+        "state": {
+          "enum": [
+            "RESERVED",
+            "CONSUMED",
+            "RELEASED"
+          ]
+        },
+        "createdAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        }
+      },
+      "description": "Internal transaction-linked reservation: exactly one generation slot per new admission, independent of 30/60/90 preset; default 3 slots/user/UTC day, global one running plus two waiting, one active job/project. Admission atomically records reservation/job/receipt. Matching replay and same-job recovery never reserve again. Success consumes; system/provider failure releases; confirmed cancellation before actual RENDER_VIDEO execution releases, after actual render start consumes. Settlement is guarded/idempotent, linked to durable ExecutionState.renderStartedAt across reclaims. No pricing or payment feature is introduced.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-07"
+      ]
+    },
+    "ApprovedInputReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storyboardId",
+        "approvedRevision",
+        "storyboardHash"
+      ],
+      "properties": {
+        "storyboardId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "approvedRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "storyboardHash": {
+          "$ref": "#/$defs/Sha256"
+        }
+      },
+      "description": "Immutable approved logical input. The approved storyboard hash covers the canonical scene plan AND settings snapshot. Claim-time execution versions cannot mutate this reference or user-approved text/settings."
+    },
+    "ExecutionProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engineVersion",
+        "bundleSha256",
+        "templateRegistryVersion",
+        "remotionVersion",
+        "browserVersion",
+        "ffmpegVersion",
+        "ffprobeVersion",
+        "speech",
+        "fonts",
+        "encoding",
+        "captions"
+      ],
+      "properties": {
+        "engineVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bundleSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "templateRegistryVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "remotionVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "browserVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ffmpegVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ffprobeVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "speech": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "modelVersion",
+            "voiceId",
+            "configurationSha256",
+            "configurationSnapshotId"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1
+            },
+            "modelVersion": {
+              "type": "string",
+              "minLength": 1
+            },
+            "voiceId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "configurationSha256": {
+              "$ref": "#/$defs/Sha256"
+            },
+            "configurationSnapshotId": {
+              "$ref": "#/$defs/OpaqueId",
+              "description": "Internal immutable nonsecret provider-configuration record, not a public media kind or endpoint."
+            }
+          }
+        },
+        "fonts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "family",
+              "sha256"
+            ],
+            "properties": {
+              "family": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "$ref": "#/$defs/Sha256"
+              }
+            }
+          },
+          "description": "Includes actual fallback fonts if used. Reproducibility requires retained font assets or an equivalent pinned environment."
+        },
+        "encoding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "videoCodec",
+            "audioCodec",
+            "pixelFormat",
+            "width",
+            "height",
+            "fps",
+            "configurationSha256"
+          ],
+          "properties": {
+            "videoCodec": {
+              "type": "string",
+              "minLength": 1
+            },
+            "audioCodec": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pixelFormat": {
+              "type": "string",
+              "minLength": 1
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "configurationSha256": {
+              "$ref": "#/$defs/Sha256"
+            }
+          }
+        },
+        "captions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mimeType",
+            "exportBurnIn",
+            "configurationSha256"
+          ],
+          "properties": {
+            "mimeType": {
+              "const": "text/vtt"
+            },
+            "exportBurnIn": {
+              "const": false
+            },
+            "configurationSha256": {
+              "$ref": "#/$defs/Sha256"
+            }
+          },
+          "description": "Approved D-04: clean MP4 plus selectable private WebVTT sidecar; both derive from the same measured timeline."
+        }
+      },
+      "description": "Internal actual per-attempt versions and nonsecret configuration snapshot references, persisted before executing/reusing their stage. The selected preferred local Kokoro adapter is configured server-side; runtime/model/voice specifics remain separately validated, with no automatic cloud fallback. Reuse requires matching approved input, text, voice/model/configuration and artifact hashes. This manifest records actual execution without changing user-approved logical inputs. Retained versions/assets enable investigation; byte-identical reproduction is not an unconditional cross-platform/provider guarantee.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-10"
+      ]
+    },
+    "RenderManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestVersion",
+        "generationId",
+        "attempt",
+        "approvedInput",
+        "provenance",
+        "timeline",
+        "narrationAssets",
+        "createdAt",
+        "captionArtifact"
+      ],
+      "properties": {
+        "manifestVersion": {
+          "const": 1
+        },
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "approvedInput": {
+          "$ref": "#/$defs/ApprovedInputReference"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ExecutionProvenance"
+        },
+        "timeline": {
+          "$ref": "./scene.schema.json#/$defs/RenderTimeline"
+        },
+        "narrationAssets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sceneId",
+              "assetId",
+              "sha256",
+              "durationMs"
+            ],
+            "properties": {
+              "sceneId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "assetId": {
+                "$ref": "#/$defs/OpaqueId"
+              },
+              "sha256": {
+                "$ref": "#/$defs/Sha256"
+              },
+              "durationMs": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "createdAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "captionArtifact": {
+          "$ref": "#/$defs/CaptionArtifact"
+        }
+      },
+      "description": "Immutable internal per-attempt render-input manifest finalized after narration measurement/alignment and caption preparation, before video render. Caption artifact hash binds the separate WebVTT to the same timeline; clean MP4 has no burned-in captions. Keep original inputs immutable. A separate PublishedExportManifest records post-render output hashes and verified delivery/expiry, rather than mutating this pre-render manifest. Success intermediates clean up after verified delivery; failed temporary artifacts retain at most 24 hours. Final MP4/WebVTT are available for 7 days from the same verified publication timestamp; retained metadata/manifests do not make expired blobs available.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-03",
+        "D-04",
+        "D-10"
+      ]
+    },
+    "ExecutionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generationId",
+        "attempt",
+        "renderStartedAt",
+        "cancelRequestedAt",
+        "lease"
+      ],
+      "properties": {
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "renderStartedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UtcDateTime"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Job-level first actual RENDER_VIDEO execution timestamp. Set durably under the current fencing guard and never reset on recovery. A stage label alone is not proof a renderer ran."
+        },
+        "cancelRequestedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UtcDateTime"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lease": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkerLease"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "renderStartedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "renderStartedAt"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attempt": {
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "description": "Internal lifecycle/settlement evidence, never public polling fields. Once renderStartedAt is nonnull, it remains nonnull across attempts. Confirm actual subprocess state before finalizing cancellation or freeing a real execution slot; when stop/start evidence is uncertain keep cancellation pending and reservation unsettled.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-07",
+        "D-08"
+      ]
+    },
+    "CaptionArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetId",
+        "sha256",
+        "mimeType",
+        "language",
+        "timelineSha256"
+      ],
+      "properties": {
+        "assetId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "sha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "mimeType": {
+          "const": "text/vtt"
+        },
+        "language": {
+          "enum": [
+            "en",
+            "hi"
+          ]
+        },
+        "timelineSha256": {
+          "$ref": "#/$defs/Sha256"
+        }
+      },
+      "description": "Internal retained WebVTT artifact descriptor. ID resolves to an owned CAPTION_TRACK through the existing private media mechanism; content hash and canonical timeline hash bind the sidecar to the exact export. Schema does not activate untested Hindi or define a new endpoint.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-04",
+        "D-09",
+        "D-10"
+      ]
+    },
+    "PublishedExportManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestVersion",
+        "generationId",
+        "attempt",
+        "renderManifestSha256",
+        "videoArtifact",
+        "captionArtifact",
+        "verifiedPublishedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "manifestVersion": {
+          "const": 1
+        },
+        "generationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "renderManifestSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "videoArtifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "assetId",
+            "sha256",
+            "mimeType"
+          ],
+          "properties": {
+            "assetId": {
+              "$ref": "#/$defs/OpaqueId"
+            },
+            "sha256": {
+              "$ref": "#/$defs/Sha256"
+            },
+            "mimeType": {
+              "const": "video/mp4"
+            }
+          }
+        },
+        "captionArtifact": {
+          "$ref": "#/$defs/CaptionArtifact"
+        },
+        "verifiedPublishedAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/UtcDateTime"
+        }
+      },
+      "description": "Immutable internal successful-publication receipt, separate from frozen render inputs. It binds validated clean MP4 and WebVTT hashes to the render manifest and a shared availability expiry: verifiedPublishedAt+604800 seconds. Both owned READY assets must exist at publication. Later expiry/deletion changes asset availability, not historical COMPLETED or these IDs. Delivery and cleanup must honor approved-policy.",
+      "x-internal": true,
+      "x-review-decisions": [
+        "D-04",
+        "D-09",
+        "D-10"
+      ]
+    }
+  },
+  "x-draft-version": "1.0.1-draft.2",
+  "x-decision-approval-date": "2026-11-21",
+  "x-policy-ref": "../approved-policy.json"
+}

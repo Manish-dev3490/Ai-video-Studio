@@ -1,0 +1,355 @@
+{
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "description": "Synthetic draft.2 API schema review cases with approved policy recommendations. No API endpoint, auth, media delivery, worker, quota or settings-invalidation implementation is exercised; semantic cases remain future service obligations.",
+  "cases": [
+    {
+      "name": "project-create.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectCreate",
+      "file": "project-create.valid.json",
+      "valid": true
+    },
+    {
+      "name": "project-owner.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectCreate",
+      "file": "project-owner.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "project-patch.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectPatch",
+      "file": "project-patch.valid.json",
+      "valid": true
+    },
+    {
+      "name": "project-phase.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectPatch",
+      "file": "project-phase.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "project-prompt-patch.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectPatch",
+      "file": "project-prompt-patch.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "assistant-request.valid.json",
+      "schema": "../../openapi.json#/components/schemas/AssistantMessageRequest",
+      "file": "assistant-request.valid.json",
+      "valid": true
+    },
+    {
+      "name": "user-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/UserDataResponse",
+      "file": "user-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "missing-meta.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/UserDataResponse",
+      "file": "missing-meta.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "revision-conflict.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ErrorResponse",
+      "file": "revision-conflict.valid.json",
+      "valid": true
+    },
+    {
+      "name": "error-request-id.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/ErrorResponse",
+      "file": "error-request-id.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "usage-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/UsageResponse",
+      "file": "usage-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "report.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ReportRequest",
+      "file": "report.valid.json",
+      "valid": true
+    },
+    {
+      "name": "report-both-targets.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/ReportRequest",
+      "file": "report-both-targets.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "media-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "media-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "admission-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/GenerationAcceptedResponse",
+      "file": "admission-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "review-project-create.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectCreate",
+      "file": "review-project-create.valid.json",
+      "valid": true
+    },
+    {
+      "name": "storyboard-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/StoryboardResponse",
+      "file": "storyboard-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "storyboard-edit.valid.json",
+      "schema": "../../schemas/scene.schema.json#/$defs/StoryboardEdit",
+      "file": "storyboard-edit.valid.json",
+      "valid": true
+    },
+    {
+      "name": "storyboard-edited-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/StoryboardResponse",
+      "file": "storyboard-edited-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "storyboard-approval-request.valid.json",
+      "schema": "../../schemas/scene.schema.json#/$defs/ApproveStoryboardRequest",
+      "file": "storyboard-approval-request.valid.json",
+      "valid": true
+    },
+    {
+      "name": "storyboard-approval-response.valid.json",
+      "schema": "../../openapi.json#/components/schemas/StoryboardApprovalResponse",
+      "file": "storyboard-approval-response.valid.json",
+      "valid": true
+    },
+    {
+      "name": "review-generation-start.valid.json",
+      "schema": "../../schemas/job.schema.json#/$defs/StartGenerationRequest",
+      "file": "review-generation-start.valid.json",
+      "valid": true
+    },
+    {
+      "name": "review-generation-accepted.valid.json",
+      "schema": "../../openapi.json#/components/schemas/GenerationAcceptedResponse",
+      "file": "review-generation-accepted.valid.json",
+      "valid": true
+    },
+    {
+      "name": "signup-min15.valid.json",
+      "schema": "../../openapi.json#/components/schemas/SignupRequest",
+      "file": "signup-min15.valid.json",
+      "valid": true
+    },
+    {
+      "name": "signup-max128.valid.json",
+      "schema": "../../openapi.json#/components/schemas/SignupRequest",
+      "file": "signup-max128.valid.json",
+      "valid": true
+    },
+    {
+      "name": "signup-short14.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/SignupRequest",
+      "file": "signup-short14.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "signup-long129.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/SignupRequest",
+      "file": "signup-long129.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "video-expiry-metadata.valid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "video-expiry-metadata.valid.json",
+      "valid": true
+    },
+    {
+      "name": "caption-metadata.valid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "caption-metadata.valid.json",
+      "valid": true
+    },
+    {
+      "name": "caption-wrong-mime.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "caption-wrong-mime.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "caption-missing-expiry.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "caption-missing-expiry.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "video-missing-availability.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "video-missing-availability.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "expired-export.semantic-invalid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "expired-export.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "MEDIA_RETENTION_EXPIRED"
+      ],
+      "context": {
+        "now": "2026-11-29T12:00:00.000Z",
+        "requestedOperation": "GET /assets/asset_video_review/download"
+      },
+      "expectedServiceOutcome": "404; READY processing status and historical COMPLETED do not authorize an expired stream."
+    },
+    {
+      "name": "incomplete-pair.semantic-invalid.json",
+      "schema": "../../openapi.json#/components/schemas/MediaAssetResponse",
+      "file": "incomplete-pair.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "PUBLISH_OUTPUT_PAIR"
+      ],
+      "context": {
+        "captionAssetExists": false
+      },
+      "expectedServiceOutcome": "Do not publish COMPLETED or serve either export; pair is unavailable until both video and caption are verified READY."
+    },
+    {
+      "name": "caption-webvtt.valid.json",
+      "schema": "../../openapi.json#/components/schemas/WebVttDocument",
+      "file": "caption-webvtt.valid.json",
+      "valid": true
+    },
+    {
+      "name": "caption-plain-text.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/WebVttDocument",
+      "file": "caption-plain-text.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "completed-caption-pair.valid.json",
+      "schema": "../../openapi.json#/components/schemas/GenerationResponse",
+      "file": "completed-caption-pair.valid.json",
+      "valid": true
+    },
+    {
+      "name": "completed-missing-caption.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/GenerationResponse",
+      "file": "completed-missing-caption.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "title-only-patch.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectPatch",
+      "file": "title-only-patch.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Only project title changes; generation settings and approved snapshot remain identical."
+      ],
+      "expectedServiceOutcome": "Keep existing approval/output; no new review required for title-only metadata."
+    },
+    {
+      "name": "settings-change-patch.valid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectPatch",
+      "file": "settings-change-patch.valid.json",
+      "valid": true,
+      "semanticNotes": [
+        "Generation-affecting change after approval requires a new draft review and approval; preserve older snapshot and output."
+      ],
+      "expectedServiceOutcome": "Save settings, require new review/approval before changed settings render."
+    },
+    {
+      "name": "settings-change-old-approval.semantic-invalid.json",
+      "schema": "../../schemas/job.schema.json#/$defs/StartGenerationRequest",
+      "file": "settings-change-old-approval.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "SETTINGS_CHANGE_REQUIRES_NEW_REVIEW"
+      ],
+      "context": {
+        "currentProjectDurationSec": 60,
+        "referencedApprovedDurationSec": 30,
+        "changedSettingsRequested": true
+      },
+      "expectedServiceOutcome": "409 with no job/reservation for changed settings using the old approval; require a newly reviewed/approved matching snapshot. Exact error code is a DTO detail."
+    },
+    {
+      "name": "voice-selector.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/ProjectPatch",
+      "file": "voice-selector.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "initial-capabilities.valid.json",
+      "schema": "../../openapi.json#/components/schemas/CapabilitiesResponse",
+      "file": "initial-capabilities.valid.json",
+      "valid": true,
+      "context": {
+        "allFiveInitialTemplateTestsPassed": true,
+        "englishVoiceAndLandscapeProfileValidated": true
+      },
+      "semanticNotes": [
+        "Synthetic future profile only; current prototype is not evidence of all five generic templates being implemented/tested."
+      ]
+    },
+    {
+      "name": "untested-template-capability.semantic-invalid.json",
+      "schema": "../../openapi.json#/components/schemas/CapabilitiesResponse",
+      "file": "untested-template-capability.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "CAPABILITY_TESTED_TEMPLATE"
+      ],
+      "context": {
+        "comparisonTemplatePassedTests": false
+      },
+      "expectedServiceOutcome": "Do not advertise or admit COMPARISON while untested; retain known template registry without enabling it."
+    },
+    {
+      "name": "usage-configured4.valid.json",
+      "schema": "../../openapi.json#/components/schemas/UsageResponse",
+      "file": "usage-configured4.valid.json",
+      "valid": true,
+      "context": {
+        "configuredDailyLimit": 4
+      },
+      "semanticNotes": [
+        "Wire schema reports an explicitly configured value; initial demo default remains3 in approved-policy.json. No API change is needed to tune configuration."
+      ]
+    },
+    {
+      "name": "usage-negative-limit.invalid.json",
+      "schema": "../../openapi.json#/components/schemas/UsageResponse",
+      "file": "usage-negative-limit.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "usage-initial-default-mismatch.semantic-invalid.json",
+      "schema": "../../openapi.json#/components/schemas/UsageResponse",
+      "file": "usage-initial-default-mismatch.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "USAGE_CONFIG_MATCH"
+      ],
+      "context": {
+        "configuredDailyLimit": 3,
+        "responseDailyLimit": 4
+      },
+      "expectedServiceOutcome": "Report the actual configured initial default3; schema accepts4 but a server response disagreeing with its configured allowance is incorrect."
+    },
+    {
+      "name": "Complete reviewed workflow publishes video and captions",
+      "schema": "../../openapi.json#/components/schemas/GenerationResponse",
+      "file": "review-generation-completed.valid.json",
+      "valid": true
+    }
+  ],
+  "x-review-updated-on": "2026-11-21"
+}

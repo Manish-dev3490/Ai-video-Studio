@@ -1,0 +1,9 @@
+{
+  "generationId": "gen_demo_1",
+  "projectId": "prj_demo",
+  "storyboardId": "sb_demo",
+  "approvedRevision": 2,
+  "status": "QUEUED",
+  "stage": null,
+  "statusUrl": "/api/v1/generations/gen_demo_1"
+}

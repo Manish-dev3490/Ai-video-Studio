@@ -1,0 +1,273 @@
+.video-canvas {
+  --ink: #0b1423;
+  --text: #f2f6ff;
+  --muted: #a5b6cb;
+  --cyan: #70d7ff;
+  --mint: #80e6bd;
+  --amber: #ffd18a;
+  --line: #2c4057;
+  --mono: "IBM Plex Mono", Consolas, "Liberation Mono", monospace;
+
+  box-sizing: border-box;
+  overflow: hidden;
+  color: var(--text);
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(ellipse at 84% 0%, #172c45 0%, var(--ink) 55%);
+}
+
+.video-canvas *,
+.video-canvas *::before,
+.video-canvas *::after {
+  box-sizing: inherit;
+}
+
+.tone-cyan {
+  --tone: var(--cyan);
+}
+.tone-mint {
+  --tone: var(--mint);
+}
+.tone-amber {
+  --tone: var(--amber);
+}
+.tone-muted {
+  --tone: var(--muted);
+}
+
+.scene-header {
+  position: absolute;
+  top: 55px;
+  left: 72px;
+  right: 72px;
+}
+
+.scene-header h1,
+.intro-title h1 {
+  margin: 0;
+  font-size: 62px;
+  font-weight: 750;
+  line-height: 1.05;
+  letter-spacing: -0.047em;
+}
+
+.scene-header p,
+.intro-title p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 450;
+  line-height: 1.35;
+}
+
+.scene-body {
+  position: absolute;
+  top: 195px;
+  left: 72px;
+  width: 1136px;
+  height: 385px;
+}
+
+.visual-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #17283c 0%, #101d2d 85%);
+}
+
+.visual-panel > h2 {
+  flex: none;
+  margin: 0;
+  color: var(--tone);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.015em;
+}
+
+.visual-label {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  padding: 5px 11px;
+  border: 1px solid color-mix(in srgb, var(--tone) 38%, transparent);
+  border-radius: 6px;
+  color: var(--tone);
+  background: color-mix(in srgb, var(--tone) 8%, transparent);
+  font-size: 15px;
+  font-weight: 670;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.visual-arrow {
+  display: block;
+  color: var(--tone);
+}
+
+.stack-items,
+.queue-items {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.stack-items {
+  flex-direction: column-reverse;
+}
+
+.queue-items {
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+}
+
+.visual-item,
+.empty-item {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 56px;
+  align-items: center;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--text);
+  background: #1a2c43;
+  font: 500 19px / 1.15 var(--mono);
+  white-space: nowrap;
+}
+
+.visual-item.active {
+  border-color: color-mix(in srgb, var(--tone) 64%, var(--line));
+  color: var(--tone);
+  background: color-mix(in srgb, var(--tone) 11%, #112034);
+}
+
+.queue-item {
+  flex-shrink: 1;
+  max-width: 100%;
+}
+
+.empty-item {
+  width: 100%;
+  border-style: dashed;
+  color: var(--muted);
+  background: rgb(8 18 30 / 36%);
+  font-family: inherit;
+  font-size: 17px;
+}
+
+.scene-caption {
+  position: absolute;
+  top: 601px;
+  left: 72px;
+  right: 72px;
+  min-height: 51px;
+  display: flex;
+  align-items: center;
+  padding: 9px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--tone);
+  border-radius: 8px;
+  background: #111f30;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 550;
+  line-height: 1.25;
+}
+
+.video-progress {
+  position: absolute;
+  left: 72px;
+  right: 72px;
+  bottom: 38px;
+  display: flex;
+  gap: 8px;
+}
+
+.progress-segment {
+  flex-basis: 0;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #293a4e;
+}
+
+.progress-segment > div {
+  height: 100%;
+  background: var(--cyan);
+  transform-origin: left center;
+}
+
+.intro-body {
+  position: absolute;
+  top: 137px;
+  left: 72px;
+  right: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+}
+
+.intro-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.intro-title h1 {
+  font-size: 80px;
+  letter-spacing: -0.065em;
+  white-space: pre-line;
+}
+
+.intro-title p {
+  max-width: 440px;
+  margin-top: 22px;
+  font-size: 27px;
+}
+
+.intro-diagram {
+  position: relative;
+  width: 500px;
+  height: 280px;
+  margin: 15px auto 0;
+}
+
+.intro-node {
+  position: absolute;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--tone) 60%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tone) 11%, #152338);
+  color: var(--tone);
+  font-size: 18px;
+  font-weight: 680;
+  white-space: nowrap;
+}
+
+.loop-center {
+  position: absolute;
+  top: 94px;
+  left: 185px;
+  width: 130px;
+  height: 130px;
+  display: grid;
+  place-content: center;
+  border: 1px solid #3a5674;
+  border-radius: 50%;
+  background: #172a41;
+  color: var(--text);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+}

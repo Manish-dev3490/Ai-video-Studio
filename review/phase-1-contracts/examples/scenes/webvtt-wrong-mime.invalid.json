@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "format": "WEBVTT",
+  "mimeType": "text/html",
+  "language": "en",
+  "cues": [
+    {
+      "startFrame": 6,
+      "endFrame": 168,
+      "text": "JavaScript runs one task at a time, while the browser coordinates other work."
+    },
+    {
+      "startFrame": 186,
+      "endFrame": 408,
+      "text": "Function calls enter the call stack. The newest call completes first, then control returns to the function below it."
+    },
+    {
+      "startFrame": 426,
+      "endFrame": 708,
+      "text": "When the current task finishes, the browser drains microtasks before running the next task, such as a ready timer callback."
+    },
+    {
+      "startFrame": 726,
+      "endFrame": 888,
+      "text": "Remember the order: finish the task, drain microtasks, then take the next task."
+    }
+  ]
+}

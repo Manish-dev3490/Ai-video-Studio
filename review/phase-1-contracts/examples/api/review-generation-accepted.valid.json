@@ -1,0 +1,14 @@
+{
+  "data": {
+    "generationId": "gen_event_loop_001",
+    "projectId": "prj_event_loop_001",
+    "storyboardId": "sb_event_loop_001",
+    "approvedRevision": 2,
+    "status": "QUEUED",
+    "stage": null,
+    "statusUrl": "/api/v1/generations/gen_event_loop_001"
+  },
+  "meta": {
+    "requestId": "req_review_admitted"
+  }
+}

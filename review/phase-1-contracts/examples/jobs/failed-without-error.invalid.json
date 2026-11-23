@@ -1,0 +1,18 @@
+{
+  "id": "gen_demo_1",
+  "projectId": "prj_demo",
+  "storyboardId": "sb_demo",
+  "approvedRevision": 2,
+  "status": "FAILED",
+  "stage": "RENDER_VIDEO",
+  "progress": {
+    "completedStages": 3,
+    "totalStages": 6
+  },
+  "attempt": 1,
+  "outputAssetId": null,
+  "error": null,
+  "createdAt": "2026-11-21T12:00:00.000Z",
+  "updatedAt": "2026-11-21T12:00:30.000Z",
+  "captionAssetId": null
+}

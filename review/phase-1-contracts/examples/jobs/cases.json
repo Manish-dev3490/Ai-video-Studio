@@ -1,0 +1,362 @@
+{
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "description": "Synthetic updated contract fixtures, not implemented application tests. Structural schema results and semantic policy/race preconditions remain distinct.",
+  "cases": [
+    {
+      "name": "Unclaimed queued job",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "queued.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Rendering job",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "processing.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Running cancellation request is not cancellation completion",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "cancel-requested.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Queued cancellation request does not start execution",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "cancel-requested-queued.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Confirmed cancellation before first claim",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "cancelled.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Completed export",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Sanitized failure",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "failed.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Immutable admission receipt",
+      "schema": "../../schemas/job.schema.json#/$defs/GenerationAccepted",
+      "file": "admission-receipt.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Cancellation acknowledgement",
+      "schema": "../../schemas/job.schema.json#/$defs/CancelGenerationAccepted",
+      "file": "cancel-acknowledgement.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Start only references approved identity",
+      "schema": "../../schemas/job.schema.json#/$defs/StartGenerationRequest",
+      "file": "start.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Internal lease is separate from polling",
+      "schema": "../../schemas/job.schema.json#/$defs/WorkerLease",
+      "file": "lease.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Completed output reference is required",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed-without-output.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Completed jobs cannot also contain failure errors",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed-with-error.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Failed jobs require actionable errors",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "failed-without-error.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Queued job has no prior execution claim",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "queued-with-attempt.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Public serializer rejects worker internals",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "worker-field-leak.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Flattened legacy pipeline label is not a job status",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "legacy-status.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Owner cannot be set by client",
+      "schema": "../../schemas/job.schema.json#/$defs/StartGenerationRequest",
+      "file": "start-with-owner.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Structurally valid publication with unready/unowned video or caption must fail service checks",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed.valid.json",
+      "valid": true,
+      "semanticViolations": [
+        "At publication, clean MP4 or paired WebVTT is not READY/owned/aligned"
+      ],
+      "expectedServiceOutcome": "Do not publish COMPLETED. A later expiry of already-published media is a different historical-availability case."
+    },
+    {
+      "name": "Structurally valid start using unapproved storyboard must fail service checks",
+      "schema": "../../schemas/job.schema.json#/$defs/StartGenerationRequest",
+      "file": "start.valid.json",
+      "valid": true,
+      "semanticViolations": [
+        "Referenced storyboard is DRAFT rather than APPROVED"
+      ],
+      "expectedServiceOutcome": "409 STORYBOARD_NOT_APPROVED and no job or reservation created."
+    },
+    {
+      "name": "render-manifest.valid.json",
+      "schema": "../../schemas/job.schema.json#/$defs/RenderManifest",
+      "file": "render-manifest.valid.json",
+      "valid": true
+    },
+    {
+      "name": "manifest-fps-mismatch.semantic-invalid.json",
+      "schema": "../../schemas/job.schema.json#/$defs/RenderManifest",
+      "file": "manifest-fps-mismatch.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "MANIFEST_TIMELINE_MATCH: encoding FPS differs from timeline FPS"
+      ]
+    },
+    {
+      "name": "manifest-audio-mismatch.semantic-invalid.json",
+      "schema": "../../schemas/job.schema.json#/$defs/RenderManifest",
+      "file": "manifest-audio-mismatch.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "MANIFEST_AUDIO_MATCH: retained audio duration differs from timeline metadata"
+      ]
+    },
+    {
+      "name": "Completed job requires caption reference",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed-without-caption.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Completed caption reference cannot be null",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed-null-caption.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Unpublished caption reference is not exposed on a running job",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "processing-with-caption.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Automatic execution attempts are capped at two",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "attempt-budget-exceeded.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Caption artifact descriptor",
+      "schema": "../../schemas/job.schema.json#/$defs/CaptionArtifact",
+      "file": "caption-artifact.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Logical WebVTT cue payload shares timeline",
+      "schema": "../../schemas/scene.schema.json#/$defs/WebVttCaptionTrack",
+      "file": "caption-track.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Internal cancellation before actual renderer start",
+      "schema": "../../schemas/job.schema.json#/$defs/ExecutionState",
+      "file": "execution-before-render.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Internal first render-start evidence survives a reclaim",
+      "schema": "../../schemas/job.schema.json#/$defs/ExecutionState",
+      "file": "execution-after-render-reclaim.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Exactly one slot is reserved per new admission",
+      "schema": "../../schemas/job.schema.json#/$defs/UsageReservation",
+      "file": "reservation-reserved.valid.json",
+      "valid": true
+    },
+    {
+      "name": "A consumed reservation has a stable job link",
+      "schema": "../../schemas/job.schema.json#/$defs/UsageReservation",
+      "file": "reservation-consumed.valid.json",
+      "valid": true
+    },
+    {
+      "name": "A released reservation has a stable job link",
+      "schema": "../../schemas/job.schema.json#/$defs/UsageReservation",
+      "file": "reservation-released.valid.json",
+      "valid": true
+    },
+    {
+      "name": "A longer duration does not reserve two slots",
+      "schema": "../../schemas/job.schema.json#/$defs/UsageReservation",
+      "file": "reservation-double-slot.invalid.json",
+      "valid": false
+    },
+    {
+      "name": "Separate retained twenty-four-hour receipt",
+      "schema": "../../schemas/job.schema.json#/$defs/IdempotencyIdentity",
+      "file": "idempotency-receipt.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Published clean MP4 and caption pair share seven-day expiry",
+      "schema": "../../schemas/job.schema.json#/$defs/PublishedExportManifest",
+      "file": "publication-manifest.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Wrong caption timeline hash is structurally valid but semantically rejected",
+      "schema": "../../schemas/job.schema.json#/$defs/RenderManifest",
+      "file": "manifest-caption-mismatch.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "CAPTION_MANIFEST_MATCH: caption timeline hash differs from canonical retained timeline"
+      ]
+    },
+    {
+      "name": "Wrong publication expiry is structurally valid but semantically rejected",
+      "schema": "../../schemas/job.schema.json#/$defs/PublishedExportManifest",
+      "file": "publication-expiry.semantic-invalid.json",
+      "valid": true,
+      "semanticViolations": [
+        "PUBLICATION_RETENTION: expiresAt is not verifiedPublishedAt plus 604800 seconds"
+      ]
+    },
+    {
+      "name": "Historical COMPLETED is retained after paired assets expire",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed.valid.json",
+      "valid": true,
+      "semanticExpectations": [
+        "At 2026-11-29T12:02:00Z the paired seven-day assets are expired; historical job stays COMPLETED with both IDs",
+        "Asset metadata reports expired and new authorized download/range requests are denied"
+      ],
+      "expectedServiceOutcome": "Keep successful job history; do not flip to FAILED or clear asset references because availability ended."
+    },
+    {
+      "name": "Cancellation winning before completion prevents later publication",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "completed.valid.json",
+      "valid": true,
+      "semanticViolations": [
+        "CANCEL_COMPLETE_RACE: cancellation guard committed first for this job"
+      ],
+      "expectedServiceOutcome": "Reject stale completion write even if its JSON shape is valid; stop execution then finalize cancellation."
+    },
+    {
+      "name": "Late cancellation after a reclaim cannot refund prior render work",
+      "schema": "../../schemas/job.schema.json#/$defs/UsageReservation",
+      "file": "reservation-released.valid.json",
+      "valid": true,
+      "semanticViolations": [
+        "QUOTA_SETTLEMENT: execution-after-render-reclaim.valid.json records a prior actual render start, but cancellation settlement released its reservation"
+      ],
+      "expectedServiceOutcome": "Consume the single slot once after confirmed stop; keep the first render-start marker across attempts."
+    },
+    {
+      "name": "Replaying a receipt does not re-run capacity checks or reserve twice",
+      "schema": "../../schemas/job.schema.json#/$defs/IdempotencyIdentity",
+      "file": "idempotency-receipt.valid.json",
+      "valid": true,
+      "semanticExpectations": [
+        "Same owner/action/key/method/target/body within 24 hours returns the original receipt even if worker now offline",
+        "Another body or concrete target with the same scoped key returns 409"
+      ],
+      "expectedServiceOutcome": "No new job or reservation; current HTTP tracing metadata is regenerated outside the immutable admission data receipt."
+    },
+    {
+      "name": "A repeated terminal reservation settlement cannot count twice",
+      "schema": "../../schemas/job.schema.json#/$defs/UsageReservation",
+      "file": "reservation-consumed.valid.json",
+      "valid": true,
+      "semanticExpectations": [
+        "Second settlement of the same reserved-to-consumed outcome is idempotent",
+        "A conflicting consumed-to-released update is rejected by the transaction/ledger guard"
+      ],
+      "expectedServiceOutcome": "Exactly one terminal disposition."
+    },
+    {
+      "name": "Duration mismatch is a nonretryable pipeline failure",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "duration-revision-required.failed.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Known nonretryable duration failure cannot create a same-snapshot retry",
+      "schema": "../../schemas/job.schema.json#/$defs/Generation",
+      "file": "duration-revision-required.failed.valid.json",
+      "valid": true,
+      "semanticViolations": [
+        "A NEW retry is requested even though error.retryable=false and revision is required"
+      ],
+      "expectedServiceOutcome": "409 GENERATION_NOT_RETRYABLE; no new job/reservation; revise and approve a new draft. Matching authenticated original receipt replay creates no work and remains allowed."
+    },
+    {
+      "name": "Known revision-required snapshot cannot bypass retry guard via new start",
+      "schema": "../../schemas/job.schema.json#/$defs/StartGenerationRequest",
+      "file": "start.valid.json",
+      "valid": true,
+      "semanticViolations": [
+        "Referenced approved snapshot has known unresolved duration-revision failure"
+      ],
+      "expectedServiceOutcome": "409 REVISION_REQUIRED for fresh admission; matching original receipt may replay without reservation."
+    },
+    {
+      "name": "Pre-cancel render evidence can arrive after cancellation accepted",
+      "schema": "../../schemas/job.schema.json#/$defs/ExecutionState",
+      "scenario": {
+        "storedJobStatus": "CANCEL_REQUESTED",
+        "event": "CONFIRM_PRE_CANCEL_RENDER_START"
+      },
+      "expectedServiceOutcome": "Evidence-only update; no launch/resume/publication. Confirm stop before consuming once.",
+      "file": "late-pre-cancel-start-evidence.valid.json",
+      "valid": true
+    },
+    {
+      "name": "Post-cancel launch is not legitimate pre-cancel render evidence",
+      "schema": "../../schemas/job.schema.json#/$defs/ExecutionState",
+      "semanticViolations": [
+        "renderStartedAt is after accepted cancelRequestedAt; cannot claim it as pre-cancel execution"
+      ],
+      "expectedServiceOutcome": "Reject evidence classification; no new work or false pre-cancel charge. Stop any unauthorized process; uncertain process state stays pending.",
+      "file": "post-cancel-start.semantic-invalid.json",
+      "valid": true
+    }
+  ],
+  "x-draft-version": "1.0.1-draft.2",
+  "x-decision-approval-date": "2026-11-21"
+}

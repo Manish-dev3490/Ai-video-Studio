@@ -1,0 +1,142 @@
+{
+  "id": "sb_event_loop_90",
+  "projectId": "prj_event_loop_90",
+  "revision": 2,
+  "status": "APPROVED",
+  "schemaVersion": 1,
+  "targetDurationSec": 90,
+  "settingsSnapshot": {
+    "mode": "FACELESS",
+    "durationSec": 90,
+    "language": "en",
+    "aspectRatio": "16:9",
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS",
+    "characterAssetId": null
+  },
+  "scenes": [
+    {
+      "sceneId": "intro_90",
+      "template": "TITLE",
+      "narration": "The browser event loop coordinates tasks, microtasks, and the call stack. Understanding these pieces explains callback order and why busy JavaScript can make a page unresponsive.",
+      "estimatedDurationSec": 12,
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One call stack, tasks and microtasks"
+      }
+    },
+    {
+      "sceneId": "stack_90",
+      "template": "STACK_QUEUE",
+      "narration": "The stack records active function calls. Calls push frames and returns remove them. JavaScript finishes the current task before another task begins, so long synchronous work delays user interactions.",
+      "estimatedDurationSec": 13,
+      "visualProps": {
+        "title": "One call stack",
+        "items": [
+          "main()",
+          "calculate()",
+          "format()"
+        ],
+        "layout": "STACK"
+      }
+    },
+    {
+      "sceneId": "timers_90",
+      "template": "STEPS",
+      "narration": "When code calls setTimeout, the browser tracks the delay outside the stack. After that delay, the callback becomes eligible as a task, but still waits for its turn.",
+      "estimatedDurationSec": 13,
+      "visualProps": {
+        "title": "What a timer really does",
+        "steps": [
+          "Register the callback",
+          "Browser tracks the delay",
+          "Timer task becomes eligible",
+          "Wait for the event loop"
+        ]
+      }
+    },
+    {
+      "sceneId": "microtasks_90",
+      "template": "STACK_QUEUE",
+      "narration": "A callback attached to an already resolved promise becomes a microtask. At a checkpoint, the browser drains this queue, including microtasks added while the queue is being drained.",
+      "estimatedDurationSec": 13,
+      "visualProps": {
+        "title": "The microtask queue",
+        "items": [
+          "Promise callback",
+          "New microtask",
+          "Queue drained"
+        ],
+        "layout": "QUEUE"
+      }
+    },
+    {
+      "sceneId": "example_90",
+      "template": "STEPS",
+      "narration": "Imagine a script logging A, scheduling a timer for D, scheduling a resolved promise callback for C, then logging B. Synchronous execution prints A then B before either callback.",
+      "estimatedDurationSec": 13,
+      "visualProps": {
+        "title": "Follow the example",
+        "steps": [
+          "Log A now",
+          "Schedule timer D",
+          "Schedule promise C",
+          "Log B now"
+        ]
+      }
+    },
+    {
+      "sceneId": "flow_90",
+      "template": "FLOWCHART",
+      "narration": "After the task, the promise microtask prints C. A ready timer task can later print D. Rendering may happen at a rendering opportunity, while timers are not exact clocks.",
+      "estimatedDurationSec": 13,
+      "visualProps": {
+        "title": "After the current task",
+        "nodes": [
+          {
+            "id": "task",
+            "label": "Current task finishes"
+          },
+          {
+            "id": "microtasks",
+            "label": "Drain microtasks"
+          },
+          {
+            "id": "next",
+            "label": "Run a later ready task"
+          }
+        ],
+        "edges": [
+          {
+            "from": "task",
+            "to": "microtasks",
+            "label": "Checkpoint"
+          },
+          {
+            "from": "microtasks",
+            "to": "next",
+            "label": "When eligible"
+          }
+        ]
+      }
+    },
+    {
+      "sceneId": "summary_90",
+      "template": "KEY_POINTS",
+      "narration": "The example produces A, B, C, D. Keep tasks short and avoid endless microtask chains. Asynchronous scheduling changes when callbacks run, but does not make all JavaScript automatically execute in parallel.",
+      "estimatedDurationSec": 13,
+      "visualProps": {
+        "title": "Remember the order",
+        "points": [
+          "Current task runs to completion",
+          "Promise callbacks use microtasks",
+          "Timers schedule later tasks",
+          "Keep synchronous work short"
+        ]
+      }
+    }
+  ],
+  "approvedAt": "2026-11-21T12:30:00.000Z",
+  "createdAt": "2026-11-21T11:59:00.000Z",
+  "updatedAt": "2026-11-21T12:30:00.000Z"
+}

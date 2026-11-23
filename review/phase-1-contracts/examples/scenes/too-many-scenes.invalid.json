@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "targetDurationSec": 90,
+  "scenes": [
+    {
+      "sceneId": "scene_0",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_1",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_2",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_3",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_4",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_5",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_6",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_7",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_8",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_9",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_10",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_11",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_12",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_13",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_14",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_15",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_16",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_17",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    },
+    {
+      "sceneId": "scene_18",
+      "template": "TITLE",
+      "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+      "visualProps": {
+        "title": "The JavaScript event loop",
+        "subtitle": "One stack, several sources of work"
+      },
+      "estimatedDurationSec": 6
+    }
+  ]
+}

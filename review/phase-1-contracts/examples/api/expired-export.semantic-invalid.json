@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "asset_video_review",
+    "ownerId": "user_review",
+    "projectId": "prj_review",
+    "generationId": "gen_review",
+    "kind": "VIDEO_EXPORT",
+    "mimeType": "video/mp4",
+    "sizeBytes": 2946633,
+    "status": "READY",
+    "aiGenerated": true,
+    "durationSec": 30.016,
+    "width": 1280,
+    "height": 720,
+    "createdAt": "2026-11-21T12:00:00.000Z",
+    "expiresAt": "2026-11-28T12:00:00.000Z",
+    "availability": "EXPIRED"
+  },
+  "meta": {
+    "requestId": "req_review"
+  }
+}

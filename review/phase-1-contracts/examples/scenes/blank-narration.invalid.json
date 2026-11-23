@@ -1,0 +1,10 @@
+{
+  "sceneId": "scene_title",
+  "template": "TITLE",
+  "narration": "   ",
+  "visualProps": {
+    "title": "The JavaScript event loop",
+    "subtitle": "One stack, several sources of work"
+  },
+  "estimatedDurationSec": 6
+}

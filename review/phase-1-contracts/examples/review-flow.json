@@ -1,0 +1,68 @@
+{
+  "status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "description": "Synthetic declarative workflow updated with approved policies. It executes no requests or implementation. Establish a cookie session and CSRF separately.",
+  "projectId": "prj_event_loop_001",
+  "steps": [
+    {
+      "method": "POST",
+      "path": "/api/v1/projects",
+      "request": "api/review-project-create.valid.json",
+      "note": "Server-assigned projectId is reused below."
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj_event_loop_001/storyboards/generate",
+      "request": {},
+      "response": "api/storyboard-response.valid.json"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/projects/prj_event_loop_001/storyboards/sb_event_loop_001",
+      "request": "api/storyboard-edit.valid.json",
+      "response": "api/storyboard-edited-response.valid.json"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj_event_loop_001/storyboards/sb_event_loop_001/approve",
+      "request": "api/storyboard-approval-request.valid.json",
+      "response": "api/storyboard-approval-response.valid.json"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj_event_loop_001/generations",
+      "headers": {
+        "Idempotency-Key": "review-start-0001"
+      },
+      "request": "api/review-generation-start.valid.json",
+      "response": "api/review-generation-accepted.valid.json"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/generations/gen_event_loop_001",
+      "response": "api/review-generation-completed.valid.json",
+      "note": "Poll active jobs until a terminal result; the completed example is synthetic and paired assets must be READY at publication."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assets/asset_event_loop_video_001/download",
+      "responseMediaType": "video/mp4",
+      "note": "Private clean MP4; no burned-in captions. Block new reads after deletion or seven-day expiry."
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assets/asset_event_loop_caption_001/download",
+      "responseMediaType": "text/vtt",
+      "note": "Same owner-authorized route serves the separate WebVTT track for toggleable browser captions and caption download."
+    }
+  ],
+  "mutationHeaders": "All writes also require allowed Origin and current X-CSRF-Token. No real cookies or credentials are stored here.",
+  "approvalInvariant": "Any later generation-setting change requires a new reviewed draft and fresh approval; title-only edits preserve approval. Older snapshots stay immutable.",
+  "updatedOn": "2026-11-21",
+  "deliveryPolicy": {
+    "mp4CaptionMode": "NONE",
+    "captionFormat": "WEBVTT",
+    "sharedRetentionSeconds": 604800,
+    "expiryStartsAt": "VERIFIED_PUBLICATION_UTC",
+    "historicalCompletedPreserved": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "dailyLimit": 4,
+    "used": 0,
+    "reserved": 0,
+    "activeJobs": 0,
+    "queuedJobs": 0,
+    "resetAt": null,
+    "nextEligibleAt": null
+  },
+  "meta": {
+    "requestId": "req_review"
+  }
+}

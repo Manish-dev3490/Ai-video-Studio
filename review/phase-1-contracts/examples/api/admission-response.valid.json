@@ -1,0 +1,14 @@
+{
+  "data": {
+    "generationId": "gen_review",
+    "projectId": "prj_review",
+    "storyboardId": "sb_review",
+    "approvedRevision": 2,
+    "status": "QUEUED",
+    "stage": null,
+    "statusUrl": "/api/v1/generations/gen_review"
+  },
+  "meta": {
+    "requestId": "req_example"
+  }
+}

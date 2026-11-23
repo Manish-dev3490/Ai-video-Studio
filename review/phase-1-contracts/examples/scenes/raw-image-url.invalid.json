@@ -1,0 +1,20 @@
+{
+  "sceneId": "scene_image",
+  "template": "IMAGE_WITH_LABELS",
+  "narration": "An authorized image can support the explanation.",
+  "visualProps": {
+    "title": "An owned supporting image",
+    "assetId": "https://example.invalid/private.png",
+    "labels": [
+      {
+        "text": "Relevant feature",
+        "xPercent": 50,
+        "yPercent": 40
+      }
+    ]
+  },
+  "assetIds": [
+    "asset_diagram_001"
+  ],
+  "estimatedDurationSec": 6
+}

@@ -1,0 +1,29 @@
+{
+  "sceneId": "scene_flow",
+  "template": "FLOWCHART",
+  "narration": "When the current task finishes, the browser drains microtasks before running the next task, such as a ready timer callback.",
+  "visualProps": {
+    "title": "Choosing the next work",
+    "nodes": [
+      {
+        "id": "task",
+        "label": "Current task finishes"
+      },
+      {
+        "id": "microtasks",
+        "label": "Drain microtasks"
+      },
+      {
+        "id": "next",
+        "label": "Next task"
+      }
+    ],
+    "edges": [
+      {
+        "from": "task",
+        "to": "missing"
+      }
+    ]
+  },
+  "estimatedDurationSec": 10
+}

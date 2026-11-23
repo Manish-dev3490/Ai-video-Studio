@@ -1,0 +1,12 @@
+{
+  "generationId": "gen_demo_1",
+  "attempt": 1,
+  "renderStartedAt": "2026-11-21T12:00:10.000Z",
+  "cancelRequestedAt": "2026-11-21T12:00:11.000Z",
+  "lease": {
+    "workerId": "worker_demo",
+    "fencingToken": "synthetic-token-for-review-only",
+    "heartbeatAt": "2026-11-21T12:00:00.000Z",
+    "expiresAt": "2026-11-21T12:01:00.000Z"
+  }
+}

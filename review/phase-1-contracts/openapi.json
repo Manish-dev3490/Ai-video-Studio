@@ -1,0 +1,4264 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://spec.openapis.org/oas/3.1/dialect/base",
+  "info": {
+    "title": "AI Video Studio API Draft for Review",
+    "version": "1.0.1-draft.2",
+    "description": "DRAFT UPDATED WITH APPROVED DECISIONS on 21 November 2026. The user approved the twelve recommendation policies; this does not blanket-approve every DTO field, validation bound, deployment setting or response layout. Policy is recorded separately in approved-policy.json; remaining shape/detail proposals retain x-review-decision annotations. This is a review contract, not implemented API/worker behavior. Approved source documents and prototype remain unchanged. JSON successes use data + meta.requestId; errors use error + requestId, with media/204/redirect exceptions. Ownership checks apply to all resources. Never expose provider secrets, paths, leases, storage keys or private hashes."
+  },
+  "x-review-status": "DRAFT_UPDATED_WITH_APPROVED_DECISIONS",
+  "x-review-decision-register": "./decisions.json",
+  "x-source-baseline": [
+    "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+    "../../docs/AI_Video_Studio_Database_Design_v1.0.md",
+    "../../docs/AI_Video_Studio_HLD_v1.0.md",
+    "../../docs/AI_Video_Studio_UIUX_Design_v1.0.md"
+  ],
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Approved initial deployment is same-origin /api/v1, remote HTTPS with secure cookie/CSRF protection; local HTTP development allowed. Exact domain, cookie names/paths and concrete SameSite configuration remain deployment details."
+    }
+  ],
+  "security": [
+    {
+      "accessCookie": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Projects"
+    },
+    {
+      "name": "Assistant"
+    },
+    {
+      "name": "Storyboards"
+    },
+    {
+      "name": "Generations"
+    },
+    {
+      "name": "Assets"
+    },
+    {
+      "name": "Reports"
+    },
+    {
+      "name": "Usage"
+    },
+    {
+      "name": "System"
+    }
+  ],
+  "paths": {
+    "/auth/csrf": {
+      "get": {
+        "operationId": "getCsrfToken",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Bootstrap CSRF token",
+        "description": "Public token plus signed/bound bootstrap cookie. This token is not an authentication credential.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Bootstrap CSRF token",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Set-Cookie": {
+                "$ref": "#/components/headers/SetCookie"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsrfDataResponse"
+                },
+                "example": {
+                  "data": {
+                    "csrfToken": "example_csrf_token_not_a_secret"
+                  },
+                  "meta": {
+                    "requestId": "req_example"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "security": [],
+        "x-review-decision": [
+          "D-11"
+        ]
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "operationId": "signup",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Create account and establish session",
+        "description": "Approved password length 15-128 code points; hash credentials and establish 15-minute access/seven-day rotated refresh cookies. Require CSRF and same-origin Origin before login. Exact cookie/deployment attributes and DTO fields remain draft details.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "201": {
+            "description": "Create account and establish session",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Set-Cookie": {
+                "$ref": "#/components/headers/SetCookie"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-11",
+          "D-12"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "login",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Authenticate and establish session",
+        "description": "Generic invalid-credential error. Set 15-minute httpOnly access and seven-day rotated refresh cookies; production Secure and explicit SameSite. Require CSRF/Origin; never expose raw tokens.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Authenticate and establish session",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Set-Cookie": {
+                "$ref": "#/components/headers/SetCookie"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-11"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "refreshSession",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Rotate refresh session and access cookie",
+        "description": "Authenticate using refresh cookie, not an unexpired access cookie. Approved seven-day refresh session rotation is atomic; detect revoked-token reuse and invalidate the applicable family. Issue a 15-minute access cookie. User-response envelope and session-family DTO mechanics remain draft details.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Rotate refresh session and access cookie",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Set-Cookie": {
+                "$ref": "#/components/headers/SetCookie"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "security": [
+          {
+            "refreshCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-11",
+          "D-12"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "logout",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Revoke current session and clear cookies",
+        "description": "Draft uses refresh cookie so access expiry does not prevent logout. Absent/expired refresh behavior unresolved; empty response.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "204": {
+            "description": "Session revoked and cookies cleared; empty response.",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Set-Cookie": {
+                "$ref": "#/components/headers/SetCookie"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "security": [
+          {
+            "refreshCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-11"
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "getCurrentUser",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Read current profile",
+        "description": "Sanitized authenticated user only.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read current profile",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "tags": [
+          "System"
+        ],
+        "summary": "Read API liveness",
+        "description": "Public non-sensitive liveness; does not assert database/provider/renderer readiness.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read API liveness",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                },
+                "example": {
+                  "data": {
+                    "status": "ok"
+                  },
+                  "meta": {
+                    "requestId": "req_example"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "security": [],
+        "x-review-decision": [
+          "D-12"
+        ]
+      }
+    },
+    "/projects": {
+      "post": {
+        "operationId": "createProject",
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Create draft project",
+        "description": "Owner derived from session. Validate capability-gated settings. Character project may await upload; render cannot.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "201": {
+            "description": "Create draft project",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectCreate"
+              },
+              "example": {
+                "title": "Event Loop Explained",
+                "prompt": "Explain the JavaScript event loop clearly.",
+                "settings": {
+                  "mode": "FACELESS",
+                  "durationSec": 30,
+                  "language": "en",
+                  "aspectRatio": "16:9",
+                  "tone": "EDUCATIONAL",
+                  "visualStyle": "MOTION_GRAPHICS"
+                }
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "get": {
+        "operationId": "listProjects",
+        "tags": [
+          "Projects"
+        ],
+        "summary": "List current user projects",
+        "description": "Owner-scoped keyset list. Proposed updatedAt/ID descending ordering; no unapproved search/filter query fields.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "List current user projects",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectPageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "x-review-decision": [
+          "D-12"
+        ]
+      }
+    },
+    "/projects/{projectId}": {
+      "get": {
+        "operationId": "getProject",
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Read project",
+        "description": "404 for missing/non-owned/deleted resource; pointers never replace authorization.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read project",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateProject",
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Update editable title and settings",
+        "description": "Title-only changes do not require reapproval. Any generation-affecting settings change after approval requires a new reviewed draft and fresh approval before those changed settings can render. Preserve older approved snapshots and existing outputs; never combine new project settings with an older approval. Validate merged settings and explicitly save assistant suggestions. Direct prompt PATCH remains deferred; exact invalidation response fields remain draft.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Update editable title and settings",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectPatch"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteProject",
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Revoke project access and schedule cleanup",
+        "description": "Immediately deny new API/private LOCAL media reads after logical deletion, guard active-worker publication, then schedule physical cleanup. Already delivered bytes cannot be recalled. No initial remote bearer URL is issued. Detailed metadata/history cleanup mechanics remain draft.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "202": {
+            "description": "Revoke project access and schedule cleanup",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteProjectAcceptedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "x-review-decision": [
+          "D-09",
+          "D-12"
+        ]
+      }
+    },
+    "/assistant/messages": {
+      "post": {
+        "operationId": "sendAssistantMessage",
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Request a project assistant turn",
+        "description": "Moderate before provider call, bound history and timeout. Suggestions do not auto-mutate settings. Persist monotonic conversation revision.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Request a project assistant turn",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantReplyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          },
+          "504": {
+            "$ref": "#/components/responses/GatewayTimeout"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantMessageRequest"
+              },
+              "example": {
+                "projectId": "prj_review",
+                "message": "Make the explanation beginner friendly."
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-12"
+        ]
+      }
+    },
+    "/projects/{projectId}/assistant/messages": {
+      "get": {
+        "operationId": "getAssistantHistory",
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Read project assistant history",
+        "description": "Owned messages oldest-to-newest by immutable conversationRevision; cursor after last returned revision. No hidden instructions/provider payloads.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read project assistant history",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantHistoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/storyboards/generate": {
+      "post": {
+        "operationId": "generateStoryboardDraft",
+        "tags": [
+          "Storyboards"
+        ],
+        "summary": "Generate a new draft storyboard",
+        "description": "Initial synchronous bounded Gemini planning reads project prompt/settings, validates data-only templates, assigns IDs and stores a NEW draft. No render occurs. No async planning endpoint invented.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "201": {
+            "description": "Generate a new draft storyboard",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryboardResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          },
+          "504": {
+            "$ref": "#/components/responses/GatewayTimeout"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-01",
+          "D-02",
+          "D-12"
+        ]
+      }
+    },
+    "/projects/{projectId}/storyboards/current": {
+      "get": {
+        "operationId": "getCurrentStoryboard",
+        "tags": [
+          "Storyboards"
+        ],
+        "summary": "Read current storyboard",
+        "description": "Selected owned draft/approved version; 404 when missing.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read current storyboard",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryboardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ]
+      }
+    },
+    "/projects/{projectId}/storyboards/{storyboardId}": {
+      "get": {
+        "operationId": "getStoryboard",
+        "tags": [
+          "Storyboards"
+        ],
+        "summary": "Read a storyboard version",
+        "description": "Check ownership and project membership. Approved snapshots remain immutable.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read a storyboard version",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryboardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/storyboardId"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "editStoryboard",
+        "tags": [
+          "Storyboards"
+        ],
+        "summary": "Edit an exact draft revision",
+        "description": "Atomically compare DRAFT + expectedRevision, validate whole ordered scene list, increment revision. Stale edit 409 REVISION_CONFLICT. Canonical schemas reject legacy aliases.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Edit an exact draft revision",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryboardResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/storyboardId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/scene.schema.json#/$defs/StoryboardEdit"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-01",
+          "D-02",
+          "D-03"
+        ]
+      }
+    },
+    "/projects/{projectId}/storyboards/{storyboardId}/approve": {
+      "post": {
+        "operationId": "approveStoryboard",
+        "tags": [
+          "Storyboards"
+        ],
+        "summary": "Approve exact saved revision",
+        "description": "Approval separate from rendering. Freeze exact revision and settings snapshot. Subsequent edit needs new draft/fork.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Approve exact saved revision",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryboardApprovalResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/storyboardId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/scene.schema.json#/$defs/ApproveStoryboardRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/storyboards/{storyboardId}/fork": {
+      "post": {
+        "operationId": "forkStoryboard",
+        "tags": [
+          "Storyboards"
+        ],
+        "summary": "Fork approved storyboard into a new draft",
+        "description": "P1/gated. Copy approved owned snapshot into new ID with lineage. Never mutate source. FEATURE_UNAVAILABLE while disabled.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "201": {
+            "description": "Fork approved storyboard into a new draft",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryboardResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/storyboardId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-12"
+        ],
+        "x-priority": "P1_GATED"
+      }
+    },
+    "/projects/{projectId}/generations": {
+      "post": {
+        "operationId": "startGeneration",
+        "tags": [
+          "Generations"
+        ],
+        "summary": "Enqueue generation from approved storyboard",
+        "description": "After auth, ownership and deletion checks, replay lookup comes BEFORE fresh admission/capacity/quota checks. Identical owner/action/key and canonical method/route target/body replay the original receipt for the approved 24-hour window; no new job or reservation. Changed body/target with the same key is 409. NEW admission requires an owned exact approved snapshot; changed generation settings require a new reviewed approval before those settings render, while prior snapshots/outputs remain preserved. Demo limit is three slots per user UTC day, one running plus two waiting globally, one active per project, and one slot per accepted job for every duration. Use transaction-capable atomic capacity/quota reservation and a job-linked ledger. Success consumes; system/provider failure releases; user cancellation before actual RENDER_VIDEO execution starts releases and after its durably recorded start consumes. A stage label alone is not render-start evidence. Worker unavailable or queue full rejects new admission. A fresh request for a snapshot with known unresolved revision-required failure rejects409 REVISION_REQUIRED until a corrected draft is reviewed and approved. Matching existing admission receipt replay still returns the original job without fresh work.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "202": {
+            "description": "Enqueue generation from approved storyboard",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationAcceptedResponse"
+                },
+                "example": {
+                  "data": {
+                    "generationId": "gen_review",
+                    "projectId": "prj_review",
+                    "storyboardId": "sb_review",
+                    "approvedRevision": 2,
+                    "status": "QUEUED",
+                    "stage": null,
+                    "statusUrl": "/api/v1/generations/gen_review"
+                  },
+                  "meta": {
+                    "requestId": "req_example"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/job.schema.json#/$defs/StartGenerationRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-06",
+          "D-07",
+          "D-08"
+        ]
+      },
+      "get": {
+        "operationId": "listGenerations",
+        "tags": [
+          "Generations"
+        ],
+        "summary": "List generation attempts",
+        "description": "Retain owned attempt history and earlier successful export references. Later failed attempts or media expiry do not rewrite historical outcomes. Concrete list ordering/envelope remain draft; current media availability must be checked separately.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "List generation attempts",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationPageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "x-review-decision": [
+          "D-12"
+        ]
+      }
+    },
+    "/generations/{generationId}": {
+      "get": {
+        "operationId": "getGeneration",
+        "tags": [
+          "Generations"
+        ],
+        "summary": "Poll authoritative generation state",
+        "description": "Poll ~3 seconds while QUEUED/PROCESSING/CANCEL_REQUESTED; honor Retry-After/page visibility and stop on terminal. No fabricated percentage. At successful publication both clean VIDEO_EXPORT MP4 and owner-authorized CAPTION_TRACK WebVTT must be verified READY. Historical COMPLETED and its outputAssetId/captionAssetId survive later seven-day expiry/deletion; current media metadata/authorization gates playback/download.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Poll authoritative generation state",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/RetryAfter"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/generationId"
+          }
+        ]
+      }
+    },
+    "/generations/{generationId}/cancel": {
+      "post": {
+        "operationId": "cancelGeneration",
+        "tags": [
+          "Generations"
+        ],
+        "summary": "Request cooperative cancellation",
+        "description": "202 acknowledges a request, not process termination. Unclaimed queued work may cancel immediately; executing work stays CANCEL_REQUESTED until confirmed stopped. First committed guarded database update wins the cancel/complete race; stale workers cannot publish. User cancellation before actual RENDER_VIDEO execution starts releases the slot; after durably recorded render start it consumes. Stage label alone is insufficient. Terminal jobs reject cancellation with 409. Exact repeated-cancel/race-response DTO details remain draft. Durable render-start evidence survives automatic reclaim and stage reset, so a post-start cancellation still consumes.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "202": {
+            "description": "Request cooperative cancellation",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelGenerationAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/generationId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-08",
+          "D-12"
+        ]
+      }
+    },
+    "/generations/{generationId}/retry": {
+      "post": {
+        "operationId": "retryGeneration",
+        "tags": [
+          "Generations"
+        ],
+        "summary": "Create a new attempt from failed or cancelled generation",
+        "description": "FAILED/CANCELLED only: create NEW job linked by retryOf, preserving original immutable snapshot/history; never mix changed current-project settings into an old approval. After auth, ownership and deletion checks, replay lookup comes BEFORE fresh admission/capacity/quota checks. Identical owner/action/key and canonical method/route target/body replay the original receipt for the approved 24-hour window; no new job or reservation. Changed body/target with the same key is 409. NEW admission requires an owned exact approved snapshot; changed generation settings require a new reviewed approval before those settings render, while prior snapshots/outputs remain preserved. Demo limit is three slots per user UTC day, one running plus two waiting globally, one active per project, and one slot per accepted job for every duration. Use transaction-capable atomic capacity/quota reservation and a job-linked ledger. Success consumes; system/provider failure releases; user cancellation before actual RENDER_VIDEO execution starts releases and after its durably recorded start consumes. A stage label alone is not render-start evidence. Worker unavailable or queue full rejects new admission. NEW retry after FAILED additionally requires error.retryable=true. Nonretryable failures reject409 GENERATION_NOT_RETRYABLE. Duration/revision-required failures specifically require a corrected newly approved draft; other nonretryable errors require their indicated corrective action. Resolve an existing authenticated matching receipt before this fresh-eligibility guard.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "202": {
+            "description": "Create a new attempt from failed or cancelled generation",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/generationId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-06",
+          "D-07",
+          "D-08"
+        ]
+      }
+    },
+    "/assets/uploads": {
+      "post": {
+        "operationId": "uploadCharacterImage",
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Upload a permitted character image",
+        "description": "P1/gated. Validate rights/disclosure, magic bytes, real decode, size/dimensions and ownership. Re-encode/strip metadata. Private uploads not sent to providers without disclosure/permission. No realistic lip-sync/voice cloning.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "201": {
+            "description": "Upload a permitted character image",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaAssetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "413": {
+            "$ref": "#/components/responses/TooLarge"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMedia"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "x-review-decision": [
+          "D-09",
+          "D-12"
+        ],
+        "x-priority": "P1_GATED",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadRequest"
+              },
+              "encoding": {
+                "file": {
+                  "contentType": "image/jpeg, image/png, image/webp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assets/{assetId}": {
+      "get": {
+        "operationId": "getAsset",
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Read sanitized media metadata",
+        "description": "Owned retained metadata exposes current expiresAt/availability for video and caption exports, including expired exports so UI can disable playback/download. Historical COMPLETED references may remain. Missing/non-owned/revoked or physically purged metadata is 404. Retained expired metadata can be 200 with EXPIRED availability; file download is denied.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read sanitized media metadata",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaAssetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/assetId"
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "deleteAsset",
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Revoke unused upload access and schedule cleanup",
+        "description": "Owner-authorized private LOCAL access is revoked immediately before durable cleanup; no initial signed URL grace period. Referenced project/active-job deletion safeguards apply. Export-pair cancellation/deletion must not leave a downloadable incomplete pair. Fine-grained export/thumbnail deletion response policy remains draft.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "202": {
+            "description": "Revoke unused upload access and schedule cleanup",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteAssetAcceptedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/assetId"
+          },
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "x-review-decision": [
+          "D-09",
+          "D-12"
+        ]
+      }
+    },
+    "/assets/{assetId}/download": {
+      "get": {
+        "operationId": "downloadAsset",
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Authorize and deliver private media",
+        "description": "Approved initial delivery: owner-authorized private LOCAL streaming. Support complete 200 and single byte-range 206, with 416 for unsatisfiable ranges. The same route separately serves VIDEO_EXPORT MP4 and CAPTION_TRACK UTF-8 WebVTT; no new caption endpoint. Download requires owned nondeleted project/asset, READY storage state, AVAILABLE current media state, an unexpired export and a complete published pair. Expired/revoked/unavailable assets return 404; status READY alone is insufficient. Both exports expire seven days after verified publication. Clean MP4 has no captions; playback toggles the separately authorized track and users may download it separately. Remote signed 302 is future/deferred and inactive initially.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Authorized complete LOCAL binary/text stream; MP4 is clean, captions downloaded separately as text/vtt. No JSON envelope.",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Content-Length": {
+                "$ref": "#/components/headers/ContentLength"
+              },
+              "Accept-Ranges": {
+                "$ref": "#/components/headers/AcceptRanges"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/wav": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/webp": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/vtt": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebVttDocument"
+                }
+              }
+            },
+            "x-feature-status": "INITIAL_LOCAL_STREAMING"
+          },
+          "206": {
+            "description": "Authorized single byte-range LOCAL stream for an available unexpired asset.",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Content-Length": {
+                "$ref": "#/components/headers/ContentLength"
+              },
+              "Accept-Ranges": {
+                "$ref": "#/components/headers/AcceptRanges"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              },
+              "Content-Range": {
+                "description": "Inclusive interval and complete representation size.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^bytes [0-9]+-[0-9]+/[0-9]+$"
+                }
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/wav": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/webp": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/vtt": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebVttDocument"
+                }
+              }
+            },
+            "x-review-decision": [
+              "D-09"
+            ],
+            "x-feature-status": "INITIAL_LOCAL_STREAMING"
+          },
+          "302": {
+            "description": "FUTURE / DEFERRED, NOT ACTIVE INITIALLY. Remote object-storage signed redirect retained for later extension; no initial URLs are issued. Before enabling, review provider access/revocation and short expiry (ceiling <=60 seconds remains a detail for later review). Never persist Location or substitute a public permanent URL.",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Location": {
+                "description": "Expiring authorized media location.",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "x-review-decision": [
+              "D-09"
+            ],
+            "x-feature-status": "DEFERRED_NOT_ACTIVE"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "416": {
+            "$ref": "#/components/responses/RangeNotSatisfiable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/assetId"
+          },
+          {
+            "$ref": "#/components/parameters/Range"
+          }
+        ],
+        "x-review-decision": [
+          "D-04",
+          "D-09"
+        ]
+      }
+    },
+    "/reports": {
+      "post": {
+        "operationId": "reportContent",
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Submit content or consent report",
+        "description": "Authenticated intake only, no public moderation queue. Do not reveal target existence/ownership. Vocabulary, reporting permission and operations unresolved.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "201": {
+            "description": "Submit content or consent report",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Csrf"
+          },
+          {
+            "$ref": "#/components/parameters/Origin"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-12"
+        ]
+      }
+    },
+    "/usage": {
+      "get": {
+        "operationId": "getUsage",
+        "tags": [
+          "Usage"
+        ],
+        "summary": "Read current user usage and limits",
+        "description": "Read approved initial three-slot per-user UTC daily demo usage: used means consumed and reserved means active job-linked reservations. Success consumes, system/provider failure releases, user cancel before actual render execution releases and after durably recorded RENDER_VIDEO start consumes. Global one running/two waiting and per-project one-active are separate atomic admission guards. Replays reserve nothing twice. Detailed DTO layout remains reviewable. Actual renderStartedAt evidence survives reclaim; resetting stage never changes cancellation settlement.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read current user usage and limits",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "x-review-decision": [
+          "D-07",
+          "D-12"
+        ]
+      }
+    },
+    "/capabilities": {
+      "get": {
+        "operationId": "getCapabilities",
+        "tags": [
+          "Usage"
+        ],
+        "summary": "Read tested supported options and availability",
+        "description": "Authenticated app metadata in this draft. Initial development/test targets are English/FACELESS/16:9 and five templates; advertise each only after tests pass. Other known templates and optional modes remain gated. Kokoro runtime/English voice still require quality selection; no public voice selector. Exact DTO/auth-publicness details remain reviewable.",
+        "x-source-baseline": "../../docs/AI_Video_Studio_API_Design_v1.0.1.md",
+        "responses": {
+          "200": {
+            "description": "Read tested supported options and availability",
+            "headers": {
+              "X-Request-ID": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilitiesResponse"
+                },
+                "example": {
+                  "data": {
+                    "durationsSec": [
+                      30,
+                      60,
+                      90
+                    ],
+                    "languages": [
+                      "en"
+                    ],
+                    "modes": [
+                      "FACELESS"
+                    ],
+                    "aspectRatios": [
+                      "16:9"
+                    ],
+                    "worker": {
+                      "available": true,
+                      "status": "ONLINE"
+                    },
+                    "characterMode": {
+                      "enabled": false,
+                      "reason": "EXPERIMENTAL"
+                    },
+                    "templates": [
+                      "TITLE",
+                      "STEPS",
+                      "STACK_QUEUE",
+                      "FLOWCHART",
+                      "KEY_POINTS"
+                    ]
+                  },
+                  "meta": {
+                    "requestId": "req_example"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "x-review-decision": [
+          "D-12"
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "accessCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "avs_access",
+        "description": "PROPOSED cookie name only. Approved policy: 15-minute access JWT in httpOnly cookie; production Secure and explicit SameSite, same-origin deployment, CSRF/Origin on writes. Never expose access token through JSON/localStorage. Names/path/domain and exact deployment configuration remain draft details.",
+        "x-review-decision": [
+          "D-11"
+        ],
+        "x-approved-ttl-seconds": 900
+      },
+      "refreshCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "avs_refresh",
+        "description": "PROPOSED cookie name only. Approved policy: seven-day refresh session in httpOnly cookie, atomically rotated and hashed/revoked server-side; production Secure and explicit SameSite. Distinct from access-cookie authentication. Exact name/path/domain configuration remains draft.",
+        "x-review-decision": [
+          "D-11"
+        ],
+        "x-approved-ttl-seconds": 604800
+      }
+    },
+    "parameters": {
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 20
+        }
+      },
+      "Cursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "description": "Opaque cursor scoped to authenticated collection; wrong/malformed cursor is 400.",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "Csrf": {
+        "name": "X-CSRF-Token",
+        "in": "header",
+        "required": true,
+        "description": "Bootstrap token required on ALL mutations including auth/upload. Verify binding plus Origin.",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "x-review-decision": [
+          "D-11"
+        ]
+      },
+      "Origin": {
+        "name": "Origin",
+        "in": "header",
+        "required": true,
+        "description": "Required allowlisted same-origin Origin on state-changing cookie operations, including auth/upload. CSRF token also required. Non-browser automation policy and local development origin values remain deployment details.",
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        },
+        "x-review-decision": [
+          "D-11"
+        ]
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "Client unique token; owner/action/key namespace and canonical request digest bind method, route template, concrete target and body. Same key with changed body or target conflicts. Approved replay window is 24 hours and repeated identical requests replay the original admission receipt without duplicate quota reservation. Header length bounds remain draft DTO detail.",
+        "schema": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
+        "x-review-decision": [
+          "D-06"
+        ]
+      },
+      "Range": {
+        "name": "Range",
+        "in": "header",
+        "required": false,
+        "description": "Approved initial private LOCAL delivery supports a single bytes range; syntactically malformed range is 400 and an unsatisfiable valid range is 416. Multiple-range support remains deferred.",
+        "schema": {
+          "type": "string",
+          "pattern": "^bytes=(?:[0-9]+-[0-9]*|-[0-9]+)$"
+        },
+        "x-review-decision": [
+          "D-09"
+        ]
+      },
+      "projectId": {
+        "name": "projectId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/OpaqueId"
+        }
+      },
+      "storyboardId": {
+        "name": "storyboardId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/OpaqueId"
+        }
+      },
+      "generationId": {
+        "name": "generationId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/OpaqueId"
+        }
+      },
+      "assetId": {
+        "name": "assetId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/OpaqueId"
+        }
+      }
+    },
+    "headers": {
+      "RequestId": {
+        "description": "Request correlation identifier; matches JSON meta.requestId or error requestId.",
+        "schema": {
+          "$ref": "#/components/schemas/OpaqueId"
+        }
+      },
+      "RetryAfter": {
+        "description": "Optional retry delay seconds or HTTP-date; honor when present.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "SetCookie": {
+        "description": "Repeated Set-Cookie fields establish/rotate/clear httpOnly access (15 minutes) and refresh (seven days) cookies plus the bound CSRF bootstrap cookie as needed. Production Secure and explicit SameSite required; same-origin is selected. Never comma-join Set-Cookie fields. Exact names, Path/Domain and final attributes are deployment details.",
+        "schema": {
+          "type": "string"
+        },
+        "x-review-decision": [
+          "D-11"
+        ]
+      },
+      "NoStore": {
+        "description": "Approved private response policy: no-store. Detailed per-response/browser/intermediary cache plumbing remains a deployment detail; no initial signed URLs are issued.",
+        "schema": {
+          "type": "string",
+          "const": "no-store"
+        },
+        "x-review-decision": [
+          "D-11",
+          "D-12"
+        ]
+      },
+      "ContentLength": {
+        "description": "Response-body bytes.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "AcceptRanges": {
+        "description": "Initial owner-authorized LOCAL asset streams support bytes.",
+        "schema": {
+          "type": "string",
+          "const": "bytes"
+        },
+        "x-review-decision": [
+          "D-09"
+        ]
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Malformed JSON or malformed cursor/header syntax. Valid JSON with invalid fields, unsupported body shape or unsupported settings uses 422; wire/media parsing failures retain their documented 400/415 handling.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing/expired session or invalid credentials; generic authentication failure.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "AUTH_REQUIRED"
+        ]
+      },
+      "Forbidden": {
+        "description": "CSRF/Origin invalid, or authenticated action forbidden.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Missing, non-owned, access-revoked or purged resource; do not reveal ownership/existence. Download also returns 404 for expired/unavailable media. Retained owner metadata may instead return 200 with EXPIRED availability. READY/COMPLETED alone never authorizes media access.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "NOT_FOUND"
+        ]
+      },
+      "Conflict": {
+        "description": "Revision, state, idempotency, active-generation or asset-in-use conflict.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": "REVISION_CONFLICT",
+                "message": "Reload the latest saved revision.",
+                "details": {
+                  "currentRevision": 3
+                },
+                "retryable": false
+              },
+              "requestId": "req_review"
+            }
+          }
+        },
+        "x-error-codes": [
+          "REVISION_CONFLICT",
+          "STORYBOARD_NOT_APPROVED",
+          "IDEMPOTENCY_CONFLICT",
+          "ACTIVE_GENERATION_EXISTS",
+          "ASSET_IN_USE",
+          "GENERATION_NOT_RETRYABLE",
+          "REVISION_REQUIRED"
+        ]
+      },
+      "TooLarge": {
+        "description": "Payload or upload exceeds configured bound.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "FILE_TOO_LARGE"
+        ]
+      },
+      "UnsupportedMedia": {
+        "description": "Unsupported declared/detected content or media type.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "UNSUPPORTED_MEDIA_TYPE"
+        ]
+      },
+      "Unprocessable": {
+        "description": "Valid JSON but invalid field, unavailable capability, blocked content or invalid media.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "INVALID_DURATION",
+          "FEATURE_UNAVAILABLE",
+          "CONTENT_NOT_ALLOWED",
+          "INVALID_MEDIA"
+        ]
+      },
+      "RateLimited": {
+        "description": "Request rate or AI/user quota exceeded.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Retry-After": {
+            "$ref": "#/components/headers/RetryAfter"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "AI_QUOTA_EXCEEDED"
+        ]
+      },
+      "InternalError": {
+        "description": "Sanitized unexpected server error.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "BadGateway": {
+        "description": "Invalid/unusable provider response.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unavailable": {
+        "description": "Provider/worker/storage unavailable or system capacity exhausted.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Retry-After": {
+            "$ref": "#/components/headers/RetryAfter"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-error-codes": [
+          "WORKER_UNAVAILABLE",
+          "PROVIDER_UNAVAILABLE"
+        ]
+      },
+      "GatewayTimeout": {
+        "description": "Bounded upstream provider/planning timeout.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "RangeNotSatisfiable": {
+        "description": "Requested range cannot be satisfied for the authorized LOCAL representation; includes Content-Range bytes */<size>.",
+        "headers": {
+          "X-Request-ID": {
+            "$ref": "#/components/headers/RequestId"
+          },
+          "Content-Range": {
+            "description": "Unsatisfied range, e.g. bytes */2946633.",
+            "schema": {
+              "type": "string",
+              "pattern": "^bytes \\*/[0-9]+$"
+            }
+          },
+          "Cache-Control": {
+            "$ref": "#/components/headers/NoStore"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "x-review-decision": [
+          "D-09"
+        ]
+      }
+    },
+    "schemas": {
+      "OpaqueId": {
+        "$ref": "./schemas/scene.schema.json#/$defs/OpaqueId",
+        "description": "Shared proposed opaque identifier rule; clients do not parse MongoDB ObjectIds or treat IDs as media paths.",
+        "x-review-decision": [
+          "D-02",
+          "D-12"
+        ]
+      },
+      "RequestMeta": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          }
+        },
+        "required": [
+          "requestId"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "details": {
+                "type": "object",
+                "maxProperties": 20,
+                "additionalProperties": true,
+                "description": "Optional bounded sanitized public details only. Service must cap serialized size/nesting; no provider payloads, paths, stack traces, tokens or secrets.",
+                "x-review-decision": [
+                  "D-12"
+                ]
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          }
+        },
+        "required": [
+          "error",
+          "requestId"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "email"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-11"
+        ]
+      },
+      "SignupRequest": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "password": {
+            "type": "string",
+            "minLength": 15,
+            "maxLength": 128,
+            "writeOnly": true,
+            "description": "Approved single-factor signup password length is 15-128 Unicode code points. Do not silently truncate. Hashing-input byte handling and other password-policy implementation details remain for review."
+          }
+        },
+        "required": [
+          "displayName",
+          "email",
+          "password"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-11"
+        ],
+        "x-approved-policy": "./approved-policy.json"
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 254
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-11"
+        ]
+      },
+      "EmptyRequest": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "CsrfData": {
+        "type": "object",
+        "properties": {
+          "csrfToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "required": [
+          "csrfToken"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-11"
+        ]
+      },
+      "UserData": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "required": [
+          "user"
+        ],
+        "additionalProperties": false
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "const": "ok"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "ProjectPhase": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "REVIEW",
+          "RENDERING",
+          "HAS_OUTPUT"
+        ],
+        "description": "UI summary only; FAILED filters derive from latest generation. Preserve prior successful output."
+      },
+      "ProjectCreate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "settings": {
+            "$ref": "./schemas/scene.schema.json#/$defs/Settings"
+          }
+        },
+        "required": [
+          "title",
+          "prompt",
+          "settings"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Required fields remain a DTO completion for review. Approved limits are title <=120 and prompt <=2000 characters; scene/settings capability policy comes from approved-policy.json."
+      },
+      "ProjectPatch": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "settings": {
+            "$ref": "./schemas/scene.schema.json#/$defs/SettingsPatch"
+          }
+        },
+        "required": [],
+        "additionalProperties": false,
+        "minProperties": 1,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Only title/settings per approved route. Title-only changes retain approval. Changed generation settings require new review/approval; older approved versions/output remain preserved. Direct prompt PATCH deferred. Empty nested settings/no-op DTO handling remains for review."
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "settings": {
+            "$ref": "./schemas/scene.schema.json#/$defs/Settings"
+          },
+          "phase": {
+            "$ref": "#/components/schemas/ProjectPhase"
+          },
+          "currentStoryboardId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpaqueId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestGenerationId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpaqueId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latestOutputAssetId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpaqueId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "prompt",
+          "settings",
+          "phase",
+          "currentStoryboardId",
+          "latestGenerationId",
+          "latestOutputAssetId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Owned project summary. Project settings may be edited without mutating older approved settingsSnapshot or exported output. Generation-affecting changes require a new review/approval. phase remains a UI summary; historical outputs remain accessible only while current retention/authorization allows."
+      },
+      "ProjectPage": {
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Project"
+            },
+            "maxItems": 50
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "projects",
+          "nextCursor"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Proposed list envelope; updatedAt descending then opaque ID descending. Cursor scoped and integrity checked."
+      },
+      "DeleteProjectAccepted": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "status": {
+            "const": "DELETION_SCHEDULED"
+          }
+        },
+        "required": [
+          "projectId",
+          "status"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Proposed acknowledgment, not a project phase. API access denied immediately; physical cleanup asynchronous."
+      },
+      "AssistantMessageRequest": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "projectId",
+          "message"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "AssistantReply": {
+        "type": "object",
+        "properties": {
+          "assistantMessage": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "suggestedSettings": {
+            "$ref": "./schemas/scene.schema.json#/$defs/SettingsPatch"
+          },
+          "missingInformation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "maxItems": 10
+          },
+          "conversationRevision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "assistantMessage",
+          "suggestedSettings",
+          "missingInformation",
+          "conversationRevision"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Suggestions do not mutate project. Save accepted suggestions via explicit PATCH."
+      },
+      "AssistantMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "ASSISTANT"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "conversationRevision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          },
+          "suggestedSettings": {
+            "$ref": "./schemas/scene.schema.json#/$defs/SettingsPatch"
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "content",
+          "conversationRevision",
+          "createdAt"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "AssistantHistory": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssistantMessage"
+            },
+            "maxItems": 50
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "messages",
+          "nextCursor"
+        ],
+        "additionalProperties": false,
+        "description": "Ascending immutable conversationRevision; cursor after last returned revision. Owned project only."
+      },
+      "GenerationPage": {
+        "type": "object",
+        "properties": {
+          "generations": {
+            "type": "array",
+            "items": {
+              "$ref": "./schemas/job.schema.json#/$defs/Generation"
+            },
+            "maxItems": 50
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "generations",
+          "nextCursor"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Proposed list envelope and createdAt descending / ID descending ordering."
+      },
+      "MediaAsset": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "ownerId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "projectId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpaqueId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generationId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpaqueId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "CHARACTER_IMAGE",
+              "NARRATION_AUDIO",
+              "VIDEO_EXPORT",
+              "THUMBNAIL",
+              "CAPTION_TRACK"
+            ]
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "audio/wav",
+              "video/mp4",
+              "text/vtt"
+            ]
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "UPLOADING",
+              "READY",
+              "DELETING",
+              "DELETED",
+              "FAILED"
+            ]
+          },
+          "aiGenerated": {
+            "type": "boolean"
+          },
+          "durationSec": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "VIDEO_EXPORT and CAPTION_TRACK share a nonnull expiry exactly 604800 seconds after successful verified publication/completion UTC. Other asset-kind retention remains a separate policy/detail."
+          },
+          "availability": {
+            "$ref": "#/components/schemas/MediaAvailability"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "kind",
+          "mimeType",
+          "sizeBytes",
+          "status",
+          "aiGenerated",
+          "createdAt"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-04",
+          "D-09",
+          "D-12"
+        ],
+        "description": "Sanitized private metadata, never storage keys, paths, permanent URLs or internal consent/lease fields. Approved export pair: clean VIDEO_EXPORT video/mp4 plus separate CAPTION_TRACK text/vtt; each generation-linked and AI-produced. Both must be verified READY before COMPLETED publication and share expiresAt = verified completion UTC + seven days. Current availability and expiresAt gate downloads even if storage status still READY or historical job still COMPLETED. Incomplete publication pairs are unavailable. Fields/enum vocabulary are DTO completions still under review.",
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "VIDEO_EXPORT",
+                    "CAPTION_TRACK"
+                  ]
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "required": [
+                "generationId",
+                "expiresAt",
+                "availability"
+              ],
+              "properties": {
+                "generationId": {
+                  "$ref": "#/components/schemas/OpaqueId"
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "Z$",
+                  "description": "UTC ISO 8601 timestamp."
+                },
+                "aiGenerated": {
+                  "const": true
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "VIDEO_EXPORT"
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "properties": {
+                "mimeType": {
+                  "const": "video/mp4"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "CAPTION_TRACK"
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "properties": {
+                "mimeType": {
+                  "const": "text/vtt"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UploadRequest": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "Detected/decoded JPEG, PNG or WebP. Provisional 10 MiB cap; dimensions/decompression bounds unresolved.",
+            "x-max-file-bytes": 10485760,
+            "x-review-decision": [
+              "D-12"
+            ]
+          },
+          "purpose": {
+            "const": "CHARACTER_REFERENCE"
+          },
+          "containsIdentifiablePerson": {
+            "type": "boolean"
+          },
+          "rightsConfirmed": {
+            "const": true
+          },
+          "aiDisclosureAcknowledged": {
+            "const": true
+          }
+        },
+        "required": [
+          "file",
+          "purpose",
+          "containsIdentifiablePerson",
+          "rightsConfirmed",
+          "aiDisclosureAcknowledged"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Multipart booleans serialize true/false, parse server-side. Consent is an assertion, not verified rights. Re-encode/strip EXIF as appropriate."
+      },
+      "DeleteAssetAccepted": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "status": {
+            "const": "DELETING"
+          }
+        },
+        "required": [
+          "assetId",
+          "status"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "ReportRequest": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "projectId": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "reasonCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "reasonCode",
+          "description"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "assetId"
+            ],
+            "not": {
+              "required": [
+                "projectId"
+              ]
+            }
+          },
+          {
+            "required": [
+              "projectId"
+            ],
+            "not": {
+              "required": [
+                "assetId"
+              ]
+            }
+          }
+        ],
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Proposed exactly one target. Reporting must not leak target existence; reason vocabulary, permissions and moderation operations remain open."
+      },
+      "ReportAccepted": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/OpaqueId"
+          },
+          "status": {
+            "const": "OPEN"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "createdAt"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "Usage": {
+        "type": "object",
+        "properties": {
+          "dailyLimit": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 3,
+            "x-initial-demo-default": 3,
+            "description": "Actual configured daily limit. Approved initial demo default is three per-user UTC-day generation slots; configuration may change without changing this DTO. Policy/admission enforce the configured allowance."
+          },
+          "used": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reserved": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "activeJobs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "queuedJobs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "resetAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          },
+          "nextEligibleAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "pattern": "Z$",
+            "description": "UTC ISO 8601 timestamp."
+          }
+        },
+        "required": [
+          "dailyLimit",
+          "used",
+          "reserved",
+          "activeJobs",
+          "queuedJobs"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-07",
+          "D-12"
+        ],
+        "description": "Field names remain DTO details. Initial demo is three per-user UTC daily slots; one accepted generation costs one slot at 30/60/90 seconds. Active reservations count toward allowance. Success consumes, system/provider failure releases; user cancel before actual RENDER_VIDEO execution starts releases and after durable start consumes. Stage label alone is not evidence. Global one-running/two-waiting and per-project-one-active are separate guards. Replay precedes new admission checks and never reserves twice. Transaction-capable admission and job-linked settlement are required; snapshots alone do not authorize admission. Durable actual render-start evidence survives reclaim/stage reset; cancellation after such a start still consumes."
+      },
+      "Capabilities": {
+        "type": "object",
+        "properties": {
+          "durationsSec": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                30,
+                60,
+                90
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "en",
+                "hi"
+              ]
+            },
+            "maxItems": 2,
+            "uniqueItems": true
+          },
+          "modes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "FACELESS",
+                "CHARACTER_2D"
+              ]
+            },
+            "maxItems": 2,
+            "uniqueItems": true
+          },
+          "aspectRatios": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "16:9",
+                "9:16"
+              ]
+            },
+            "maxItems": 2,
+            "uniqueItems": true
+          },
+          "worker": {
+            "type": "object",
+            "properties": {
+              "available": {
+                "type": "boolean"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ONLINE",
+                  "OFFLINE",
+                  "BUSY",
+                  "UNKNOWN"
+                ],
+                "x-review-decision": [
+                  "D-12"
+                ]
+              }
+            },
+            "required": [
+              "available",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "characterMode": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 300
+              }
+            },
+            "required": [
+              "enabled",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "templates": {
+            "type": "array",
+            "items": {
+              "$ref": "./schemas/scene.schema.json#/$defs/TemplateId"
+            },
+            "uniqueItems": true,
+            "minItems": 0,
+            "maxItems": 9,
+            "description": "Advertise only enabled templates whose tests have passed. First targets to develop/test are TITLE, STEPS, STACK_QUEUE, FLOWCHART, KEY_POINTS; this approval is not evidence they are implemented or tested. Other known IDs remain gated. May be empty while no template has passed; field placement remains a DTO completion.",
+            "x-review-decision": [
+              "D-01",
+              "D-12"
+            ]
+          }
+        },
+        "required": [
+          "durationsSec",
+          "languages",
+          "modes",
+          "aspectRatios",
+          "worker",
+          "characterMode",
+          "templates"
+        ],
+        "additionalProperties": false,
+        "x-review-decision": [
+          "D-12"
+        ],
+        "description": "Advertise only tested capabilities. Approved development targets are English/FACELESS/16:9, one local Kokoro English voice selected after quality tests, and TITLE/STEPS/STACK_QUEUE/FLOWCHART/KEY_POINTS. No feature is enabled solely by contract approval. Extra templates/Hindi/vertical/character stay gated until tested; no public voice selector. DTO vocabulary remains for review."
+      },
+      "CsrfDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CsrfData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "UserDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/UserData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Health"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "ProjectResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Project"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "ProjectPageResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProjectPage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "DeleteProjectAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/DeleteProjectAccepted"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "AssistantReplyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AssistantReply"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "AssistantHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AssistantHistory"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "GenerationPageResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GenerationPage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "MediaAssetResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/MediaAsset"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "DeleteAssetAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/DeleteAssetAccepted"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "ReportAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReportAccepted"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "UsageResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Usage"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "CapabilitiesResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Capabilities"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "StoryboardResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "./schemas/scene.schema.json#/$defs/Storyboard"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "StoryboardApprovalResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "./schemas/scene.schema.json#/$defs/StoryboardApproval"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "GenerationResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "./schemas/job.schema.json#/$defs/Generation"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "GenerationAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "./schemas/job.schema.json#/$defs/GenerationAccepted"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "CancelGenerationAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "./schemas/job.schema.json#/$defs/CancelGenerationAccepted"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/RequestMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ],
+        "additionalProperties": false
+      },
+      "MediaAvailability": {
+        "type": "string",
+        "enum": [
+          "AVAILABLE",
+          "EXPIRED",
+          "DELETED",
+          "UNAVAILABLE"
+        ],
+        "description": "Proposed DTO vocabulary for current private-media availability. Business policy is approved: expired/deleted/unpublished/incomplete-pair outputs cannot be downloaded. This is separate from historical job status and storage-processing status.",
+        "x-review-decision": [
+          "D-12"
+        ]
+      },
+      "WebVttDocument": {
+        "type": "string",
+        "minLength": 7,
+        "pattern": "^(?:\\uFEFF)?WEBVTT(?:[ \\t][^\\r\\n]*)?\\r?\\n",
+        "description": "UTF-8 WebVTT sidecar generated from approved narration and the canonical measured timeline. Prefix check only: full cue syntax, chronological bounds, safe text, language, alignment and generation ownership need semantic validation. Clean MP4 has no burned-in captions; browser toggle reads this separately authorized track.",
+        "x-review-decision": [
+          "D-04",
+          "D-12"
+        ]
+      }
+    }
+  },
+  "x-sensitive-response-cache-policy": {
+    "status": "APPROVED_POLICY_WITH_DRAFT_HEADER_DETAILS",
+    "decisions": [
+      "D-11",
+      "D-12"
+    ],
+    "policy": "Approved private response policy is Cache-Control: no-store. New owner-authorized LOCAL reads are denied immediately after deletion/expiry. Already delivered bytes cannot be recalled. Exact individual response/header plumbing remains reviewable. Remote signed-link delivery is deferred, not active."
+  },
+  "x-review-updated-on": "2026-11-21",
+  "x-approved-policy": "./approved-policy.json"
+}

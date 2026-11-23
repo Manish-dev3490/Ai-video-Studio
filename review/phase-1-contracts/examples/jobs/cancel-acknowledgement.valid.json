@@ -1,0 +1,5 @@
+{
+  "generationId": "gen_demo_1",
+  "status": "CANCEL_REQUESTED",
+  "statusUrl": "/api/v1/generations/gen_demo_1"
+}

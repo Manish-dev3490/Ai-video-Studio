@@ -1,0 +1,10 @@
+{
+  "sceneId": "scene_title",
+  "template": "TITLE_CARD",
+  "narration": "JavaScript runs one task at a time, while the browser coordinates other work.",
+  "visualProps": {
+    "title": "The JavaScript event loop",
+    "subtitle": "One stack, several sources of work"
+  },
+  "estimatedDurationSec": 6
+}

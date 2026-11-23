@@ -1,0 +1,18 @@
+{
+  "sceneId": "scene_character",
+  "template": "CHARACTER_PRESENTER_2D",
+  "narration": "This optional image presenter uses a clearly synthetic narration.",
+  "visualProps": {
+    "title": "Optional 2D presenter",
+    "characterAssetId": "asset_character_001",
+    "points": [
+      "Authorized image",
+      "Synthetic narration"
+    ],
+    "motionPreset": "BOB"
+  },
+  "assetIds": [
+    "asset_character_001"
+  ],
+  "estimatedDurationSec": 6
+}

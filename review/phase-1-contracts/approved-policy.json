@@ -1,0 +1,269 @@
+{
+  "version": "1.0.0-draft.2",
+  "status": "APPROVED_FOR_PHASE_1_CONTRACT_UPDATE",
+  "approvedOn": "2026-11-21",
+  "timezone": "Asia/Calcutta",
+  "approvalSource": "User approval of all twelve Hinglish recommendations in this conversation",
+  "scope": "Approved initial design policies for updated Phase 1 drafts. This is a contract reference, not runtime configuration or authorization to implement features.",
+  "implementationAuthorized": false,
+  "approvedDocumentsAmended": false,
+  "initialProfile": {
+    "knownTemplateRegistry": [
+      "TITLE",
+      "STEPS",
+      "STACK_QUEUE",
+      "FLOWCHART",
+      "COMPARISON",
+      "TIMELINE",
+      "KEY_POINTS",
+      "IMAGE_WITH_LABELS",
+      "CHARACTER_PRESENTER_2D"
+    ],
+    "firstTemplatesToDevelopAndTest": [
+      "TITLE",
+      "STEPS",
+      "STACK_QUEUE",
+      "FLOWCHART",
+      "KEY_POINTS"
+    ],
+    "templateActivationRequiresTests": true,
+    "legacyAliasesAccepted": false,
+    "modes": [
+      "FACELESS"
+    ],
+    "languages": [
+      "en"
+    ],
+    "aspectRatios": [
+      "16:9"
+    ],
+    "tone": "EDUCATIONAL",
+    "visualStyle": "MOTION_GRAPHICS",
+    "output": {
+      "width": 1280,
+      "height": 720,
+      "fps": 30
+    },
+    "speech": {
+      "preferredProvider": "KOKORO",
+      "execution": "LOCAL",
+      "voiceCount": 1,
+      "voiceSelectionRequiresQualityTests": true,
+      "runtime": null,
+      "voiceId": null,
+      "publicVoiceSelector": false,
+      "automaticCloudFallback": false
+    },
+    "deferredFeatures": [
+      "EXTRA_TEMPLATES_UNTIL_TESTED",
+      "HINDI_UNTIL_TESTED",
+      "VERTICAL_UNTIL_TESTED",
+      "EXTRA_VOICES",
+      "CHARACTER_2D_P1",
+      "BURNED_IN_EXPORT",
+      "REMOTE_SIGNED_URL_DELIVERY",
+      "DIRECT_PROMPT_PATCH"
+    ]
+  },
+  "limits": {
+    "scenes": {
+      "minimum": 2,
+      "maximum": 18
+    },
+    "promptMaxCharacters": 2000,
+    "titleMaxCharacters": 120,
+    "perTemplateBoundsReference": "schemas/scene.schema.json",
+    "unknownPropertiesAccepted": false,
+    "textInterpretation": "INERT_TEXT",
+    "arbitraryMediaUrlsPathsOrExecutableFieldsAccepted": false,
+    "limitsGuaranteeLayoutOrSpokenDuration": false
+  },
+  "timing": {
+    "targetDurationsSec": [
+      30,
+      60,
+      90
+    ],
+    "initialToleranceSec": 5,
+    "planningUnit": "SECONDS",
+    "measuredAudioUnit": "INTEGER_MILLISECONDS",
+    "compositorUnit": "INTEGER_FRAMES",
+    "fps": 30,
+    "frameRanges": "HALF_OPEN",
+    "audioFrameCountRounding": "CEILING",
+    "sceneOverlap": false,
+    "transitionsInsideSceneWindows": true,
+    "planningEstimatesProveFit": false,
+    "smallGapPolicy": "SENSIBLE_PAUSES_WITHOUT_MISLEADING_OR_EXCESSIVE_PADDING",
+    "largeMismatchPolicy": "FAILED_NONRETRYABLE_REVISION_REQUIRED_NEW_DRAFT_AND_APPROVAL",
+    "silentSpeechClippingAllowed": false,
+    "unnaturalSpeedupAllowed": false
+  },
+  "captions": {
+    "assetKind": "CAPTION_TRACK",
+    "format": "WEBVTT",
+    "mimeType": "text/vtt",
+    "videoExportMode": "CLEAN_MP4",
+    "mp4AloneContainsCaptions": false,
+    "browserToggle": true,
+    "downloadVideoAndCaptionsSeparately": true,
+    "deliveryRoute": "/api/v1/assets/{assetId}/download",
+    "newCaptionRouteRequired": false,
+    "timingSource": "CANONICAL_MEASURED_TIMELINE",
+    "publicationRequiresReadyVideoAndCaptionPair": true,
+    "burnedInExport": "DEFERRED"
+  },
+  "idempotency": {
+    "replayWindowSeconds": 86400,
+    "uniqueScope": [
+      "authenticatedOwnerId",
+      "START_OR_RETRY_ACTION",
+      "idempotencyKeyHash"
+    ],
+    "canonicalRequestIdentity": [
+      "httpMethod",
+      "routeTemplate",
+      "concreteRouteTargetId",
+      "canonicalJsonBody"
+    ],
+    "matchingReplay": "ORIGINAL_ADMISSION_RECEIPT_SAME_GENERATION_ID",
+    "differentBodyOrTargetWithSameKey": "409_IDEMPOTENCY_CONFLICT",
+    "liveStatusSource": "POLL_GENERATION",
+    "replayCreatesJobOrReservation": false,
+    "matchingReplayBeforeNewAdmissionChecks": true,
+    "authOwnershipAndDeletionChecksAlwaysApply": true,
+    "idempotencyExpiryDeletesJobHistory": false
+  },
+  "quota": {
+    "profile": "INITIAL_CONFIGURABLE_DEMO",
+    "unit": "GENERATION_SLOT",
+    "slotsPerNewAdmission": 1,
+    "sameSlotCostForAllDurationPresets": true,
+    "dailySlotsPerUser": 3,
+    "dailyBucketTimezone": "UTC",
+    "maxRunningJobsGlobal": 1,
+    "maxWaitingJobsGlobal": 2,
+    "maxActiveJobsPerProject": 1,
+    "reservationLinkedToJob": true,
+    "admissionAndReservation": "TRANSACTION_CAPABLE_MONGODB_WITH_ATOMIC_CAPACITY_AND_QUOTA_GUARDS",
+    "settlement": {
+      "completed": "CONSUME",
+      "systemOrProviderFailure": "RELEASE",
+      "pipelineValidationOrDurationMismatch": "RELEASE",
+      "userCancelledBeforeRenderStarted": "RELEASE",
+      "userCancelledAfterRenderStarted": "CONSUME"
+    },
+    "renderStartedBoundary": "ACTUAL_RENDER_VIDEO_EXECUTION_START_RECORDED_DURABLY",
+    "renderStartedEvidenceSurvivesReclaim": true,
+    "uncertainProcessStopFinalizesCancellationOrReleasesReservation": false,
+    "automaticRecoveryCreatesExtraReservation": false,
+    "limitsAreProductionCapacityGuarantees": false
+  },
+  "worker": {
+    "heartbeatSeconds": 10,
+    "leaseSeconds": 60,
+    "maxAutomaticExecutionAttemptsTotal": 2,
+    "attemptBudgetMeaning": "INITIAL_CLAIM_PLUS_AT_MOST_ONE_AUTOMATIC_RECLAIM",
+    "staleWritesBlockedByFencing": true,
+    "staleWorkerMustStopOwnedProcesses": true,
+    "cancelCompleteRace": "FIRST_COMMITTED_GUARDED_DATABASE_UPDATE_WINS",
+    "cancelledRequiresConfirmedStop": true,
+    "userRetry": "NEW_JOB_RECHECK_ADMISSION_AND_QUOTA",
+    "stageTimeoutPolicy": "SET_FROM_DURATION_SPECIFIC_BENCHMARKS",
+    "stageTimeoutSeconds": null,
+    "benchmarkedDurationPresetsSec": [
+      30
+    ],
+    "failedJobRetryRequiresRetryableError": true,
+    "revisionRequiredAllowsSameSnapshotRetry": false,
+    "lateRenderStartEvidenceMustPredateAcceptedCancellation": true,
+    "lateEvidenceMayLaunchOrResumeWork": false
+  },
+  "storage": {
+    "initialProvider": "PRIVATE_LOCAL_FILESYSTEM",
+    "delivery": "OWNER_AUTHENTICATED_STREAMING",
+    "singleByteRangeSupport": true,
+    "activeDeliveryStatusCodes": [
+      200,
+      206,
+      416
+    ],
+    "remote302Delivery": "DEFERRED",
+    "checkOwnerDeletionAndExpiryOnEveryNewRead": true,
+    "deleteBlocksNewReadsImmediately": true,
+    "alreadyDeliveredBytesRetractable": false,
+    "successfulIntermediates": "CLEAN_AFTER_DELIVERY_VERIFIED",
+    "failedTemporaryArtifactMaxAgeSeconds": 86400,
+    "exportRetentionSeconds": 604800,
+    "exportRetentionStartsAt": "VERIFIED_SUCCESSFUL_PUBLICATION_UTC",
+    "videoAndCaptionShareExpiry": true,
+    "expiryAppliesTo": [
+      "VIDEO_EXPORT",
+      "CAPTION_TRACK"
+    ],
+    "historicalCompletedJobRetainsAssetReferences": true,
+    "expiredAssetDownloadAllowed": false,
+    "physicalCleanupMayBeAsynchronous": true
+  },
+  "provenance": {
+    "approvedScriptAndSettingsImmutable": true,
+    "separateInternalExecutionManifest": true,
+    "requiredRecipe": [
+      "ENGINE_AND_TEMPLATE_VERSIONS",
+      "TTS_MODEL_AND_VOICE",
+      "AUDIO_HASHES",
+      "MEASURED_TIMELINE",
+      "FONTS",
+      "ENCODING",
+      "PUBLISHED_VIDEO_AND_CAPTION_HASHES"
+    ],
+    "cachedAudioReuseRequires": [
+      "MATCHING_TEXT",
+      "MATCHING_VOICE",
+      "MATCHING_MODEL",
+      "MATCHING_RELEVANT_SETTINGS",
+      "VERIFIED_RETAINED_AUDIO"
+    ],
+    "crossEnvironmentIdenticalBytesGuaranteed": false
+  },
+  "auth": {
+    "initialDeployment": "SAME_ORIGIN_FRONTEND_AND_API",
+    "productionTransport": "HTTPS",
+    "productionHttpOnlyCookies": true,
+    "productionSecureCookies": true,
+    "explicitSameSiteRequired": true,
+    "csrfAndOriginChecksOnMutations": true,
+    "accessLifetimeSeconds": 900,
+    "refreshLifetimeSeconds": 604800,
+    "refreshRotation": true,
+    "logoutRevokesRefreshAndClearsCookies": true,
+    "tokensInLocalStorage": false,
+    "passwordMinCharacters": 15,
+    "passwordMaxCharacters": 128,
+    "privateResponseCacheControl": "no-store"
+  },
+  "projectApproval": {
+    "generationSettingsChangeAfterApproval": "NEW_DRAFT_REVIEW_AND_APPROVAL_REQUIRED",
+    "titleOnlyChangeRequiresReapproval": false,
+    "oldApprovedSnapshotAndSuccessfulExportsPreserved": true,
+    "combineNewSettingsWithOldApproval": false,
+    "directPromptPatch": "DEFERRED",
+    "approvedMethodAndPathSetPreserved": true,
+    "jsonSuccessEnvelope": [
+      "data",
+      "meta.requestId"
+    ],
+    "disabledP1FeaturesMustExplainUnavailable": true,
+    "knownRevisionRequiredSnapshotAdmissible": false
+  },
+  "deferredImplementationDetails": [
+    "Exact Kokoro runtime/model/voice and speech-quality benchmark; no runtime or voice has been selected by this approval.",
+    "60/90-second render benchmarks and duration-specific stage timeouts; initial worker values remain configurable test defaults.",
+    "Cookie names, precise Path/domain/SameSite value, local-development exceptions and CSRF bootstrap binding for the chosen same-origin deployment.",
+    "Canonical JSON serialization, optional-empty-body normalization and key reuse behavior after the guaranteed 24-hour replay window.",
+    "WebVTT serialization, escaping and frame-to-millisecond conversion validation against the shared measured timeline.",
+    "Final DTO field names and operational cleanup scheduling within the approved ownership, expiry and retention policies.",
+    "Remote object storage/signed URLs, burned-in export, optional voices/languages/ratios/templates and P1 character/fork feature activation.",
+    "MongoDB deployment/topology and index bootstrap; transactions and atomic capacity admission must be verified before worker integration."
+  ]
+}

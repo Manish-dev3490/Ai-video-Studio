@@ -1,0 +1,10 @@
+{
+  "reservationId": "reservation_demo",
+  "generationId": "gen_demo_1",
+  "bucketId": "bucket_20261121_demo",
+  "amount": 1,
+  "unit": "GENERATION_SLOT",
+  "state": "RELEASED",
+  "createdAt": "2026-11-21T12:00:00.000Z",
+  "updatedAt": "2026-11-21T12:02:00.000Z"
+}

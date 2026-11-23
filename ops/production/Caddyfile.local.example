@@ -1,0 +1,17 @@
+# Optional alternative gateway. Not required or installed by the local profile.
+# Reviewed against Caddy docs; run `caddy validate` on an installed binary before use.
+{
+    admin off
+    auto_https disable_redirects
+}
+
+https://studio.localhost:8443 {
+    bind 127.0.0.1
+    tls internal
+    reverse_proxy 127.0.0.1:4200 {
+        header_up -Forwarded
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-Host {host}
+    }
+}

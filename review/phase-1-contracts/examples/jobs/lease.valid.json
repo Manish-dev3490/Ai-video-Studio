@@ -1,0 +1,6 @@
+{
+  "workerId": "worker_demo",
+  "fencingToken": "synthetic-token-for-review-only",
+  "heartbeatAt": "2026-11-20T12:00:10.000Z",
+  "expiresAt": "2026-11-20T12:01:10.000Z"
+}

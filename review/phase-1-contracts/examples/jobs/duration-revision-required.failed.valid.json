@@ -1,0 +1,22 @@
+{
+  "id": "gen_demo_1",
+  "projectId": "prj_demo",
+  "storyboardId": "sb_demo",
+  "approvedRevision": 2,
+  "status": "FAILED",
+  "stage": "ALIGN_TIMELINE",
+  "progress": {
+    "completedStages": 2,
+    "totalStages": 6
+  },
+  "attempt": 1,
+  "outputAssetId": null,
+  "error": {
+    "code": "DURATION_REVISION_REQUIRED",
+    "message": "Measured narration does not fit the target. Review and approve a corrected draft.",
+    "retryable": false
+  },
+  "createdAt": "2026-11-21T12:00:00.000Z",
+  "updatedAt": "2026-11-21T12:00:20.000Z",
+  "captionAssetId": null
+}

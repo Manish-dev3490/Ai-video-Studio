@@ -1,0 +1,9 @@
+{
+  "sceneId": "scene_long_title",
+  "template": "TITLE",
+  "narration": "A literal narration.",
+  "visualProps": {
+    "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  "estimatedDurationSec": 6
+}
